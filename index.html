@@ -4,16 +4,9 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Seter Pro · Motor de Leitura Nacional + OCR Multi-Camada</title>
-  
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
-  
-  <!-- TensorFlow.js -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
-  
-  <!-- Tesseract.js v5 (OCR local / offline) -->
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  
   <style>
     :root{--navy:#080f1e;--slate1:#101827;--slate2:#16202f;--slate3:#1c2a3a;--blue:#3b7bff;--cyan:#2de1f5;--mint:#3fdba0;--amber:#f5a623;--rose:#f55555;--p:#f1f4fb;--m:#7a8bab;--b:rgba(255,255,255,0.08);--r:12px;--r2:8px}
     *{box-sizing:border-box;margin:0;padding:0}
@@ -354,6 +347,8 @@ async function carregarModeloTF() {
 
 async function ocrViaTensorFlow(file) {
   await carregarModeloTF();
+  // Implementação simplificada e robusta (segmentação + classificação)
+  // Para produção use seu modelo treinado de medidores
   const img = await new Promise((res, rej) => {
     const i = new Image();
     i.onload = () => res(i);
@@ -395,48 +390,28 @@ async function ocrViaTensorFlow(file) {
   };
 }
 
-/* ── Camada 4: Tesseract.js (já carregado no <head>) ── */
+/* ── Camada 4: Tesseract.js ── */
 async function ocrViaTesseract(file) {
   if (!window.Tesseract) {
-    throw new Error('Tesseract.js não foi carregado. Verifique o script no HTML.');
+    await new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+      s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
   }
-
-  ocrLog('info', 'Iniciando Tesseract.js (fallback local)');
-
   const { data } = await Tesseract.recognize(file, 'eng', {
-    logger: m => {
-      if (m.status === 'recognizing text') {
-        const pct = Math.round((m.progress || 0) * 100);
-        document.getElementById('confFill').style.width = (60 + pct * 0.3) + '%';
-        document.getElementById('statusTxt').innerHTML =
-          `<span style="color:var(--amber)">Tesseract · ${pct}%</span>`;
-      }
-    },
     tessedit_char_whitelist: '0123456789',
     tessedit_pageseg_mode: '7'
   });
-
-  const texto = (data.text || '').replace(/\D/g, ' ').trim();
-  const numeros = texto.match(/\d{3,8}/g) || [];
-
-  if (numeros.length === 0) {
-    throw new Error('Tesseract não encontrou números válidos');
-  }
-
-  numeros.sort((a, b) => Number(b) - Number(a));
-  const leitura = Number(numeros[0]);
-
-  let confianca = 65;
-  if (numeros[0].length >= 5) confianca = 75;
-  if (data.confidence) confianca = Math.min(90, Math.round(data.confidence));
-
+  const nums = (data.text || '').match(/\d{3,8}/g) || [];
+  if (!nums.length) throw new Error('Tesseract não encontrou números');
+  nums.sort((a, b) => Number(b) - Number(a));
   return {
-    leitura,
-    confianca,
-    modelo: 'Tesseract.js (local)',
-    origem: 'tesseract',
-    texto: data.text,
-    candidatos: numeros.slice(0, 5)
+    leitura: Number(nums[0]),
+    confianca: Math.min(80, Math.round(data.confidence || 70)),
+    modelo: 'Tesseract.js',
+    origem: 'tesseract'
   };
 }
 
@@ -444,6 +419,7 @@ async function ocrViaTesseract(file) {
 async function ocrMedidorCompleto(file) {
   const base64 = await fileToBase64(file);
 
+  // 1º + 2º Cloud
   try {
     document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">Vertex AI / Cloud Vision…</span>';
     document.getElementById('confFill').style.width = '25%';
@@ -451,6 +427,7 @@ async function ocrMedidorCompleto(file) {
   } catch (cloudErr) {
     ocrLog('warn', 'Cloud falhou', cloudErr.message);
 
+    // 3º TF.js
     try {
       document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">TensorFlow.js…</span>';
       document.getElementById('confFill').style.width = '50%';
@@ -458,6 +435,7 @@ async function ocrMedidorCompleto(file) {
     } catch (tfErr) {
       ocrLog('warn', 'TF.js falhou', tfErr.message);
 
+      // 4º Tesseract
       if (!OCR_CONFIG.enableTesseract) throw tfErr;
       document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">Tesseract.js…</span>';
       document.getElementById('confFill').style.width = '70%';
