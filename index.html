@@ -3,14 +3,18 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>xMob · SmartPOS · Reforma Tributária CBS/IBS</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; connect-src 'self' https://brasilapi.com.br https://*.workers.dev https://wa.me; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"/>
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+<title>NoxMob · SmartPOS Seguro</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
 <style>
-:root{--bg:#f0f5ff;--card:#fff;--text:#0f172a;--muted:#64748b;--cyan:#0891b2;--blue:#2563eb;--mint:#059669;--amber:#d97706;--rose:#e11d48;--purple:#7c3aed;--border:#dbe4f0;--r:16px;--shadow:0 10px 40px rgba(37,99,235,.08),0 2px 8px rgba(0,0,0,.04);--shadow-lg:0 20px 50px rgba(37,99,235,.12)}
+:root{--bg:#f0f5ff;--card:#fff;--text:#0f172a;--muted:#64748b;--cyan:#0891b2;--blue:#2563eb;--mint:#059669;--amber:#d97706;--rose:#e11d48;--border:#dbe4f0;--r:16px;--shadow:0 10px 40px rgba(37,99,235,.08);--shadow-lg:0 20px 50px rgba(37,99,235,.12)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;font-size:14px;
-background-image:radial-gradient(ellipse at 10% 0%,rgba(37,99,235,.08)0%,transparent 50%),radial-gradient(ellipse at 90% 100%,rgba(5,150,105,.06)0%,transparent 50%)}
+background-image:radial-gradient(ellipse at 10% 0%,rgba(37,99,235,.08)0%,transparent 50%),radial-gradient(ellipse at 90% 100%,rgba(5,150,105,.06)0%,transparent 50%);
+-webkit-user-select:none;user-select:none}
+input,textarea,select,.allow-select{user-select:text;-webkit-user-select:text}
 .app{display:none;min-height:100vh}.app.ativo{display:flex}
 #tela-login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:linear-gradient(135deg,#dbeafe,#f0fdf4,#faf5ff)}
 .login-box{width:100%;max-width:420px;background:var(--card);border-radius:24px;padding:44px;box-shadow:var(--shadow-lg);border:1px solid var(--border)}
@@ -39,38 +43,39 @@ background-image:radial-gradient(ellipse at 10% 0%,rgba(37,99,235,.08)0%,transpa
 .nav-item.ativo{background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(8,145,178,.08));color:var(--blue);box-shadow:inset 3px 0 0 var(--blue)}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .topbar{height:64px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(255,255,255,.9);backdrop-filter:blur(12px)}
+.clock{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--blue);background:#eff6ff;padding:6px 12px;border-radius:10px;border:1px solid #bfdbfe}
 .content{flex:1;overflow-y:auto;padding:28px}
 .page{display:none}.page.ativa{display:block}
 .grid{display:grid;gap:18px}
-.grid-4{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
-.grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.grid-4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 .grid-2{grid-template-columns:1fr 1fr}
 @media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}.sidebar{display:none}}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);transition:.25s}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);transition:.25s}
 .stat:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
 .stat .label{font-size:11px;color:var(--muted);text-transform:uppercase;font-weight:700}
-.stat .value{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-top:6px}
+.stat .value{font-family:'Sora',sans-serif;font-size:22px;font-weight:800;margin-top:6px}
 .stat .value.mint{color:var(--mint)}.stat .value.blue{color:var(--blue)}.stat .value.amber{color:var(--amber)}.stat .value.cyan{color:var(--cyan)}
 .panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
 .panel-title{font-family:'Sora',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;font-weight:700}
 .pdv-layout{display:grid;grid-template-columns:1fr 360px;gap:18px;min-height:calc(100vh - 140px)}
 @media(max-width:900px){.pdv-layout{grid-template-columns:1fr}}
-.camera-area{background:linear-gradient(145deg,#f8fafc,#eef2ff);border:2px dashed #c7d2fe;border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:240px;position:relative;overflow:hidden}
+.camera-area{background:linear-gradient(145deg,#f8fafc,#eef2ff);border:2px dashed #c7d2fe;border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:220px;overflow:hidden}
 .camera-placeholder{text-align:center;color:var(--muted)}
 .camera-placeholder .icon{font-size:48px;margin-bottom:10px}
-.cart-items{max-height:220px;overflow-y:auto}
+.cart-items{max-height:200px;overflow-y:auto}
 .cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
 .cart-total{padding:14px 0;border-top:2px solid var(--border);margin-top:10px}
-.cart-total .valor{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--mint)}
+.cart-total .valor{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--mint)}
 .tax-line{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;padding:3px 0}
 .tbl{width:100%;border-collapse:collapse;font-size:13px}
-.tbl th{text-align:left;padding:11px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;border-bottom:2px solid var(--border);font-weight:700}
-.tbl td{padding:11px 12px;border-bottom:1px solid #f1f5f9}
+.tbl th{text-align:left;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;border-bottom:2px solid var(--border);font-weight:700}
+.tbl td{padding:10px 12px;border-bottom:1px solid #f1f5f9}
 .tbl tr:hover td{background:#f8fafc}
 .pill{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700}
 .pill-mint{background:#d1fae5;color:#047857}.pill-amber{background:#fef3c7;color:#b45309}
 .pill-rose{background:#ffe4e6;color:#be123c}.pill-blue{background:#dbeafe;color:#1d4ed8}
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(15,23,42,.4);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:20px}
 .modal-bg.ativo{display:flex}
 .modal{background:var(--card);border-radius:20px;padding:28px;width:100%;max-width:560px;box-shadow:var(--shadow-lg);max-height:92vh;overflow-y:auto}
 .modal h3{font-family:'Sora',sans-serif;font-size:20px;margin-bottom:18px}
@@ -83,68 +88,48 @@ background-image:radial-gradient(ellipse at 10% 0%,rgba(37,99,235,.08)0%,transpa
 .spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4px}
-.sub{color:var(--muted);margin-bottom:22px;font-size:13px}
+.sub{color:var(--muted);margin-bottom:20px;font-size:13px}
 .scan-box{border:2px dashed #c7d2fe;border-radius:12px;padding:12px;text-align:center;background:#f8fafc;margin-bottom:12px}
-.scan-box video{width:100%;max-height:140px;border-radius:8px}
+.scan-box video{width:100%;max-height:130px;border-radius:8px}
 .icon-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
 .icon-btn:hover{border-color:var(--rose);background:#fff1f2}
 .icon-btn.ok:hover{border-color:var(--mint);background:#ecfdf5}
-
-/* DANFE / Nota impressa */
-@media print{
-  body *{visibility:hidden}
-  #danfePrint,#danfePrint *{visibility:visible}
-  #danfePrint{position:absolute;left:0;top:0;width:100%;background:#fff;padding:0}
-  .no-print{display:none!important}
-}
-.danfe{font-family:'Courier New',monospace;font-size:11px;color:#000;background:#fff;border:2px solid #000;max-width:800px;margin:0 auto;padding:0}
-.danfe-head{border-bottom:2px solid #000;padding:8px 12px;display:grid;grid-template-columns:1fr auto;gap:8px}
-.danfe-title{font-size:14px;font-weight:bold;text-align:center}
-.danfe-box{border:1px solid #000;padding:4px 6px;margin:2px 0}
-.danfe table{width:100%;border-collapse:collapse;font-size:10px}
-.danfe th,.danfe td{border:1px solid #000;padding:3px 4px;text-align:left}
-.danfe th{background:#eee;font-weight:bold}
-.danfe-totais{display:grid;grid-template-columns:1fr 1fr;gap:0}
-.danfe-totais .danfe-box{margin:0;border-radius:0}
+.sec-badge{font-size:10px;color:var(--mint);font-weight:700;letter-spacing:.04em}
 </style>
 </head>
 <body>
-<div class="toast-area no-print" id="toasts"></div>
+<div class="toast-area" id="toasts"></div>
 
 <!-- MODAL PRODUTO -->
-<div class="modal-bg no-print" id="modalProduto">
+<div class="modal-bg" id="modalProduto">
   <div class="modal">
     <h3>Cadastrar produto</h3>
     <div class="scan-box">
-      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600">📷 Ler código de barras / QR</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600">📷 Código de barras / QR</div>
       <video id="scanVideo" style="display:none"></video>
-      <div id="scanPlaceholder" style="padding:12px;color:var(--muted);font-size:13px">Clique em “Ler código”</div>
+      <div id="scanPlaceholder" style="padding:10px;color:var(--muted);font-size:13px">Clique em Ler código</div>
       <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap">
         <button type="button" class="btn btn-prim btn-sm" onclick="iniciarScanCadastro()">Ler código</button>
         <button type="button" class="btn btn-ghost btn-sm" onclick="pararScanCadastro()">Parar</button>
       </div>
     </div>
-    <div class="field"><label>Nome *</label><input id="pNome" placeholder="Ex: Coca-Cola 350ml"/></div>
+    <div class="field"><label>Nome *</label><input id="pNome" class="allow-select" placeholder="Ex: Coca-Cola 350ml"/></div>
     <div class="row cols2">
-      <div class="field"><label>SKU</label><input id="pSku" placeholder="SKU-001"/></div>
-      <div class="field"><label>Barras / EAN</label><input id="pBarras" placeholder="7891234567890"/></div>
+      <div class="field"><label>SKU</label><input id="pSku" class="allow-select" placeholder="SKU-001"/></div>
+      <div class="field"><label>Barras / EAN</label><input id="pBarras" class="allow-select" placeholder="7891234567890"/></div>
     </div>
     <div class="row cols2">
-      <div class="field"><label>NCM *</label><input id="pNcm" placeholder="22021000" maxlength="8"/></div>
-      <div class="field"><label>CNP</label><input id="pCnp" placeholder="Opcional"/></div>
+      <div class="field"><label>NCM *</label><input id="pNcm" class="allow-select" placeholder="22021000" maxlength="8"/></div>
+      <div class="field"><label>CNP</label><input id="pCnp" class="allow-select" placeholder="Opcional"/></div>
     </div>
     <div class="row cols2">
-      <div class="field"><label>Preço (R$)</label><input id="pPreco" type="number" step="0.01" value="5.50"/></div>
-      <div class="field"><label>Estoque</label><input id="pEstoque" type="number" value="10"/></div>
+      <div class="field"><label>Preço (R$)</label><input id="pPreco" class="allow-select" type="number" step="0.01" value="5.50"/></div>
+      <div class="field"><label>Estoque</label><input id="pEstoque" class="allow-select" type="number" value="10"/></div>
     </div>
     <div class="row cols2">
-      <div class="field"><label>ICMS %</label><input id="pIcms" type="number" step="0.01" value="18"/></div>
+      <div class="field"><label>ICMS %</label><input id="pIcms" class="allow-select" type="number" step="0.01" value="18"/></div>
       <div class="field"><label>CFOP</label>
-        <select id="pCfop">
-          <option value="5102">5102 - Venda</option>
-          <option value="5405">5405 - ST</option>
-          <option value="5933">5933 - Serviço</option>
-        </select>
+        <select id="pCfop"><option value="5102">5102 - Venda</option><option value="5405">5405 - ST</option><option value="5933">5933 - Serviço</option></select>
       </div>
     </div>
     <div style="display:flex;gap:10px;margin-top:8px">
@@ -155,65 +140,55 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 </div>
 
 <!-- MODAL PESSOA -->
-<div class="modal-bg no-print" id="modalPessoa">
+<div class="modal-bg" id="modalPessoa">
   <div class="modal">
     <h3>Cadastrar pessoa</h3>
-    <div class="field"><label>Nome *</label><input id="cNome"/></div>
+    <div class="field"><label>CPF / CNPJ *</label>
+      <input id="cDoc" class="allow-select" placeholder="Digite e saia do campo para buscar" onblur="buscarDocumento()"/>
+    </div>
+    <div class="field"><label>Nome / Razão social *</label><input id="cNome" class="allow-select"/></div>
     <div class="row cols2">
-      <div class="field"><label>CPF/CNPJ</label><input id="cDoc"/></div>
-      <div class="field"><label>Telefone</label><input id="cTel"/></div>
+      <div class="field"><label>Telefone / WhatsApp</label><input id="cTel" class="allow-select" placeholder="11999999999"/></div>
+      <div class="field"><label>Tipo</label>
+        <select id="cTipo"><option value="PF">PF</option><option value="PJ">PJ</option></select>
+      </div>
     </div>
-    <div class="field"><label>E-mail</label><input id="cEmail" type="email"/></div>
-    <div class="field"><label>Tipo</label>
-      <select id="cTipo"><option value="PF">PF</option><option value="PJ">PJ</option></select>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:8px">
+    <div class="field"><label>E-mail</label><input id="cEmail" class="allow-select" type="email"/></div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:12px">CNPJ: BrasilAPI · CPF: via Cloudflare Worker → Serpro (produção)</p>
+    <div style="display:flex;gap:10px">
       <button class="btn btn-prim" onclick="salvarPessoa()">Salvar</button>
       <button class="btn btn-ghost" onclick="fecharModal('modalPessoa')">Cancelar</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL DANFE / IMPRESSÃO -->
-<div class="modal-bg no-print" id="modalDanfe">
-  <div class="modal" style="max-width:820px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <h3 style="margin:0">Nota Fiscal Eletrônica</h3>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-prim btn-sm" onclick="window.print()">🖨 Imprimir</button>
-        <button class="btn btn-ghost btn-sm" onclick="fecharModal('modalDanfe')">Fechar</button>
-      </div>
-    </div>
-    <div id="danfePrint"></div>
-  </div>
-</div>
-
 <!-- LOGIN -->
-<div id="tela-login" class="no-print">
+<div id="tela-login">
   <div class="login-box">
     <div class="logo"><div class="logo-dot"></div>Nox<span style="color:var(--blue)">Mob</span></div>
     <h1>Entrar no sistema</h1>
-    <p>SmartPOS · NF-e · CBS/IBS · Reforma Tributária 2026</p>
-    <div class="field"><label>E-mail</label><input type="email" id="loginEmail" value="admin@noxmob.com.br"/></div>
-    <div class="field"><label>Senha</label><input type="password" id="loginSenha" value="123456"/></div>
+    <p>SmartPOS · NF-e · CBS/IBS · Worker seguro</p>
+    <div class="field"><label>E-mail</label><input type="email" id="loginEmail" class="allow-select" value="admin@noxmob.com.br"/></div>
+    <div class="field"><label>Senha</label><input type="password" id="loginSenha" class="allow-select" value="123456"/></div>
     <button class="btn btn-prim btn-full" onclick="fazerLogin()" style="margin-top:8px">Entrar</button>
+    <p class="sec-badge" style="text-align:center;margin-top:16px">🔒 TLS · CSP · secrets no Worker</p>
   </div>
 </div>
 
 <!-- APP -->
-<div class="app no-print" id="app">
+<div class="app" id="app">
   <div class="shell">
     <aside class="sidebar">
       <div class="logo"><div class="logo-dot"></div>Nox<span style="color:var(--blue)">Mob</span></div>
       <div class="nav-item ativo" onclick="irPara('dashboard',this)">📊 Dashboard</div>
       <div class="nav-item" onclick="irPara('pdv',this)">🛒 PDV / Caixa</div>
       <div class="nav-item" onclick="irPara('produtos',this)">📦 Produtos</div>
-      <div class="nav-item" onclick="irPara('pessoas',this)">👥 Pessoas</div>
+      <div class="nav-item" onclick="irPara('pessoas',this)">👥 Pessoas / Leads</div>
       <div class="nav-item" onclick="irPara('estoque',this)">📋 Estoque</div>
       <div class="nav-item" onclick="irPara('relatorios',this)">📈 Relatórios / DRE</div>
       <div class="nav-item" onclick="irPara('fiscal',this)">🧾 Fiscal · CBS/IBS</div>
       <div class="nav-item" onclick="irPara('visao',this)">📷 Visão IA</div>
-      <div class="nav-item" onclick="irPara('config',this)">⚙️ Config</div>
+      <div class="nav-item" onclick="irPara('config',this)">⚙️ Config / Worker</div>
       <div style="flex:1"></div>
       <div class="nav-item" onclick="sair()" style="color:var(--rose)">Sair</div>
     </aside>
@@ -221,116 +196,114 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
       <div class="topbar">
         <div id="topTitle" style="font-family:'Sora',sans-serif;font-weight:700">Dashboard</div>
         <div style="display:flex;align-items:center;gap:12px">
+          <div class="clock" id="relogio">--:--:--</div>
           <span class="pill pill-mint">● Online</span>
           <span style="color:var(--muted);font-size:12px;font-weight:600">admin@noxmob.com.br</span>
         </div>
       </div>
       <div class="content">
 
-        <!-- DASHBOARD -->
         <div class="page ativa" id="p-dashboard">
           <h2>Dashboard</h2>
-          <p class="sub">Vendas · impostos legados · IVA Dual (CBS+IBS)</p>
-          <div class="grid grid-4" style="margin-bottom:22px">
+          <p class="sub">Vendas · legados · IVA Dual</p>
+          <div class="grid grid-4" style="margin-bottom:20px">
             <div class="stat"><div class="label">Vendas hoje</div><div class="value mint" id="statVendas">R$ 0</div></div>
             <div class="stat"><div class="label">ICMS+PIS+COFINS</div><div class="value amber" id="statImpostos">R$ 0</div></div>
-            <div class="stat"><div class="label">CBS+IBS (teste)</div><div class="value cyan" id="statDual">R$ 0</div></div>
+            <div class="stat"><div class="label">CBS+IBS teste</div><div class="value cyan" id="statDual">R$ 0</div></div>
             <div class="stat"><div class="label">Tickets</div><div class="value blue" id="statTickets">0</div></div>
           </div>
           <div class="panel">
             <div class="panel-title">Últimas vendas</div>
-            <table class="tbl">
-              <thead><tr><th>Hora</th><th>Itens</th><th>Total</th><th>Legados</th><th>CBS+IBS</th><th></th></tr></thead>
-              <tbody id="ultimasVendas"></tbody>
-            </table>
+            <table class="tbl"><thead><tr><th>Hora</th><th>Itens</th><th>Total</th><th>Legados</th><th>CBS+IBS</th><th></th></tr></thead>
+            <tbody id="ultimasVendas"></tbody></table>
           </div>
         </div>
 
-        <!-- PDV -->
         <div class="page" id="p-pdv">
           <h2>PDV / Caixa</h2>
-          <p class="sub">Barras · QR · IA · impostos + CBS/IBS</p>
+          <p class="sub">Barras · QR · IA · impostos · WhatsApp</p>
           <div class="pdv-layout">
             <div>
               <div class="field">
-                <label>Bip / código de barras ou QR</label>
-                <input id="scanInput" placeholder="Leitor ou digite + Enter" onkeydown="if(event.key==='Enter')buscarPorCodigo()" style="font-family:'JetBrains Mono',monospace"/>
+                <label>Bip / código</label>
+                <input id="scanInput" class="allow-select" placeholder="Leitor ou Enter" onkeydown="if(event.key==='Enter')buscarPorCodigo()" style="font-family:'JetBrains Mono',monospace"/>
               </div>
               <div class="camera-area">
-                <div class="camera-placeholder" id="camPlaceholder">
-                  <div class="icon">📷</div>
-                  <div style="font-weight:600;color:var(--text)">Câmera ou foto</div>
-                </div>
-                <video id="videoCam" autoplay playsinline style="display:none;width:100%;max-height:220px;object-fit:cover;border-radius:12px"></video>
+                <div class="camera-placeholder" id="camPlaceholder"><div class="icon">📷</div><div style="font-weight:600;color:var(--text)">Câmera ou foto</div></div>
+                <video id="videoCam" autoplay playsinline style="display:none;width:100%;max-height:200px;object-fit:cover;border-radius:12px"></video>
               </div>
               <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
                 <button class="btn btn-prim btn-sm" onclick="ativarCamera()">Câmera</button>
                 <label class="btn btn-ghost btn-sm" style="cursor:pointer">Foto<input type="file" accept="image/*" style="display:none" onchange="aoFotoProduto(event)"/></label>
-                <button class="btn btn-mint btn-sm" id="btnReconhecer" onclick="reconhecerProduto()" disabled>Reconhecer IA</button>
+                <button class="btn btn-mint btn-sm" id="btnReconhecer" onclick="reconhecerProduto()" disabled>IA</button>
               </div>
               <div style="margin-top:8px;font-size:12px;color:var(--muted)" id="ocrStatus">aguardando…</div>
             </div>
             <div class="panel">
-              <div class="panel-title">Carrinho · impostos</div>
+              <div class="panel-title">Carrinho</div>
               <div class="cart-items" id="cartItems"></div>
               <div class="cart-total">
                 <div class="tax-line"><span>Subtotal</span><span id="cartSub">R$ 0,00</span></div>
-                <div class="tax-line"><span>ICMS + PIS + COFINS</span><span id="cartTax">R$ 0,00</span></div>
+                <div class="tax-line"><span>ICMS+PIS+COFINS</span><span id="cartTax">R$ 0,00</span></div>
                 <div class="tax-line"><span>CBS 0,9% + IBS 0,1%</span><span id="cartDual">R$ 0,00</span></div>
-                <div style="font-size:12px;color:var(--muted);margin-top:8px">Total a pagar</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:8px">Total</div>
                 <div class="valor" id="cartTotal">R$ 0,00</div>
               </div>
-              <button class="btn btn-mint btn-full" style="margin-top:12px" onclick="finalizarVenda()">Finalizar · emitir NF-e</button>
+              <button class="btn btn-mint btn-full" style="margin-top:12px" onclick="finalizarVenda()">Finalizar · NF-e</button>
               <button class="btn btn-ghost btn-sm btn-full" style="margin-top:8px" onclick="limparCarrinho()">Limpar</button>
             </div>
           </div>
         </div>
 
-        <!-- PRODUTOS -->
         <div class="page" id="p-produtos">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
-            <div><h2>Produtos</h2><p class="sub" style="margin:0">NCM · barras · ICMS · CFOP</p></div>
-            <button class="btn btn-prim btn-sm" onclick="abrirModalProduto()">+ Novo produto</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+            <div><h2>Produtos</h2><p class="sub" style="margin:0">NCM · barras · ICMS</p></div>
+            <button class="btn btn-prim btn-sm" onclick="abrirModalProduto()">+ Novo</button>
           </div>
           <div class="panel" style="padding:0;overflow:hidden">
-            <table class="tbl">
-              <thead><tr><th>SKU</th><th>Nome</th><th>Barras</th><th>NCM</th><th>ICMS</th><th>Preço</th><th>Est.</th><th></th></tr></thead>
-              <tbody id="listaProdutos"></tbody>
-            </table>
+            <table class="tbl"><thead><tr><th>SKU</th><th>Nome</th><th>Barras</th><th>NCM</th><th>ICMS</th><th>Preço</th><th>Est</th><th></th></tr></thead>
+            <tbody id="listaProdutos"></tbody></table>
           </div>
         </div>
 
-        <!-- PESSOAS -->
         <div class="page" id="p-pessoas">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
-            <div><h2>Pessoas</h2><p class="sub" style="margin:0">Clientes NF-e</p></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+            <div><h2>Pessoas / Leads</h2><p class="sub" style="margin:0">CPF/CNPJ · WhatsApp · histórico</p></div>
             <button class="btn btn-prim btn-sm" onclick="abrirModal('modalPessoa')">+ Nova pessoa</button>
           </div>
+          <div class="panel" style="padding:0;overflow:hidden;margin-bottom:16px">
+            <table class="tbl"><thead><tr><th>Nome</th><th>Doc</th><th>Tipo</th><th>Tel</th><th></th></tr></thead>
+            <tbody id="listaPessoas"></tbody></table>
+          </div>
           <div class="panel" style="padding:0;overflow:hidden">
-            <table class="tbl">
-              <thead><tr><th>Nome</th><th>Doc</th><th>Tipo</th><th>Tel</th><th></th></tr></thead>
-              <tbody id="listaPessoas"></tbody>
-            </table>
+            <div class="panel-title" style="padding:16px 16px 0">Leads WhatsApp</div>
+            <table class="tbl"><thead><tr><th>Nome</th><th>Tel</th><th>Compras</th><th>Última</th><th></th></tr></thead>
+            <tbody id="listaLeads"></tbody></table>
           </div>
         </div>
 
-        <!-- ESTOQUE -->
         <div class="page" id="p-estoque">
           <h2>Estoque</h2>
-          <p class="sub">Ajuste · zerar · lixeira</p>
+          <p class="sub">Zerar · lixeira</p>
           <div class="panel" style="padding:0;overflow:hidden">
-            <table class="tbl">
-              <thead><tr><th>Produto</th><th>SKU</th><th>NCM</th><th>Qtd</th><th>Status</th><th></th></tr></thead>
-              <tbody id="listaEstoque"></tbody>
-            </table>
+            <table class="tbl"><thead><tr><th>Produto</th><th>SKU</th><th>NCM</th><th>Qtd</th><th>Status</th><th></th></tr></thead>
+            <tbody id="listaEstoque"></tbody></table>
           </div>
         </div>
 
-        <!-- RELATÓRIOS -->
         <div class="page" id="p-relatorios">
           <h2>Relatórios · DRE</h2>
-          <p class="sub">Receita · legados · IVA Dual</p>
-          <div class="grid grid-3" style="margin-bottom:20px">
+          <p class="sub">Filtro de período · extrato completo preservado</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+            <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('dia')">Hoje</button>
+            <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('semana')">Semana</button>
+            <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('mes')">Mês</button>
+            <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('todos')">Extrato completo</button>
+            <button class="btn btn-prim btn-sm" onclick="renderRelatorios()">↻ Atualizar</button>
+            <button class="btn btn-mint btn-sm" onclick="imprimirDRE()">🖨 Imprimir DRE</button>
+            <button class="btn btn-rose btn-sm" onclick="zerarVisualizacaoPeriodo()">Zerar saldo do período</button>
+          </div>
+          <div class="grid grid-3" style="margin-bottom:16px">
             <div class="stat"><div class="label">Receita bruta</div><div class="value mint" id="dreReceita">R$ 0</div></div>
             <div class="stat"><div class="label">Impostos legados</div><div class="value amber" id="dreImpostos">R$ 0</div></div>
             <div class="stat"><div class="label">CBS+IBS teste</div><div class="value cyan" id="dreDual">R$ 0</div></div>
@@ -340,68 +313,62 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
             <table class="tbl"><tbody id="dreLinhas"></tbody></table>
           </div>
           <div class="panel">
-            <div class="panel-title">Vendas com impostos</div>
-            <table class="tbl">
-              <thead><tr><th>Data</th><th>Itens</th><th>Bruto</th><th>Legados</th><th>CBS+IBS</th><th></th></tr></thead>
-              <tbody id="relVendas"></tbody>
-            </table>
+            <div class="panel-title">Vendas do período</div>
+            <table class="tbl"><thead><tr><th>Data</th><th>Itens</th><th>Bruto</th><th>Legados</th><th>CBS+IBS</th><th></th></tr></thead>
+            <tbody id="relVendas"></tbody></table>
           </div>
         </div>
 
-        <!-- FISCAL -->
         <div class="page" id="p-fiscal">
-          <h2>Fiscal · olho nos impostos</h2>
-          <p class="sub">ICMS · PIS · COFINS · <strong>CBS 0,9% · IBS 0,1%</strong> (Reforma Tributária 2026)</p>
+          <h2>Fiscal · CBS / IBS</h2>
+          <p class="sub">IVA Dual teste 2026 · NF-e 55 / NFC-e 65</p>
           <div class="grid grid-3" style="margin-bottom:16px">
-            <div class="stat"><div class="label">NF-e / NFC-e hoje</div><div class="value blue" id="statNfe">0</div></div>
-            <div class="stat"><div class="label">CBS teste (0,9%)</div><div class="value cyan" id="statCbs">R$ 0</div></div>
-            <div class="stat"><div class="label">IBS teste (0,1%)</div><div class="value amber" id="statIbs">R$ 0</div></div>
+            <div class="stat"><div class="label">NF-e hoje</div><div class="value blue" id="statNfe">0</div></div>
+            <div class="stat"><div class="label">CBS 0,9%</div><div class="value cyan" id="statCbs">R$ 0</div></div>
+            <div class="stat"><div class="label">IBS 0,1%</div><div class="value amber" id="statIbs">R$ 0</div></div>
           </div>
           <div class="panel" style="margin-bottom:16px">
-            <div class="panel-title">Resumo de impostos (vendas)</div>
+            <div class="panel-title">Resumo de impostos</div>
             <div id="olhoImpostos"></div>
           </div>
           <div class="panel">
-            <div class="panel-title">Configuração NF-e · IVA Dual</div>
+            <div class="panel-title">Emitente NF-e</div>
             <div class="row cols2">
-              <div class="field"><label>CNPJ emitente</label><input id="cfgCnpj" value="47.149.826/0001-80"/></div>
+              <div class="field"><label>CNPJ</label><input id="cfgCnpj" class="allow-select" value="47.149.826/0001-80"/></div>
               <div class="field"><label>Ambiente</label>
                 <select id="cfgAmb"><option>Homologação</option><option selected>Produção</option></select>
               </div>
             </div>
-            <div class="row cols2">
-              <div class="field"><label>CBS (teste 2026)</label><input value="0,90%" readonly/></div>
-              <div class="field"><label>IBS (teste 2026)</label><input value="0,10%" readonly/></div>
-            </div>
-            <p style="font-size:12px;color:var(--muted);margin-top:8px">
-              Documentos: NF-e (55), NFC-e (65), CT-e, MDF-e, NFS-e, NFCom.
-              Schema XML: grupos CBS e IBS (CST, vBC, pAliq, vImp) — LC 214/2025 · atos RFB/CGIBS.
-            </p>
+            <div class="field"><label>Razão social</label><input id="cfgRazao" class="allow-select" value="NOXMOB COMERCIO LTDA"/></div>
           </div>
         </div>
 
-        <!-- VISÃO -->
         <div class="page" id="p-visao">
           <h2>Visão Computacional</h2>
-          <p class="sub">Gemini · YOLO · ZXing · padrões EUA/Israel</p>
+          <p class="sub">Pipeline multi-camada</p>
           <div class="panel">
             <ol style="padding-left:20px;color:var(--muted);line-height:2">
-              <li><strong style="color:var(--blue)">Gemini / GPT-4o</strong> — nome na embalagem</li>
-              <li><strong style="color:var(--cyan)">Cloud Vision</strong> — OCR de rótulo</li>
-              <li><strong style="color:var(--purple)">YOLOv11</strong> — detecção + bbox</li>
-              <li><strong style="color:var(--amber)">ZXing</strong> — barras / QR</li>
-              <li><strong style="color:var(--mint)">Catálogo local</strong> — EAN / SKU / NCM</li>
+              <li><strong style="color:var(--blue)">Gemini / GPT-4o</strong> — embalagem</li>
+              <li><strong style="color:var(--cyan)">Cloud Vision</strong> — OCR</li>
+              <li><strong style="color:var(--amber)">ZXing</strong> — barras/QR</li>
+              <li><strong style="color:var(--mint)">Catálogo local</strong> — EAN/SKU/NCM</li>
             </ol>
           </div>
         </div>
 
-        <!-- CONFIG -->
         <div class="page" id="p-config">
-          <h2>Configurações</h2>
+          <h2>Config / Worker</h2>
+          <p class="sub">Endpoints seguros · sem chave no browser</p>
           <div class="panel">
-            <div class="field"><label>Nome da loja</label><input id="cfgLoja" value="Minha Loja NoxMob"/></div>
-            <div class="field"><label>Razão social (DANFE)</label><input id="cfgRazao" value="NOXMOB COMERCIO LTDA"/></div>
-            <button class="btn btn-prim btn-sm" onclick="toast('Salvo','ok')">Salvar</button>
+            <div class="field"><label>URL Cloudflare Worker (Serpro / docs)</label>
+              <input id="cfgWorker" class="allow-select" placeholder="https://noxmob-api.SEU_SUBDOMINIO.workers.dev" value=""/>
+            </div>
+            <div class="field"><label>Nome da loja</label><input id="cfgLoja" class="allow-select" value="Minha Loja NoxMob"/></div>
+            <button class="btn btn-prim btn-sm" onclick="salvarConfigWorker()">Salvar</button>
+            <p style="font-size:12px;color:var(--muted);margin-top:12px">
+              Token Serpro, certificado e rate-limit ficam <strong>somente no Worker</strong> (secrets).
+              O front nunca recebe a chave — padrão AWS / Google / Cloudflare.
+            </p>
           </div>
         </div>
 
@@ -412,13 +379,23 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 
 <script>
 /* ═══════════════════════════════════════════════════════════
-   NOXMOB · Reforma Tributária CBS 0,9% + IBS 0,1% + DANFE
+   NOXMOB · HTML único · CBS/IBS · Worker · Print · WhatsApp
+   Segurança real = secrets no Worker + CSP + HTTPS
    ═══════════════════════════════════════════════════════════ */
+(function harden() {
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('keydown', e => {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) { e.preventDefault(); return false; }
+    if (e.ctrlKey && ['u','U','s','S'].includes(e.key)) { e.preventDefault(); return false; }
+  });
+})();
+
 const PIS = 1.65, COFINS = 7.6, CBS_TESTE = 0.90, IBS_TESTE = 0.10;
 
-function calcImpostos(preco, icmsPct = 18) {
+function calcImpostos(preco, icmsPct) {
   const base = Number(preco) || 0;
-  const icms = base * (icmsPct || 18) / 100;
+  const icms = base * (Number(icmsPct) || 18) / 100;
   const pis = base * PIS / 100;
   const cofins = base * COFINS / 100;
   const cbs = base * CBS_TESTE / 100;
@@ -428,13 +405,20 @@ function calcImpostos(preco, icmsPct = 18) {
     ivaDual: cbs + ibs,
     totalLegado: icms + pis + cofins,
     detalhe_item: {
-      valor_bruto: Number(base.toFixed(2)),
+      valor_bruto: +base.toFixed(2),
       impostos_novos: {
-        CBS: { CST_CBS: '01', vBC_CBS: Number(base.toFixed(2)), pCBS: CBS_TESTE, vCBS: Number(cbs.toFixed(2)) },
-        IBS: { CST_IBS: '01', vBC_IBS: Number(base.toFixed(2)), pIBS: IBS_TESTE, vIBS: Number(ibs.toFixed(2)) }
+        CBS: { CST_CBS: '01', vBC_CBS: +base.toFixed(2), pCBS: CBS_TESTE, vCBS: +cbs.toFixed(2) },
+        IBS: { CST_IBS: '01', vBC_IBS: +base.toFixed(2), pIBS: IBS_TESTE, vIBS: +ibs.toFixed(2) }
       }
     }
   };
+}
+
+function dualDaVenda(v) {
+  if (v.cbs_ibs > 0) return v.cbs_ibs;
+  let t = 0;
+  (v.detalhe || []).forEach(d => { t += calcImpostos(d.preco * d.qtd, d.icms).ivaDual; });
+  return t;
 }
 
 let produtos = JSON.parse(localStorage.getItem('nox_produtos') || 'null') || [
@@ -445,12 +429,14 @@ let produtos = JSON.parse(localStorage.getItem('nox_produtos') || 'null') || [
   {sku:'SKU-005',nome:'Suco Natural 300ml',barras:'7891000053508',ncm:'20099000',cnp:'',preco:8.5,estoque:40,cfop:'5102',icms:18}
 ];
 let pessoas = JSON.parse(localStorage.getItem('nox_pessoas') || 'null') || [{nome:'Consumidor Final',doc:'',tipo:'PF',tel:'',email:''}];
+let leads = JSON.parse(localStorage.getItem('nox_leads') || '[]');
 let carrinho = [], vendas = JSON.parse(localStorage.getItem('nox_vendas') || '[]');
-let streamCam = null, codeReader = null, scanning = false, ultimaVenda = null;
+let streamCam = null, codeReader = null, scanning = false, periodoDRE = 'todos';
 
-function toast(m, t = 'ok') {
+function toast(m, t) {
+  t = t || 'ok';
   const e = document.createElement('div');
-  e.className = `toast toast-${t}`;
+  e.className = 'toast toast-' + t;
   e.textContent = (t === 'ok' ? '✓ ' : '✕ ') + m;
   document.getElementById('toasts').appendChild(e);
   setTimeout(() => e.remove(), 3500);
@@ -458,11 +444,19 @@ function toast(m, t = 'ok') {
 function abrirModal(id) { document.getElementById(id).classList.add('ativo'); }
 function fecharModal(id) { document.getElementById(id).classList.remove('ativo'); }
 
+function tickRelogio() {
+  const n = new Date();
+  document.getElementById('relogio').textContent = n.toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit', day: '2-digit', month: '2-digit' });
+}
+setInterval(tickRelogio, 1000); tickRelogio();
+
 function fazerLogin() {
   document.getElementById('tela-login').style.display = 'none';
   document.getElementById('app').classList.add('ativo');
+  const w = localStorage.getItem('nox_worker');
+  if (w) document.getElementById('cfgWorker').value = w;
   atualizarTudo();
-  toast('Bem-vindo ao NoxMob · CBS/IBS 2026');
+  toast('Sessão iniciada');
 }
 function sair() {
   document.getElementById('app').classList.remove('ativo');
@@ -475,42 +469,93 @@ function irPara(p, el) {
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('ativo'));
   document.getElementById('p-' + p).classList.add('ativa');
   if (el) el.classList.add('ativo');
-  const t = { dashboard: 'Dashboard', pdv: 'PDV / Caixa', produtos: 'Produtos', pessoas: 'Pessoas', estoque: 'Estoque', relatorios: 'Relatórios / DRE', fiscal: 'Fiscal · CBS/IBS', visao: 'Visão IA', config: 'Config' };
+  const t = { dashboard:'Dashboard', pdv:'PDV / Caixa', produtos:'Produtos', pessoas:'Pessoas / Leads', estoque:'Estoque', relatorios:'Relatórios / DRE', fiscal:'Fiscal · CBS/IBS', visao:'Visão IA', config:'Config / Worker' };
   document.getElementById('topTitle').textContent = t[p] || p;
   atualizarTudo();
 }
 function atualizarTudo() {
-  atualizarDashboard(); renderProdutos(); renderPessoas(); renderEstoque();
-  renderRelatorios(); renderOlhoImpostos(); renderCarrinho();
+  atualizarDashboard(); renderProdutos(); renderPessoas(); renderLeads();
+  renderEstoque(); renderRelatorios(); renderOlhoImpostos(); renderCarrinho();
 }
 
 function atualizarDashboard() {
   const hoje = vendas.filter(v => new Date(v.data).toDateString() === new Date().toDateString());
-  const bruto = hoje.reduce((s, v) => s + v.total, 0);
-  const leg = hoje.reduce((s, v) => s + (v.impostos || 0), 0);
-  const dual = hoje.reduce((s, v) => s + (v.cbs_ibs || 0), 0);
-  document.getElementById('statVendas').textContent = 'R$ ' + bruto.toFixed(2);
-  document.getElementById('statImpostos').textContent = 'R$ ' + leg.toFixed(2);
-  document.getElementById('statDual').textContent = 'R$ ' + dual.toFixed(2);
+  document.getElementById('statVendas').textContent = 'R$ ' + hoje.reduce((s, v) => s + v.total, 0).toFixed(2);
+  document.getElementById('statImpostos').textContent = 'R$ ' + hoje.reduce((s, v) => s + (v.impostos || 0), 0).toFixed(2);
+  document.getElementById('statDual').textContent = 'R$ ' + hoje.reduce((s, v) => s + dualDaVenda(v), 0).toFixed(2);
   document.getElementById('statTickets').textContent = hoje.length;
   document.getElementById('statNfe').textContent = hoje.length;
   const tb = document.getElementById('ultimasVendas');
   if (!vendas.length) {
-    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Nenhuma venda</td></tr>';
+    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">Nenhuma venda</td></tr>';
     return;
   }
-  tb.innerHTML = vendas.slice(0, 8).map((v, i) => `
-    <tr>
-      <td>${new Date(v.data).toLocaleString('pt-BR')}</td>
-      <td>${v.itens}</td>
-      <td style="color:var(--mint);font-weight:700">R$ ${v.total.toFixed(2)}</td>
-      <td style="color:var(--amber)">R$ ${(v.impostos || 0).toFixed(2)}</td>
-      <td style="color:var(--cyan)">R$ ${(v.cbs_ibs || 0).toFixed(2)}</td>
-      <td><button class="btn btn-ghost btn-sm" onclick="imprimirDanfe(${i})">🖨 NF-e</button></td>
-    </tr>`).join('');
+  tb.innerHTML = vendas.slice(0, 8).map((v, i) => `<tr>
+    <td>${new Date(v.data).toLocaleString('pt-BR')}</td>
+    <td>${v.itens}</td>
+    <td style="color:var(--mint);font-weight:700">R$ ${v.total.toFixed(2)}</td>
+    <td style="color:var(--amber)">R$ ${(v.impostos || 0).toFixed(2)}</td>
+    <td style="color:var(--cyan)">R$ ${dualDaVenda(v).toFixed(2)}</td>
+    <td style="white-space:nowrap">
+      <button class="btn btn-ghost btn-sm" onclick="imprimirDanfe(${i})">🖨</button>
+      <button class="btn btn-mint btn-sm" onclick="enviarWhatsApp(${i})">WA</button>
+    </td>
+  </tr>`).join('');
 }
 
-/* SCAN CADASTRO */
+/* CPF/CNPJ */
+function validarCPF(cpf) {
+  if (!/^\d{11}$/.test(cpf) || /^(\d)\1+$/.test(cpf)) return false;
+  let s = 0; for (let i = 0; i < 9; i++) s += +cpf[i] * (10 - i);
+  let r = (s * 10) % 11; if (r === 10) r = 0; if (r !== +cpf[9]) return false;
+  s = 0; for (let i = 0; i < 10; i++) s += +cpf[i] * (11 - i);
+  r = (s * 10) % 11; if (r === 10) r = 0; return r === +cpf[10];
+}
+async function buscarDocumento() {
+  const raw = document.getElementById('cDoc').value.replace(/\D/g, '');
+  if (raw.length !== 11 && raw.length !== 14) return;
+  toast('Consultando…');
+  const worker = (document.getElementById('cfgWorker').value || localStorage.getItem('nox_worker') || '').replace(/\/$/, '');
+  try {
+    if (raw.length === 14) {
+      if (worker) {
+        const r = await fetch(worker + '/cnpj/' + raw, { headers: { 'Accept': 'application/json' } });
+        if (r.ok) {
+          const d = await r.json();
+          document.getElementById('cNome').value = d.razao_social || d.nome || '';
+          document.getElementById('cTipo').value = 'PJ';
+          if (d.telefone) document.getElementById('cTel').value = d.telefone;
+          toast('CNPJ via Worker');
+          return;
+        }
+      }
+      const r = await fetch('https://brasilapi.com.br/api/cnpj/v1/' + raw);
+      if (!r.ok) throw new Error('fail');
+      const d = await r.json();
+      document.getElementById('cNome').value = d.razao_social || d.nome_fantasia || '';
+      document.getElementById('cTipo').value = 'PJ';
+      if (d.ddd_telefone_1) document.getElementById('cTel').value = String(d.ddd_telefone_1);
+      toast('CNPJ (BrasilAPI)');
+    } else {
+      if (!validarCPF(raw)) { toast('CPF inválido', 'err'); return; }
+      document.getElementById('cTipo').value = 'PF';
+      if (worker) {
+        const r = await fetch(worker + '/cpf/' + raw, { headers: { 'Accept': 'application/json' } });
+        if (r.ok) {
+          const d = await r.json();
+          if (d.nome) document.getElementById('cNome').value = d.nome;
+          toast('CPF via Worker/Serpro');
+          return;
+        }
+      }
+      toast('CPF ok — preencha nome (Serpro no Worker em produção)');
+    }
+  } catch (e) {
+    toast('Consulta indisponível — preencha manual', 'err');
+  }
+}
+
+/* Produtos / scan */
 async function iniciarScanCadastro() {
   try {
     pararScanCadastro();
@@ -522,12 +567,12 @@ async function iniciarScanCadastro() {
       if (res && scanning) {
         const cod = res.getText();
         document.getElementById('pBarras').value = cod;
-        const achou = produtos.find(p => p.barras === cod);
-        if (achou) {
-          document.getElementById('pNome').value = achou.nome;
-          document.getElementById('pNcm').value = achou.ncm || '';
-          document.getElementById('pPreco').value = achou.preco;
-          toast('Produto na base: ' + achou.nome);
+        const a = produtos.find(p => p.barras === cod);
+        if (a) {
+          document.getElementById('pNome').value = a.nome;
+          document.getElementById('pNcm').value = a.ncm || '';
+          document.getElementById('pPreco').value = a.preco;
+          toast('Produto na base');
         } else toast('Código: ' + cod);
         pararScanCadastro();
       }
@@ -544,10 +589,9 @@ function pararScanCadastro() {
 }
 function abrirModalProduto() { abrirModal('modalProduto'); }
 function fecharModalProduto() { pararScanCadastro(); fecharModal('modalProduto'); }
-
 function salvarProduto() {
   const nome = document.getElementById('pNome').value.trim();
-  if (!nome) { toast('Informe o nome', 'err'); return; }
+  if (!nome) { toast('Nome obrigatório', 'err'); return; }
   const sku = document.getElementById('pSku').value.trim() || ('SKU-' + String(produtos.length + 1).padStart(3, '0'));
   produtos.push({
     sku, nome,
@@ -563,7 +607,7 @@ function salvarProduto() {
   fecharModalProduto(); renderProdutos(); renderEstoque(); toast('Produto salvo');
 }
 function apagarProduto(sku) {
-  if (!confirm('Apagar produto?')) return;
+  if (!confirm('Apagar?')) return;
   produtos = produtos.filter(p => p.sku !== sku);
   localStorage.setItem('nox_produtos', JSON.stringify(produtos));
   renderProdutos(); renderEstoque(); toast('Removido');
@@ -612,7 +656,7 @@ async function ativarCamera() {
 }
 function aoFotoProduto(e) {
   const f = e.target.files[0]; if (!f) return;
-  document.getElementById('camPlaceholder').innerHTML = `<img src="${URL.createObjectURL(f)}" style="max-height:200px;border-radius:12px"/>`;
+  document.getElementById('camPlaceholder').innerHTML = `<img src="${URL.createObjectURL(f)}" style="max-height:180px;border-radius:12px"/>`;
   document.getElementById('videoCam').style.display = 'none';
   document.getElementById('btnReconhecer').disabled = false;
   toast('Foto OK');
@@ -621,23 +665,23 @@ async function reconhecerProduto() {
   const btn = document.getElementById('btnReconhecer');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
   document.getElementById('ocrStatus').textContent = 'Identificando…';
-  await new Promise(r => setTimeout(r, 900));
+  await new Promise(r => setTimeout(r, 800));
   const p = produtos[Math.floor(Math.random() * produtos.length)];
-  document.getElementById('ocrStatus').innerHTML = `<strong style="color:var(--mint)">${p.nome}</strong> · NCM ${p.ncm}`;
+  document.getElementById('ocrStatus').innerHTML = `<strong style="color:var(--mint)">${p.nome}</strong>`;
   adicionarAoCarrinho(p, 92);
-  btn.disabled = false; btn.innerHTML = 'Reconhecer IA';
+  btn.disabled = false; btn.innerHTML = 'IA';
   toast('IA: ' + p.nome);
 }
-function adicionarAoCarrinho(p, conf = 100) {
-  if (p.estoque <= 0) { toast('Sem estoque: ' + p.nome, 'err'); return; }
+function adicionarAoCarrinho(p, conf) {
+  if (p.estoque <= 0) { toast('Sem estoque', 'err'); return; }
   const e = carrinho.find(c => c.sku === p.sku);
-  if (e) e.qtd++; else carrinho.push({ ...p, qtd: 1, conf });
+  if (e) e.qtd++; else carrinho.push({ ...p, qtd: 1, conf: conf || 100 });
   renderCarrinho();
 }
 function renderCarrinho() {
   const el = document.getElementById('cartItems');
   if (!carrinho.length) {
-    el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px">Carrinho vazio</div>';
+    el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:16px">Vazio</div>';
     document.getElementById('cartSub').textContent = 'R$ 0,00';
     document.getElementById('cartTax').textContent = 'R$ 0,00';
     document.getElementById('cartDual').textContent = 'R$ 0,00';
@@ -649,16 +693,13 @@ function renderCarrinho() {
     const imp = calcImpostos(c.preco * c.qtd, c.icms);
     sub += c.preco * c.qtd; tax += imp.totalLegado; dual += imp.ivaDual;
     return `<div class="cart-item">
-      <div>
-        <div style="font-weight:700">${c.nome}</div>
-        <div style="font-size:11px;color:var(--muted)">ICMS ${c.icms || 18}% · CBS/IBS 1%</div>
-      </div>
+      <div><div style="font-weight:700">${c.nome}</div>
+      <div style="font-size:11px;color:var(--muted)">ICMS ${c.icms||18}% · CBS/IBS</div></div>
       <div style="display:flex;align-items:center;gap:8px">
         <span style="font-family:JetBrains Mono,monospace">${c.qtd}x</span>
-        <span style="color:var(--mint);font-weight:700">R$ ${(c.preco * c.qtd).toFixed(2)}</span>
+        <span style="color:var(--mint);font-weight:700">R$ ${(c.preco*c.qtd).toFixed(2)}</span>
         <button class="icon-btn" onclick="carrinho.splice(${i},1);renderCarrinho()">🗑</button>
-      </div>
-    </div>`;
+      </div></div>`;
   }).join('');
   document.getElementById('cartSub').textContent = 'R$ ' + sub.toFixed(2);
   document.getElementById('cartTax').textContent = 'R$ ' + tax.toFixed(2);
@@ -688,112 +729,89 @@ function finalizarVenda() {
     data: new Date().toISOString(), itens, total, impostos, cbs_ibs: ivaDual,
     motor: 'pdv+reforma', detalhe, nfe: true, modelo: '55',
     numero: String(vendas.length + 1).padStart(6, '0'),
-    chave: 'NFe' + Date.now() + Math.floor(Math.random() * 1000)
+    chave: 'NFe' + Date.now()
   };
   vendas.unshift(venda);
-  ultimaVenda = venda;
   localStorage.setItem('nox_vendas', JSON.stringify(vendas));
   localStorage.setItem('nox_produtos', JSON.stringify(produtos));
   carrinho = [];
   renderCarrinho();
   atualizarTudo();
-  toast(`NF-e ${venda.numero} · R$ ${total.toFixed(2)} · CBS+IBS R$ ${ivaDual.toFixed(2)}`);
+  toast('NF-e ' + venda.numero + ' · R$ ' + total.toFixed(2));
   imprimirDanfe(0);
 }
 
-/* DANFE estilo oficial / Spedy */
+/* Print DANFE — janela nova (não fica em branco) */
 function imprimirDanfe(idx) {
   const v = vendas[idx];
   if (!v) return;
-  ultimaVenda = v;
-  const razao = document.getElementById('cfgRazao')?.value || 'NOXMOB COMERCIO LTDA';
-  const cnpj = document.getElementById('cfgCnpj')?.value || '47.149.826/0001-80';
-  const amb = document.getElementById('cfgAmb')?.value || 'Produção';
+  const razao = document.getElementById('cfgRazao').value || 'NOXMOB COMERCIO LTDA';
+  const cnpj = document.getElementById('cfgCnpj').value || '47.149.826/0001-80';
+  const amb = document.getElementById('cfgAmb').value || 'Produção';
   let linhas = '', totCbs = 0, totIbs = 0, totIcms = 0;
   (v.detalhe || []).forEach((d, i) => {
     const imp = calcImpostos(d.preco * d.qtd, d.icms);
     totCbs += imp.cbs; totIbs += imp.ibs; totIcms += imp.icms;
-    linhas += `<tr>
-      <td>${i + 1}</td>
-      <td>${d.nome}<br/><small>NCM ${d.ncm || '—'} CFOP ${d.cfop || '5102'}</small></td>
-      <td>${d.qtd}</td>
-      <td>${d.preco.toFixed(2)}</td>
-      <td>${(d.preco * d.qtd).toFixed(2)}</td>
-      <td>${imp.cbs.toFixed(2)}</td>
-      <td>${imp.ibs.toFixed(2)}</td>
-    </tr>`;
+    linhas += `<tr><td>${i+1}</td><td>${d.nome}<br/><small>NCM ${d.ncm||'—'} CFOP ${d.cfop||'5102'}</small></td>
+      <td>${d.qtd}</td><td>${(+d.preco).toFixed(2)}</td><td>${(d.preco*d.qtd).toFixed(2)}</td>
+      <td>${imp.cbs.toFixed(2)}</td><td>${imp.ibs.toFixed(2)}</td></tr>`;
   });
-  document.getElementById('danfePrint').innerHTML = `
-  <div class="danfe">
-    <div class="danfe-head">
-      <div>
-        <div style="font-weight:bold;font-size:13px">${razao}</div>
-        <div>CNPJ: ${cnpj}</div>
-        <div>Documento auxiliar da Nota Fiscal Eletrônica</div>
-      </div>
-      <div style="text-align:right">
-        <div class="danfe-title">NF-e</div>
-        <div>Modelo 55</div>
-        <div>Nº ${v.numero || '000001'}</div>
-        <div>Série 1</div>
-        <div style="font-size:9px;margin-top:4px">${amb}</div>
-      </div>
-    </div>
-    <div class="danfe-box">
-      <strong>Chave de acesso (simulada):</strong> ${v.chave || '—'}<br/>
-      <strong>Data/Hora:</strong> ${new Date(v.data).toLocaleString('pt-BR')}
-      &nbsp;|&nbsp; <strong>Protocolo:</strong> DEMO-${Date.now().toString().slice(-8)}
-    </div>
-    <div class="danfe-box">
-      <strong>DESTINATÁRIO:</strong> Consumidor Final &nbsp;|&nbsp; Operação: Venda de mercadoria
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>#</th><th>Descrição / NCM / CFOP</th><th>Qtd</th><th>Unit.</th><th>Total</th>
-          <th>CBS 0,9%</th><th>IBS 0,1%</th>
-        </tr>
-      </thead>
-      <tbody>${linhas || '<tr><td colspan="7">Sem itens</td></tr>'}</tbody>
-    </table>
-    <div class="danfe-totais">
-      <div class="danfe-box">
-        <strong>CÁLCULO DO IMPOSTO (legado)</strong><br/>
-        Base ICMS: R$ ${v.total.toFixed(2)}<br/>
-        Valor ICMS: R$ ${totIcms.toFixed(2)}<br/>
-        PIS/COFINS (est.): R$ ${((v.impostos || 0) - totIcms).toFixed(2)}
-      </div>
-      <div class="danfe-box">
-        <strong>IVA DUAL — REFORMA TRIBUTÁRIA (teste 2026)</strong><br/>
-        CBS (federal 0,9%): <strong>R$ ${totCbs.toFixed(2)}</strong><br/>
-        IBS (estadual/municipal 0,1%): <strong>R$ ${totIbs.toFixed(2)}</strong><br/>
-        Total CBS+IBS: <strong>R$ ${(totCbs + totIbs).toFixed(2)}</strong>
-      </div>
-    </div>
-    <div class="danfe-box" style="text-align:right;font-size:14px">
-      <strong>VALOR TOTAL DA NOTA: R$ ${v.total.toFixed(2)}</strong>
-    </div>
-    <div class="danfe-box" style="font-size:9px">
-      LC 214/2025 · Alíquotas-teste CBS 0,9% e IBS 0,1% (Ato Conjunto RFB/CGIBS).
-      Valores de teste para destaque no XML; não representam cobrança plena em 2026.
-      Documento gerado pelo NoxMob SmartPOS — layout inspirado em DANFE / emissores (Spedy e similares).
-    </div>
-  </div>`;
-  abrirModal('modalDanfe');
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"/><title>NF-e ${v.numero||''}</title>
+  <style>body{font-family:'Courier New',monospace;font-size:11px;margin:12px;color:#000}
+  .danfe{border:2px solid #000;max-width:800px;margin:0 auto}.head{display:flex;justify-content:space-between;border-bottom:2px solid #000;padding:8px}
+  .box{border:1px solid #000;padding:6px 8px}table{width:100%;border-collapse:collapse;font-size:10px}
+  th,td{border:1px solid #000;padding:4px}th{background:#eee}.tot{display:grid;grid-template-columns:1fr 1fr}</style></head><body>
+  <div class="danfe"><div class="head"><div><b>${razao}</b><br/>CNPJ: ${cnpj}<br/>DANFE</div>
+  <div style="text-align:right"><b>NF-e</b><br/>Mod.55 Nº ${v.numero||'000001'} Série 1<br/>${amb}</div></div>
+  <div class="box">Chave: ${v.chave||'—'} | ${new Date(v.data).toLocaleString('pt-BR')}</div>
+  <div class="box">DEST: ${v.clienteNome||'Consumidor Final'} ${v.clienteTel?' · '+v.clienteTel:''}</div>
+  <table><thead><tr><th>#</th><th>Descrição</th><th>Qtd</th><th>Unit</th><th>Total</th><th>CBS</th><th>IBS</th></tr></thead>
+  <tbody>${linhas||'<tr><td colspan="7">—</td></tr>'}</tbody></table>
+  <div class="tot"><div class="box">ICMS R$ ${totIcms.toFixed(2)} | PIS/COFINS est. R$ ${((v.impostos||0)-totIcms).toFixed(2)}</div>
+  <div class="box"><b>CBS</b> R$ ${totCbs.toFixed(2)} | <b>IBS</b> R$ ${totIbs.toFixed(2)} | Dual R$ ${(totCbs+totIbs).toFixed(2)}</div></div>
+  <div class="box" style="text-align:right;font-size:14px"><b>TOTAL R$ ${v.total.toFixed(2)}</b></div>
+  <div class="box" style="font-size:9px">LC 214/2025 · CBS 0,9% + IBS 0,1% teste · NoxMob</div></div>
+  <script>window.onload=function(){window.print()}<\/script></body></html>`;
+  const w = window.open('', '_blank', 'width=860,height=700');
+  if (!w) { toast('Permita pop-up para imprimir', 'err'); return; }
+  w.document.write(html); w.document.close();
 }
 
-/* PESSOAS / ESTOQUE */
+/* WhatsApp + leads */
+function salvarLead(lead) {
+  const i = leads.findIndex(l => l.tel === lead.tel);
+  if (i >= 0) leads[i] = { ...leads[i], ...lead, compras: (leads[i].compras || 0) + 1 };
+  else leads.push({ ...lead, compras: 1, criado: new Date().toISOString() });
+  localStorage.setItem('nox_leads', JSON.stringify(leads));
+  renderLeads();
+}
+function enviarWhatsApp(idx) {
+  const v = vendas[idx];
+  if (!v) return;
+  let tel = v.clienteTel || prompt('WhatsApp (DDD+número):', '5511999999999');
+  if (!tel) return;
+  tel = tel.replace(/\D/g, '');
+  if (tel.length < 10) { toast('Telefone inválido', 'err'); return; }
+  salvarLead({ nome: v.clienteNome || 'Cliente', tel, doc: v.clienteDoc || '', ultimaCompra: v.data, valor: v.total });
+  const itens = (v.detalhe || []).map(d => `• ${d.qtd}x ${d.nome} — R$ ${(d.preco * d.qtd).toFixed(2)}`).join('%0A');
+  const msg = `*NoxMob — Pedido / NF-e ${v.numero||''}*%0A${new Date(v.data).toLocaleString('pt-BR')}%0A%0A${itens}%0A%0A*Total: R$ ${v.total.toFixed(2)}*%0ACBS+IBS: R$ ${dualDaVenda(v).toFixed(2)}%0A%0AObrigado!`;
+  window.open('https://wa.me/' + tel + '?text=' + msg, '_blank');
+  toast('WhatsApp aberto');
+}
+
 function salvarPessoa() {
   const nome = document.getElementById('cNome').value.trim();
   if (!nome) { toast('Nome obrigatório', 'err'); return; }
-  pessoas.push({
+  const tel = document.getElementById('cTel').value.replace(/\D/g, '');
+  const p = {
     nome, doc: document.getElementById('cDoc').value,
     tipo: document.getElementById('cTipo').value,
-    tel: document.getElementById('cTel').value,
-    email: document.getElementById('cEmail').value
-  });
+    tel, email: document.getElementById('cEmail').value
+  };
+  pessoas.push(p);
   localStorage.setItem('nox_pessoas', JSON.stringify(pessoas));
-  fecharModal('modalPessoa'); renderPessoas(); toast('Cliente salvo');
+  if (tel) salvarLead({ nome, tel, doc: p.doc, ultimaCompra: null, valor: 0 });
+  fecharModal('modalPessoa'); renderPessoas(); toast('Salvo');
 }
 function apagarPessoa(i) {
   if (!confirm('Remover?')) return;
@@ -804,10 +822,21 @@ function apagarPessoa(i) {
 function renderPessoas() {
   document.getElementById('listaPessoas').innerHTML = pessoas.map((c, i) => `<tr>
     <td style="font-weight:600">${c.nome}</td>
-    <td style="font-family:JetBrains Mono,monospace;font-size:12px">${c.doc || '—'}</td>
-    <td><span class="pill ${c.tipo === 'PJ' ? 'pill-blue' : 'pill-mint'}">${c.tipo}</span></td>
-    <td>${c.tel || '—'}</td>
+    <td style="font-family:JetBrains Mono,monospace;font-size:12px">${c.doc||'—'}</td>
+    <td><span class="pill ${c.tipo==='PJ'?'pill-blue':'pill-mint'}">${c.tipo}</span></td>
+    <td>${c.tel||'—'}</td>
     <td><button class="icon-btn" onclick="apagarPessoa(${i})">🗑</button></td>
+  </tr>`).join('');
+}
+function renderLeads() {
+  const el = document.getElementById('listaLeads');
+  if (!leads.length) { el.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px">Nenhum lead</td></tr>'; return; }
+  el.innerHTML = leads.map(l => `<tr>
+    <td style="font-weight:600">${l.nome}</td>
+    <td style="font-family:JetBrains Mono,monospace">${l.tel}</td>
+    <td>${l.compras||0}</td>
+    <td>${l.ultimaCompra ? new Date(l.ultimaCompra).toLocaleDateString('pt-BR') : '—'}</td>
+    <td><button class="btn btn-mint btn-sm" onclick="window.open('https://wa.me/${l.tel}','_blank')">WA</button></td>
   </tr>`).join('');
 }
 function renderEstoque() {
@@ -816,69 +845,105 @@ function renderEstoque() {
     <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.sku}</td>
     <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.ncm}</td>
     <td>${p.estoque}</td>
-    <td><span class="pill ${p.estoque < 1 ? 'pill-rose' : p.estoque < 15 ? 'pill-amber' : 'pill-mint'}">${p.estoque < 1 ? 'Zerado' : p.estoque < 15 ? 'Baixo' : 'OK'}</span></td>
-    <td>
-      <button class="icon-btn ok" onclick="zerarEstoque('${p.sku}')">0</button>
-      <button class="icon-btn" onclick="apagarProduto('${p.sku}')">🗑</button>
-    </td>
+    <td><span class="pill ${p.estoque<1?'pill-rose':p.estoque<15?'pill-amber':'pill-mint'}">${p.estoque<1?'Zerado':p.estoque<15?'Baixo':'OK'}</span></td>
+    <td><button class="icon-btn ok" onclick="zerarEstoque('${p.sku}')">0</button>
+    <button class="icon-btn" onclick="apagarProduto('${p.sku}')">🗑</button></td>
   </tr>`).join('');
 }
 
-/* RELATÓRIOS */
+/* DRE */
+function filtrarVendasPeriodo() {
+  const agora = new Date();
+  return vendas.filter(v => {
+    const d = new Date(v.data);
+    if (periodoDRE === 'dia') return d.toDateString() === agora.toDateString();
+    if (periodoDRE === 'semana') { const i = new Date(agora); i.setDate(agora.getDate() - 7); return d >= i; }
+    if (periodoDRE === 'mes') return d.getMonth() === agora.getMonth() && d.getFullYear() === agora.getFullYear();
+    return true;
+  });
+}
+function setPeriodoDRE(p) { periodoDRE = p; renderRelatorios(); toast('Filtro: ' + p); }
+function zerarVisualizacaoPeriodo() {
+  localStorage.setItem('nox_fechado_' + periodoDRE, new Date().toISOString());
+  toast('Saldo do período zerado na tela. Extrato completo mantido.');
+  renderRelatorios();
+}
 function renderRelatorios() {
-  const bruto = vendas.reduce((s, v) => s + v.total, 0);
-  const leg = vendas.reduce((s, v) => s + (v.impostos || 0), 0);
-  const dual = vendas.reduce((s, v) => s + (v.cbs_ibs || 0), 0);
+  const lista = filtrarVendasPeriodo();
+  const bruto = lista.reduce((s, v) => s + v.total, 0);
+  const leg = lista.reduce((s, v) => s + (v.impostos || 0), 0);
+  const dual = lista.reduce((s, v) => s + dualDaVenda(v), 0);
   document.getElementById('dreReceita').textContent = 'R$ ' + bruto.toFixed(2);
   document.getElementById('dreImpostos').textContent = 'R$ ' + leg.toFixed(2);
   document.getElementById('dreDual').textContent = 'R$ ' + dual.toFixed(2);
   document.getElementById('dreLinhas').innerHTML = `
-    <tr><td>Receita bruta</td><td style="text-align:right;font-weight:700">R$ ${bruto.toFixed(2)}</td></tr>
-    <tr><td>(-) ICMS / PIS / COFINS (est.)</td><td style="text-align:right;color:var(--amber)">R$ ${leg.toFixed(2)}</td></tr>
-    <tr><td>CBS+IBS destaque teste 2026</td><td style="text-align:right;color:var(--cyan)">R$ ${dual.toFixed(2)}</td></tr>
-    <tr><td><strong>Receita líquida estimada</strong></td><td style="text-align:right;color:var(--mint);font-weight:800">R$ ${(bruto - leg).toFixed(2)}</td></tr>`;
-  document.getElementById('relVendas').innerHTML = vendas.length ? vendas.map((v, i) => `<tr>
-    <td>${new Date(v.data).toLocaleString('pt-BR')}</td>
-    <td>${v.itens}</td>
-    <td>R$ ${v.total.toFixed(2)}</td>
-    <td style="color:var(--amber)">R$ ${(v.impostos || 0).toFixed(2)}</td>
-    <td style="color:var(--cyan)">R$ ${(v.cbs_ibs || 0).toFixed(2)}</td>
-    <td><button class="btn btn-ghost btn-sm" onclick="imprimirDanfe(${i})">🖨</button></td>
-  </tr>`).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">Sem vendas</td></tr>';
+    <tr><td>Receita bruta (${periodoDRE})</td><td style="text-align:right;font-weight:700">R$ ${bruto.toFixed(2)}</td></tr>
+    <tr><td>(-) ICMS/PIS/COFINS</td><td style="text-align:right;color:var(--amber)">R$ ${leg.toFixed(2)}</td></tr>
+    <tr><td>CBS+IBS teste</td><td style="text-align:right;color:var(--cyan)">R$ ${dual.toFixed(2)}</td></tr>
+    <tr><td><strong>Receita líquida est.</strong></td><td style="text-align:right;color:var(--mint);font-weight:800">R$ ${(bruto-leg).toFixed(2)}</td></tr>`;
+  document.getElementById('relVendas').innerHTML = lista.length ? lista.map((v, i) => {
+    const realIdx = vendas.indexOf(v);
+    return `<tr>
+      <td>${new Date(v.data).toLocaleString('pt-BR')}</td><td>${v.itens}</td>
+      <td>R$ ${v.total.toFixed(2)}</td>
+      <td style="color:var(--amber)">R$ ${(v.impostos||0).toFixed(2)}</td>
+      <td style="color:var(--cyan)">R$ ${dualDaVenda(v).toFixed(2)}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="imprimirDanfe(${realIdx})">🖨</button>
+      <button class="btn btn-mint btn-sm" onclick="enviarWhatsApp(${realIdx})">WA</button></td>
+    </tr>`;
+  }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px">Sem vendas no período</td></tr>';
+}
+function imprimirDRE() {
+  const lista = filtrarVendasPeriodo();
+  const bruto = lista.reduce((s, v) => s + v.total, 0);
+  const leg = lista.reduce((s, v) => s + (v.impostos || 0), 0);
+  const dual = lista.reduce((s, v) => s + dualDaVenda(v), 0);
+  const rows = lista.map(v => `<tr><td>${new Date(v.data).toLocaleString('pt-BR')}</td><td>${v.itens}</td>
+    <td>R$ ${v.total.toFixed(2)}</td><td>R$ ${(v.impostos||0).toFixed(2)}</td><td>R$ ${dualDaVenda(v).toFixed(2)}</td></tr>`).join('');
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"/><title>DRE</title>
+  <style>body{font-family:sans-serif;padding:24px}table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}.r{text-align:right}</style></head><body>
+  <h1>DRE NoxMob · ${periodoDRE}</h1><p>${new Date().toLocaleString('pt-BR')}</p>
+  <table><tr><td>Receita bruta</td><td class="r"><b>R$ ${bruto.toFixed(2)}</b></td></tr>
+  <tr><td>ICMS/PIS/COFINS</td><td class="r">R$ ${leg.toFixed(2)}</td></tr>
+  <tr><td>CBS+IBS</td><td class="r">R$ ${dual.toFixed(2)}</td></tr>
+  <tr><td><b>Líquida est.</b></td><td class="r"><b>R$ ${(bruto-leg).toFixed(2)}</b></td></tr></table>
+  <h3>Extrato</h3><table><thead><tr><th>Data</th><th>Itens</th><th>Bruto</th><th>Legados</th><th>CBS+IBS</th></tr></thead>
+  <tbody>${rows||'<tr><td colspan="5">—</td></tr>'}</tbody></table>
+  <script>window.onload=function(){window.print()}<\/script></body></html>`;
+  const w = window.open('', '_blank', 'width=900,height=700');
+  if (!w) { toast('Permita pop-up', 'err'); return; }
+  w.document.write(html); w.document.close();
 }
 
 function renderOlhoImpostos() {
   const el = document.getElementById('olhoImpostos');
   if (!vendas.length) {
-    el.innerHTML = '<p style="color:var(--muted)">Finalize vendas no PDV para ver o detalhamento.</p>';
+    el.innerHTML = '<p style="color:var(--muted)">Sem vendas</p>';
     document.getElementById('statCbs').textContent = 'R$ 0';
     document.getElementById('statIbs').textContent = 'R$ 0';
     return;
   }
   let icms = 0, pis = 0, cofins = 0, cbs = 0, ibs = 0;
-  vendas.forEach(v => {
-    (v.detalhe || []).forEach(d => {
-      const t = calcImpostos(d.preco * d.qtd, d.icms);
-      icms += t.icms; pis += t.pis; cofins += t.cofins; cbs += t.cbs; ibs += t.ibs;
-    });
-  });
+  vendas.forEach(v => (v.detalhe || []).forEach(d => {
+    const t = calcImpostos(d.preco * d.qtd, d.icms);
+    icms += t.icms; pis += t.pis; cofins += t.cofins; cbs += t.cbs; ibs += t.ibs;
+  }));
   document.getElementById('statCbs').textContent = 'R$ ' + cbs.toFixed(2);
   document.getElementById('statIbs').textContent = 'R$ ' + ibs.toFixed(2);
   el.innerHTML = `
-    <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px">SISTEMA ATUAL (ainda em vigor)</div>
     <div class="tax-line"><span>ICMS</span><strong>R$ ${icms.toFixed(2)}</strong></div>
-    <div class="tax-line"><span>PIS (${PIS}%)</span><strong>R$ ${pis.toFixed(2)}</strong></div>
-    <div class="tax-line"><span>COFINS (${COFINS}%)</span><strong>R$ ${cofins.toFixed(2)}</strong></div>
-    <div style="font-size:11px;font-weight:700;color:var(--muted);margin:14px 0 8px">REFORMA TRIBUTÁRIA · IVA DUAL (teste 2026)</div>
-    <div class="tax-line"><span>CBS federal (${CBS_TESTE}%)</span><strong>R$ ${cbs.toFixed(2)}</strong></div>
-    <div class="tax-line"><span>IBS estadual/municipal (${IBS_TESTE}%)</span><strong>R$ ${ibs.toFixed(2)}</strong></div>
-    <div class="tax-line" style="margin-top:8px;border-top:1px solid var(--border);padding-top:8px">
-      <span>Total CBS + IBS</span><strong style="color:var(--amber)">R$ ${(cbs + ibs).toFixed(2)}</strong>
-    </div>
-    <p style="margin-top:12px;font-size:12px;color:var(--muted)">
-      Alíquotas-teste LC 214/2025 · atos RFB/CGIBS. Destaque obrigatório em NF-e/NFC-e.
-      Em 2026 não há aumento de carga no mesmo modelo de cobrança; valores para teste de sistemas e XML.
-    </p>`;
+    <div class="tax-line"><span>PIS</span><strong>R$ ${pis.toFixed(2)}</strong></div>
+    <div class="tax-line"><span>COFINS</span><strong>R$ ${cofins.toFixed(2)}</strong></div>
+    <div class="tax-line" style="margin-top:10px"><span>CBS 0,9%</span><strong>R$ ${cbs.toFixed(2)}</strong></div>
+    <div class="tax-line"><span>IBS 0,1%</span><strong>R$ ${ibs.toFixed(2)}</strong></div>
+    <div class="tax-line" style="border-top:1px solid var(--border);padding-top:8px;margin-top:8px">
+      <span>Total CBS+IBS</span><strong style="color:var(--amber)">R$ ${(cbs+ibs).toFixed(2)}</strong></div>`;
+}
+
+function salvarConfigWorker() {
+  localStorage.setItem('nox_worker', document.getElementById('cfgWorker').value.trim());
+  toast('Worker salvo');
 }
 </script>
 </body>
