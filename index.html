@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Seter Pro · OCR Multi-Camada</title>
+  <title>Seter Pro · OCR 5 Camadas</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
@@ -30,374 +30,80 @@
       --purple: #a855f7;
       --radius: 14px;
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      font-size: 14px;
-      background-image: 
-        radial-gradient(ellipse at 20% 0%, rgba(0, 240, 255, 0.06) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 100%, rgba(0, 255, 157, 0.04) 0%, transparent 50%);
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 24px;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      background: rgba(5, 10, 20, 0.92);
-      backdrop-filter: blur(16px);
-      z-index: 100;
-    }
-
-    .logo {
-      font-family: 'Sora', sans-serif;
-      font-weight: 800;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .logo-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--mint);
-      box-shadow: 0 0 12px var(--mint);
-    }
-
-    .nav-tabs { display: flex; gap: 4px; }
-
-    .tab {
-      padding: 8px 16px;
-      border-radius: 10px;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .tab:hover { color: var(--text); background: rgba(255,255,255,0.04); }
-    .tab.ativo { background: rgba(0, 240, 255, 0.12); color: var(--cyan); }
-
-    .badge-env {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      border: 1px solid rgba(0, 240, 255, 0.35);
-      color: var(--cyan);
-      background: rgba(0, 240, 255, 0.06);
-    }
-
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 16px 80px; }
-    .section { display: none; }
-    .section.ativa { display: block; }
-
-    .grid2 {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 18px;
-    }
-    @media(max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
-
-    .panel {
-      background: linear-gradient(165deg, var(--card2), var(--card));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 22px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
-    }
-
-    .panel-title {
-      font-family: 'Sora', sans-serif;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-
-    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-    .field label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .field input, .field select {
-      background: #0a1220;
-      border: 1px solid rgba(0, 240, 255, 0.15);
-      border-radius: 10px;
-      padding: 11px 14px;
-      color: var(--text);
-      font-size: 13px;
-      width: 100%;
-      transition: border-color 0.2s;
-    }
-    .field input:focus {
-      border-color: var(--cyan);
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.1);
-    }
-
-    .tipo-toggle { display: flex; gap: 10px; margin-bottom: 16px; }
-
-    .tipo-btn {
-      flex: 1;
-      padding: 11px;
-      border-radius: 10px;
-      border: 1px solid rgba(0, 240, 255, 0.15);
-      background: #0a1220;
-      color: var(--muted);
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .tipo-btn.ativo {
-      background: rgba(0, 240, 255, 0.12);
-      border-color: var(--cyan);
-      color: var(--cyan);
-      box-shadow: 0 0 16px rgba(0, 240, 255, 0.15);
-    }
-
-    .dropzone {
-      border: 1.5px dashed rgba(0, 240, 255, 0.3);
-      border-radius: var(--radius);
-      padding: 32px 16px;
-      text-align: center;
-      cursor: pointer;
-      position: relative;
-      background: rgba(0, 240, 255, 0.03);
-      transition: all 0.2s;
-    }
-    .dropzone:hover {
-      border-color: var(--cyan);
-      background: rgba(0, 240, 255, 0.06);
-    }
-    .dropzone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-    .dz-preview { max-height: 140px; margin-top: 14px; border-radius: 10px; display: none; }
-
-    .visor {
-      background: radial-gradient(ellipse at center, #0a1628, #03080f);
-      border-radius: var(--radius);
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      border: 1px solid rgba(0, 240, 255, 0.2);
-      box-shadow: inset 0 0 30px rgba(0, 240, 255, 0.05);
-    }
-
-    .digito {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 38px;
-      font-weight: 700;
-      width: 36px;
-      text-align: center;
-      color: rgba(255,255,255,0.08);
-      transition: all 0.35s;
-    }
-    .digito.on {
-      color: var(--cyan);
-      text-shadow: 0 0 18px rgba(0, 240, 255, 0.6);
-    }
-
-    .status-bar {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .conf-bar {
-      height: 5px;
-      border-radius: 3px;
-      background: #0a1220;
-      margin-top: 10px;
-      overflow: hidden;
-    }
-    .conf-fill {
-      height: 100%;
-      border-radius: 3px;
-      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--mint));
-      transition: width 0.5s ease;
-    }
-
-    .btn {
-      padding: 13px 22px;
-      border-radius: 12px;
-      border: none;
-      font-family: 'Sora', sans-serif;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s;
-    }
-    .btn-full { width: 100%; }
-    .btn-prim {
-      background: linear-gradient(135deg, #00d4ff, #3b82f6);
-      color: #001018;
-      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
-    }
-    .btn-prim:hover { filter: brightness(1.1); transform: translateY(-1px); }
-    .btn-prim:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-    .btn-rose {
-      background: rgba(255, 77, 109, 0.12);
-      border: 1px solid rgba(255, 77, 109, 0.35);
-      color: var(--rose);
-    }
-    .btn-sm { padding: 7px 12px; font-size: 12px; border-radius: 8px; }
-
-    .fatura-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      font-size: 13px;
-    }
-
-    .total-box {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 16px;
-      padding: 16px;
-      background: rgba(0, 255, 157, 0.08);
-      border: 1px solid rgba(0, 255, 157, 0.25);
-      border-radius: 12px;
-    }
-    .total-val {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--mint);
-      text-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
-    }
-
-    .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .tbl th {
-      text-align: left;
-      padding: 10px 12px;
-      color: var(--muted);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      border-bottom: 1px solid var(--border);
-    }
-    .tbl td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
-
-    .toast-area {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 999;
-    }
-    .toast {
-      padding: 13px 18px;
-      border-radius: 12px;
-      font-size: 13px;
-      max-width: 340px;
-      animation: slideIn 0.25s ease;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-    }
-    .toast-ok {
-      background: rgba(0, 255, 157, 0.12);
-      border: 1px solid rgba(0, 255, 157, 0.35);
-      color: var(--mint);
-    }
-    .toast-err {
-      background: rgba(255, 77, 109, 0.12);
-      border: 1px solid rgba(255, 77, 109, 0.35);
-      color: var(--rose);
-    }
-
-    @keyframes slideIn {
-      from { transform: translateX(40px); opacity: 0; }
-      to { transform: none; opacity: 1; }
-    }
-
-    .spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.2);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      color: var(--cyan);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .eyebrow::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--mint);
-      box-shadow: 0 0 8px var(--mint);
-    }
-
-    .pill {
-      display: inline-flex;
-      padding: 3px 9px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    .pill-mint { background: rgba(0, 255, 157, 0.12); color: var(--mint); }
-    .pill-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-    .pill-amber { background: rgba(255, 176, 32, 0.12); color: var(--amber); }
-
-    .row { display: grid; gap: 12px; }
-    .row.cols2 { grid-template-columns: 1fr 1fr; }
-    @media(max-width: 600px) { .row.cols2 { grid-template-columns: 1fr; } }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;font-size:14px;
+      background-image:radial-gradient(ellipse at 20% 0%,rgba(0,240,255,.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(0,255,157,.04) 0%,transparent 50%)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(5,10,20,.92);backdrop-filter:blur(16px);z-index:100}
+    .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
+    .logo-dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint)}
+    .nav-tabs{display:flex;gap:4px}
+    .tab{padding:8px 16px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;transition:.2s}
+    .tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
+    .tab.ativo{background:rgba(0,240,255,.12);color:var(--cyan)}
+    .badge-env{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 10px;border-radius:20px;border:1px solid rgba(0,240,255,.35);color:var(--cyan);background:rgba(0,240,255,.06)}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 16px 80px}
+    .section{display:none}.section.ativa{display:block}
+    .grid2{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+    @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+    .panel{background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:0 4px 24px rgba(0,0,0,.25)}
+    .panel-title{font-family:'Sora',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:16px}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+    .field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+    .field input{background:#0a1220;border:1px solid rgba(0,240,255,.15);border-radius:10px;padding:11px 14px;color:var(--text);font-size:13px;width:100%;transition:.2s}
+    .field input:focus{border-color:var(--cyan);outline:none;box-shadow:0 0 0 3px rgba(0,240,255,.1)}
+    .tipo-toggle{display:flex;gap:10px;margin-bottom:16px}
+    .tipo-btn{flex:1;padding:11px;border-radius:10px;border:1px solid rgba(0,240,255,.15);background:#0a1220;color:var(--muted);font-weight:600;cursor:pointer;transition:.2s}
+    .tipo-btn.ativo{background:rgba(0,240,255,.12);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 16px rgba(0,240,255,.15)}
+    .dropzone{border:1.5px dashed rgba(0,240,255,.3);border-radius:var(--radius);padding:32px 16px;text-align:center;cursor:pointer;position:relative;background:rgba(0,240,255,.03);transition:.2s}
+    .dropzone:hover{border-color:var(--cyan);background:rgba(0,240,255,.06)}
+    .dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .dz-preview{max-height:140px;margin-top:14px;border-radius:10px;display:none}
+    .visor{background:radial-gradient(ellipse at center,#0a1628,#03080f);border-radius:var(--radius);padding:20px;display:flex;justify-content:center;gap:6px;border:1px solid rgba(0,240,255,.2);box-shadow:inset 0 0 30px rgba(0,240,255,.05)}
+    .digito{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:700;width:36px;text-align:center;color:rgba(255,255,255,.08);transition:.35s}
+    .digito.on{color:var(--cyan);text-shadow:0 0 18px rgba(0,240,255,.6)}
+    .status-bar{display:flex;justify-content:space-between;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+    .conf-bar{height:5px;border-radius:3px;background:#0a1220;margin-top:10px;overflow:hidden}
+    .conf-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--mint));transition:width .5s ease}
+    .btn{padding:13px 22px;border-radius:12px;border:none;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+    .btn-full{width:100%}
+    .btn-prim{background:linear-gradient(135deg,#00d4ff,#3b82f6);color:#001018;box-shadow:0 4px 20px rgba(0,212,255,.3)}
+    .btn-prim:hover{filter:brightness(1.1);transform:translateY(-1px)}
+    .btn-prim:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .btn-rose{background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:var(--rose)}
+    .btn-sm{padding:7px 12px;font-size:12px;border-radius:8px}
+    .fatura-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px}
+    .total-box{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:16px;background:rgba(0,255,157,.08);border:1px solid rgba(0,255,157,.25);border-radius:12px}
+    .total-val{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--mint);text-shadow:0 0 20px rgba(0,255,157,.3)}
+    .tbl{width:100%;border-collapse:collapse;font-size:13px}
+    .tbl th{text-align:left;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+    .tbl td{padding:12px;border-bottom:1px solid rgba(255,255,255,.04)}
+    .toast-area{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:10px;z-index:999}
+    .toast{padding:13px 18px;border-radius:12px;font-size:13px;max-width:340px;animation:slideIn .25s ease;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+    .toast-ok{background:rgba(0,255,157,.12);border:1px solid rgba(0,255,157,.35);color:var(--mint)}
+    .toast-err{background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:var(--rose)}
+    @keyframes slideIn{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+    .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--cyan);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint)}
+    .pill{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+    .pill-mint{background:rgba(0,255,157,.12);color:var(--mint)}
+    .pill-blue{background:rgba(59,130,246,.15);color:#60a5fa}
+    .pill-amber{background:rgba(255,176,32,.12);color:var(--amber)}
+    .row{display:grid;gap:12px}.row.cols2{grid-template-columns:1fr 1fr}
+    @media(max-width:600px){.row.cols2{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 
 <nav class="nav">
-  <div class="logo">
-    <div class="logo-dot"></div>
-    Seter <span style="color:var(--cyan)">Pro</span>
-  </div>
+  <div class="logo"><div class="logo-dot"></div>Seter <span style="color:var(--cyan)">Pro</span></div>
   <div class="nav-tabs">
     <button class="tab ativo" onclick="irPara('leitura',this)">Leitura</button>
     <button class="tab" onclick="irPara('historico',this)">Histórico</button>
     <button class="tab" onclick="irPara('config',this)">Config OCR</button>
   </div>
-  <div class="badge-env">v4.1 · Multi-OCR</div>
+  <div class="badge-env">v4.2 · 5 Camadas</div>
 </nav>
 
 <div class="toast-area" id="toastArea"></div>
@@ -405,21 +111,20 @@
 <!-- LEITURA -->
 <div class="section ativa" id="s-leitura">
   <div class="wrap">
-    <div class="eyebrow">Vertex → Cloud Vision → TF.js → Tesseract</div>
+    <div class="eyebrow">Vertex → Vision → YOLOv8 → TF.js → Tesseract</div>
     <h1 style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px">
       Seter <span style="color:var(--cyan)">Leitura</span>
     </h1>
     <p style="color:var(--muted);margin-bottom:24px">
-      Foto do medidor → leitura automática com 4 camadas de IA + fallback offline.
+      Câmera → 5 camadas de IA → Leitura + Confiança + Bounding Box → Fatura
     </p>
 
     <div class="grid2">
       <div class="panel">
         <div class="panel-title">Captura e leitura</div>
-        
         <div class="tipo-toggle">
-          <button class="tipo-btn ativo" id="btnAgua" onclick="selecionarTipo('AGUA',this)">💧 Água</button>
-          <button class="tipo-btn" id="btnEnergia" onclick="selecionarTipo('ENERGIA',this)">⚡ Energia</button>
+          <button class="tipo-btn ativo" onclick="selecionarTipo('AGUA',this)">💧 Água</button>
+          <button class="tipo-btn" onclick="selecionarTipo('ENERGIA',this)">⚡ Energia</button>
         </div>
 
         <label class="dropzone">
@@ -431,14 +136,8 @@
         </label>
 
         <div class="row cols2" style="margin-top:16px">
-          <div class="field">
-            <label>Leitura anterior</label>
-            <input type="number" id="leiAnt" value="12751"/>
-          </div>
-          <div class="field">
-            <label>Leitura atual (manual)</label>
-            <input type="number" id="leiAtual" placeholder="ou use a foto"/>
-          </div>
+          <div class="field"><label>Leitura anterior</label><input type="number" id="leiAnt" value="12751"/></div>
+          <div class="field"><label>Leitura atual (manual)</label><input type="number" id="leiAtual" placeholder="ou use a foto"/></div>
         </div>
 
         <button class="btn btn-prim btn-full" id="btnProcessar" onclick="processarLeitura()" style="margin-top:18px">
@@ -450,12 +149,10 @@
         <div class="panel" style="margin-bottom:16px">
           <div class="panel-title">Leitura detectada</div>
           <div class="visor">
-            <span class="digito" id="d0">0</span>
-            <span class="digito" id="d1">0</span>
+            <span class="digito" id="d0">0</span><span class="digito" id="d1">0</span>
             <span class="digito" id="d2">0</span>
-            <span style="font-size:28px;color:rgba(0,240,255,0.25);align-self:center">.</span>
-            <span class="digito" id="d3">0</span>
-            <span class="digito" id="d4">0</span>
+            <span style="font-size:28px;color:rgba(0,240,255,.25);align-self:center">.</span>
+            <span class="digito" id="d3">0</span><span class="digito" id="d4">0</span>
           </div>
           <div class="status-bar">
             <span id="statusTxt">aguardando…</span>
@@ -466,9 +163,7 @@
 
         <div class="panel">
           <div class="panel-title">Fatura calculada</div>
-          <div id="faturaVazia" style="text-align:center;padding:32px;color:var(--muted)">
-            Processe uma leitura para ver o cálculo.
-          </div>
+          <div id="faturaVazia" style="text-align:center;padding:32px;color:var(--muted)">Processe uma leitura para ver o cálculo.</div>
           <div id="faturaConteudo" style="display:none">
             <div class="fatura-row"><span>Consumo</span><span id="fvConsumo">—</span></div>
             <div class="fatura-row"><span>Serviço</span><span id="fvServico">—</span></div>
@@ -509,12 +204,16 @@
 <div class="section" id="s-config">
   <div class="wrap">
     <div class="eyebrow">Pipeline OCR</div>
-    <h2 style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;margin-bottom:18px">Configuração das camadas</h2>
+    <h2 style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;margin-bottom:18px">Configuração das 5 camadas</h2>
     
     <div class="panel">
       <div class="field">
-        <label>URL do Proxy (Vertex + Cloud Vision)</label>
+        <label>URL do Proxy (Vertex + Cloud Vision + YOLO)</label>
         <input id="cfgProxy" value="http://localhost:8790/ocr"/>
+      </div>
+      <div class="field">
+        <label>URL do YOLOv8 (opcional – se separado)</label>
+        <input id="cfgYolo" value="http://localhost:8791/detect-digits"/>
       </div>
       <div class="field">
         <label>Máximo de tentativas (retry)</label>
@@ -526,23 +225,22 @@
       </div>
       
       <label style="display:flex;align-items:center;gap:10px;margin:14px 0;cursor:pointer">
-        <input type="checkbox" id="cfgTesseract" checked/> 
-        Ativar Tesseract.js (fallback offline)
+        <input type="checkbox" id="cfgTesseract" checked/> Ativar Tesseract.js (fallback offline)
       </label>
       <label style="display:flex;align-items:center;gap:10px;margin:14px 0;cursor:pointer">
-        <input type="checkbox" id="cfgDebug" checked/> 
-        Logs de depuração no console
+        <input type="checkbox" id="cfgDebug" checked/> Logs de depuração no console
       </label>
       
       <button class="btn btn-prim btn-sm" onclick="salvarConfigOCR()">Salvar configurações</button>
     </div>
 
     <div class="panel" style="margin-top:16px">
-      <div class="panel-title">Ordem das camadas</div>
-      <ol style="padding-left:20px;color:var(--muted);line-height:2">
-        <li><strong style="color:var(--cyan)">Vertex AI (Gemini)</strong> – máxima precisão</li>
+      <div class="panel-title">Ordem das 5 camadas</div>
+      <ol style="padding-left:20px;color:var(--muted);line-height:2.1">
+        <li><strong style="color:var(--cyan)">Vertex AI Gemini</strong> – máxima precisão</li>
         <li><strong style="color:#60a5fa">Cloud Vision API</strong> – fallback cloud</li>
-        <li><strong style="color:var(--amber)">TensorFlow.js</strong> – modelo local</li>
+        <li><strong style="color:var(--purple)">YOLOv8 (dígitos)</strong> – detecção precisa + bounding box</li>
+        <li><strong style="color:var(--amber)">TensorFlow.js CNN</strong> – modelo local</li>
         <li><strong style="color:var(--mint)">Tesseract.js</strong> – último recurso offline</li>
       </ol>
     </div>
@@ -550,8 +248,18 @@
 </div>
 
 <script>
+/* ═══════════════════════════════════════════════════════════════
+   SETER PRO v4.2 – Arquitetura 5 Camadas
+   1. Vertex AI Gemini
+   2. Cloud Vision API
+   3. YOLOv8 (dígitos)
+   4. TensorFlow.js CNN
+   5. Tesseract.js
+   ═══════════════════════════════════════════════════════════════ */
+
 const OCR_CONFIG = {
   proxyUrl: localStorage.getItem('seter_proxy') || 'http://localhost:8790/ocr',
+  yoloUrl: localStorage.getItem('seter_yolo') || 'http://localhost:8791/detect-digits',
   maxRetries: Number(localStorage.getItem('seter_retries') || 3),
   baseDelayMs: 800,
   maxDelayMs: 8000,
@@ -644,13 +352,11 @@ function animarVisor(val) {
   ['d0','d1','d2','d3','d4'].forEach((id, i) => {
     const el = document.getElementById(id);
     el.classList.remove('on');
-    setTimeout(() => {
-      el.textContent = str[i] || '0';
-      el.classList.add('on');
-    }, i * 130);
+    setTimeout(() => { el.textContent = str[i] || '0'; el.classList.add('on'); }, i * 130);
   });
 }
 
+/* ── Camada 1+2: Proxy (Vertex AI → Cloud Vision) ── */
 async function ocrViaProxy(base64, tipo) {
   const res = await fetch(OCR_CONFIG.proxyUrl, {
     method: 'POST',
@@ -664,6 +370,34 @@ async function ocrViaProxy(base64, tipo) {
   return await res.json();
 }
 
+/* ── Camada 3: YOLOv8 (detecção de dígitos + bounding box) ── */
+async function ocrViaYOLOv8(file) {
+  ocrLog('info', 'Enviando para YOLOv8...');
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const res = await fetch(OCR_CONFIG.yoloUrl, {
+    method: 'POST',
+    body: formData
+  });
+  if (!res.ok) throw new Error(`YOLOv8 HTTP ${res.status}`);
+
+  const data = await res.json();
+  if (data.leitura === null || data.leitura === undefined) {
+    throw new Error('YOLOv8 não detectou dígitos');
+  }
+
+  return {
+    leitura: data.leitura,
+    confianca: data.confianca || 80,
+    modelo: data.modelo || 'YOLOv8 (dígitos)',
+    origem: 'yolov8',
+    digitos: data.digitos || [],
+    boundingBoxes: data.digitos || []
+  };
+}
+
+/* ── Camada 4: TensorFlow.js ── */
 async function carregarModeloTF() {
   if (tfPronto) return;
   ocrLog('info', 'Carregando TensorFlow.js...');
@@ -716,20 +450,17 @@ async function ocrViaTensorFlow(file) {
   };
 }
 
+/* ── Camada 5: Tesseract.js ── */
 async function ocrViaTesseract(file) {
-  if (!window.Tesseract) {
-    throw new Error('Tesseract.js não carregado. Verifique o script no HTML.');
-  }
+  if (!window.Tesseract) throw new Error('Tesseract.js não carregado');
 
   ocrLog('info', 'Iniciando Tesseract.js');
-
   const { data } = await Tesseract.recognize(file, 'eng', {
     logger: m => {
       if (m.status === 'recognizing text') {
         const pct = Math.round((m.progress || 0) * 100);
         document.getElementById('confFill').style.width = (60 + pct * 0.3) + '%';
-        document.getElementById('statusTxt').innerHTML =
-          `<span style="color:var(--amber)">Tesseract · ${pct}%</span>`;
+        document.getElementById('statusTxt').innerHTML = `<span style="color:var(--amber)">Tesseract · ${pct}%</span>`;
       }
     },
     tessedit_char_whitelist: '0123456789',
@@ -740,42 +471,52 @@ async function ocrViaTesseract(file) {
   if (!numeros.length) throw new Error('Tesseract não encontrou números');
 
   numeros.sort((a, b) => Number(b) - Number(a));
-  const leitura = Number(numeros[0]);
-
   let confianca = 65;
   if (numeros[0].length >= 5) confianca = 75;
   if (data.confidence) confianca = Math.min(90, Math.round(data.confidence));
 
   return {
-    leitura,
+    leitura: Number(numeros[0]),
     confianca,
     modelo: 'Tesseract.js (local)',
-    origem: 'tesseract',
-    candidatos: numeros.slice(0, 5)
+    origem: 'tesseract'
   };
 }
 
+/* ── Pipeline completo de 5 camadas ── */
 async function ocrMedidorCompleto(file) {
   const base64 = await fileToBase64(file);
 
+  // 1º + 2º – Vertex AI / Cloud Vision
   try {
-    document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">Vertex AI / Cloud Vision…</span>';
-    document.getElementById('confFill').style.width = '25%';
+    document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">1. Vertex AI / Cloud Vision…</span>';
+    document.getElementById('confFill').style.width = '20%';
     return await withRetry(() => ocrViaProxy(base64, tipoSelecionado), 'Proxy OCR');
-  } catch (cloudErr) {
-    ocrLog('warn', 'Cloud falhou', cloudErr.message);
+  } catch (e1) {
+    ocrLog('warn', 'Camada 1-2 falhou', e1.message);
 
+    // 3º – YOLOv8
     try {
-      document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">TensorFlow.js…</span>';
-      document.getElementById('confFill').style.width = '50%';
-      return await withRetry(() => ocrViaTensorFlow(file), 'TensorFlow.js');
-    } catch (tfErr) {
-      ocrLog('warn', 'TF.js falhou', tfErr.message);
+      document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">3. YOLOv8 (dígitos)…</span>';
+      document.getElementById('confFill').style.width = '40%';
+      return await withRetry(() => ocrViaYOLOv8(file), 'YOLOv8');
+    } catch (e2) {
+      ocrLog('warn', 'Camada 3 (YOLO) falhou', e2.message);
 
-      if (!OCR_CONFIG.enableTesseract) throw tfErr;
-      document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">Tesseract.js…</span>';
-      document.getElementById('confFill').style.width = '70%';
-      return await withRetry(() => ocrViaTesseract(file), 'Tesseract.js');
+      // 4º – TensorFlow.js
+      try {
+        document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">4. TensorFlow.js…</span>';
+        document.getElementById('confFill').style.width = '60%';
+        return await withRetry(() => ocrViaTensorFlow(file), 'TensorFlow.js');
+      } catch (e3) {
+        ocrLog('warn', 'Camada 4 (TF.js) falhou', e3.message);
+
+        // 5º – Tesseract
+        if (!OCR_CONFIG.enableTesseract) throw e3;
+        document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">5. Tesseract.js…</span>';
+        document.getElementById('confFill').style.width = '80%';
+        return await withRetry(() => ocrViaTesseract(file), 'Tesseract.js');
+      }
     }
   }
 }
@@ -792,7 +533,7 @@ async function processarLeitura() {
 
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Processando…';
-  document.getElementById('statusTxt').textContent = 'iniciando pipeline…';
+  document.getElementById('statusTxt').textContent = 'iniciando pipeline 5 camadas…';
   document.getElementById('confFill').style.width = '5%';
 
   try {
@@ -819,9 +560,7 @@ async function processarLeitura() {
     document.getElementById('confFill').style.width = confianca + '%';
 
     const consumo = Math.max(0, leituraFinal - leiAnt);
-    const total = tipoSelecionado === 'AGUA'
-      ? consumo * 6.5 + 17.46
-      : consumo * 0.89 + consumo * 0.02;
+    const total = tipoSelecionado === 'AGUA' ? consumo * 6.5 + 17.46 : consumo * 0.89 + consumo * 0.02;
 
     document.getElementById('faturaVazia').style.display = 'none';
     document.getElementById('faturaConteudo').style.display = 'block';
@@ -887,12 +626,14 @@ function apagarLeitura(id) {
 
 function salvarConfigOCR() {
   OCR_CONFIG.proxyUrl = document.getElementById('cfgProxy').value.trim();
+  OCR_CONFIG.yoloUrl = document.getElementById('cfgYolo').value.trim();
   OCR_CONFIG.maxRetries = Number(document.getElementById('cfgRetries').value) || 3;
   OCR_CONFIG.timeoutMs = Number(document.getElementById('cfgTimeout').value) || 18000;
   OCR_CONFIG.enableTesseract = document.getElementById('cfgTesseract').checked;
   OCR_CONFIG.debug = document.getElementById('cfgDebug').checked;
 
   localStorage.setItem('seter_proxy', OCR_CONFIG.proxyUrl);
+  localStorage.setItem('seter_yolo', OCR_CONFIG.yoloUrl);
   localStorage.setItem('seter_retries', OCR_CONFIG.maxRetries);
   localStorage.setItem('seter_timeout', OCR_CONFIG.timeoutMs);
   localStorage.setItem('seter_tesseract', OCR_CONFIG.enableTesseract);
@@ -902,6 +643,1963 @@ function salvarConfigOCR() {
 
 // Init
 document.getElementById('cfgProxy').value = OCR_CONFIG.proxyUrl;
+document.getElementById('cfgYolo').value = OCR_CONFIG.yoloUrl;
+document.getElementById('cfgRetries').value = OCR_CONFIG.maxRetries;
+document.getElementById('cfgTimeout').value = OCR_CONFIG.timeoutMs;
+document.getElementById('cfgTesseract').checked = OCR_CONFIG.enableTesseract;
+document.getElementById('cfgDebug').checked = OCR_CONFIG.debug;
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seter Pro · OCR 5 Camadas</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+  
+  <!-- TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+  
+  <!-- Tesseract.js v5 -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  
+  <style>
+    :root {
+      --bg: #050a14;
+      --card: #0c1525;
+      --card2: #111d30;
+      --border: rgba(0, 255, 255, 0.12);
+      --text: #f0f7ff;
+      --muted: #7b9bb8;
+      --cyan: #00f0ff;
+      --blue: #3b82f6;
+      --mint: #00ff9d;
+      --amber: #ffb020;
+      --rose: #ff4d6d;
+      --purple: #a855f7;
+      --radius: 14px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;font-size:14px;
+      background-image:radial-gradient(ellipse at 20% 0%,rgba(0,240,255,.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(0,255,157,.04) 0%,transparent 50%)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(5,10,20,.92);backdrop-filter:blur(16px);z-index:100}
+    .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
+    .logo-dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint)}
+    .nav-tabs{display:flex;gap:4px}
+    .tab{padding:8px 16px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;transition:.2s}
+    .tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
+    .tab.ativo{background:rgba(0,240,255,.12);color:var(--cyan)}
+    .badge-env{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 10px;border-radius:20px;border:1px solid rgba(0,240,255,.35);color:var(--cyan);background:rgba(0,240,255,.06)}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 16px 80px}
+    .section{display:none}.section.ativa{display:block}
+    .grid2{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+    @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+    .panel{background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:0 4px 24px rgba(0,0,0,.25)}
+    .panel-title{font-family:'Sora',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:16px}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+    .field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+    .field input{background:#0a1220;border:1px solid rgba(0,240,255,.15);border-radius:10px;padding:11px 14px;color:var(--text);font-size:13px;width:100%;transition:.2s}
+    .field input:focus{border-color:var(--cyan);outline:none;box-shadow:0 0 0 3px rgba(0,240,255,.1)}
+    .tipo-toggle{display:flex;gap:10px;margin-bottom:16px}
+    .tipo-btn{flex:1;padding:11px;border-radius:10px;border:1px solid rgba(0,240,255,.15);background:#0a1220;color:var(--muted);font-weight:600;cursor:pointer;transition:.2s}
+    .tipo-btn.ativo{background:rgba(0,240,255,.12);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 16px rgba(0,240,255,.15)}
+    .dropzone{border:1.5px dashed rgba(0,240,255,.3);border-radius:var(--radius);padding:32px 16px;text-align:center;cursor:pointer;position:relative;background:rgba(0,240,255,.03);transition:.2s}
+    .dropzone:hover{border-color:var(--cyan);background:rgba(0,240,255,.06)}
+    .dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .dz-preview{max-height:140px;margin-top:14px;border-radius:10px;display:none}
+    .visor{background:radial-gradient(ellipse at center,#0a1628,#03080f);border-radius:var(--radius);padding:20px;display:flex;justify-content:center;gap:6px;border:1px solid rgba(0,240,255,.2);box-shadow:inset 0 0 30px rgba(0,240,255,.05)}
+    .digito{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:700;width:36px;text-align:center;color:rgba(255,255,255,.08);transition:.35s}
+    .digito.on{color:var(--cyan);text-shadow:0 0 18px rgba(0,240,255,.6)}
+    .status-bar{display:flex;justify-content:space-between;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+    .conf-bar{height:5px;border-radius:3px;background:#0a1220;margin-top:10px;overflow:hidden}
+    .conf-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--mint));transition:width .5s ease}
+    .btn{padding:13px 22px;border-radius:12px;border:none;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+    .btn-full{width:100%}
+    .btn-prim{background:linear-gradient(135deg,#00d4ff,#3b82f6);color:#001018;box-shadow:0 4px 20px rgba(0,212,255,.3)}
+    .btn-prim:hover{filter:brightness(1.1);transform:translateY(-1px)}
+    .btn-prim:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .btn-rose{background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:var(--rose)}
+    .btn-sm{padding:7px 12px;font-size:12px;border-radius:8px}
+    .fatura-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px}
+    .total-box{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:16px;background:rgba(0,255,157,.08);border:1px solid rgba(0,255,157,.25);border-radius:12px}
+    .total-val{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--mint);text-shadow:0 0 20px rgba(0,255,157,.3)}
+    .tbl{width:100%;border-collapse:collapse;font-size:13px}
+    .tbl th{text-align:left;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+    .tbl td{padding:12px;border-bottom:1px solid rgba(255,255,255,.04)}
+    .toast-area{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:10px;z-index:999}
+    .toast{padding:13px 18px;border-radius:12px;font-size:13px;max-width:340px;animation:slideIn .25s ease;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+    .toast-ok{background:rgba(0,255,157,.12);border:1px solid rgba(0,255,157,.35);color:var(--mint)}
+    .toast-err{background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:var(--rose)}
+    @keyframes slideIn{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+    .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--cyan);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint)}
+    .pill{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+    .pill-mint{background:rgba(0,255,157,.12);color:var(--mint)}
+    .pill-blue{background:rgba(59,130,246,.15);color:#60a5fa}
+    .pill-amber{background:rgba(255,176,32,.12);color:var(--amber)}
+    .row{display:grid;gap:12px}.row.cols2{grid-template-columns:1fr 1fr}
+    @media(max-width:600px){.row.cols2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="logo"><div class="logo-dot"></div>Seter <span style="color:var(--cyan)">Pro</span></div>
+  <div class="nav-tabs">
+    <button class="tab ativo" onclick="irPara('leitura',this)">Leitura</button>
+    <button class="tab" onclick="irPara('historico',this)">Histórico</button>
+    <button class="tab" onclick="irPara('config',this)">Config OCR</button>
+  </div>
+  <div class="badge-env">v4.2 · 5 Camadas</div>
+</nav>
+
+<div class="toast-area" id="toastArea"></div>
+
+<!-- LEITURA -->
+<div class="section ativa" id="s-leitura">
+  <div class="wrap">
+    <div class="eyebrow">Vertex → Vision → YOLOv8 → TF.js → Tesseract</div>
+    <h1 style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px">
+      Seter <span style="color:var(--cyan)">Leitura</span>
+    </h1>
+    <p style="color:var(--muted);margin-bottom:24px">
+      Câmera → 5 camadas de IA → Leitura + Confiança + Bounding Box → Fatura
+    </p>
+
+    <div class="grid2">
+      <div class="panel">
+        <div class="panel-title">Captura e leitura</div>
+        <div class="tipo-toggle">
+          <button class="tipo-btn ativo" onclick="selecionarTipo('AGUA',this)">💧 Água</button>
+          <button class="tipo-btn" onclick="selecionarTipo('ENERGIA',this)">⚡ Energia</button>
+        </div>
+
+        <label class="dropzone">
+          <input type="file" id="inputFoto" accept="image/*" capture="environment" onchange="aoSelecionarFoto(event)"/>
+          <div style="font-size:32px;margin-bottom:8px">📷</div>
+          <div style="font-weight:600;font-size:15px" id="dzLabel">Tirar ou enviar foto do medidor</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">JPG, PNG · até 10 MB</div>
+          <img id="dzPreview" class="dz-preview"/>
+        </label>
+
+        <div class="row cols2" style="margin-top:16px">
+          <div class="field"><label>Leitura anterior</label><input type="number" id="leiAnt" value="12751"/></div>
+          <div class="field"><label>Leitura atual (manual)</label><input type="number" id="leiAtual" placeholder="ou use a foto"/></div>
+        </div>
+
+        <button class="btn btn-prim btn-full" id="btnProcessar" onclick="processarLeitura()" style="margin-top:18px">
+          Processar leitura com IA
+        </button>
+      </div>
+
+      <div>
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-title">Leitura detectada</div>
+          <div class="visor">
+            <span class="digito" id="d0">0</span><span class="digito" id="d1">0</span>
+            <span class="digito" id="d2">0</span>
+            <span style="font-size:28px;color:rgba(0,240,255,.25);align-self:center">.</span>
+            <span class="digito" id="d3">0</span><span class="digito" id="d4">0</span>
+          </div>
+          <div class="status-bar">
+            <span id="statusTxt">aguardando…</span>
+            <span id="statusConf"></span>
+          </div>
+          <div class="conf-bar"><div class="conf-fill" id="confFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Fatura calculada</div>
+          <div id="faturaVazia" style="text-align:center;padding:32px;color:var(--muted)">Processe uma leitura para ver o cálculo.</div>
+          <div id="faturaConteudo" style="display:none">
+            <div class="fatura-row"><span>Consumo</span><span id="fvConsumo">—</span></div>
+            <div class="fatura-row"><span>Serviço</span><span id="fvServico">—</span></div>
+            <div class="fatura-row"><span>Adicional</span><span id="fvExtra">—</span></div>
+            <div class="total-box">
+              <div style="font-size:12px;color:var(--muted)">Total a pagar</div>
+              <div class="total-val" id="fvTotal">R$ 0,00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTÓRICO -->
+<div class="section" id="s-historico">
+  <div class="wrap">
+    <div class="eyebrow">Registros</div>
+    <h2 style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;margin-bottom:18px">Histórico de leituras</h2>
+    <div class="panel" style="padding:0;overflow:hidden">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Cliente</th><th>Tipo</th><th>Anterior</th><th>Atual</th>
+            <th>Consumo</th><th>Valor</th><th>Motor</th><th>Data</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="tabelaHistorico">
+          <tr><td colspan="9" style="text-align:center;padding:36px;color:var(--muted)">Nenhuma leitura ainda.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div class="section" id="s-config">
+  <div class="wrap">
+    <div class="eyebrow">Pipeline OCR</div>
+    <h2 style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;margin-bottom:18px">Configuração das 5 camadas</h2>
+    
+    <div class="panel">
+      <div class="field">
+        <label>URL do Proxy (Vertex + Cloud Vision + YOLO)</label>
+        <input id="cfgProxy" value="http://localhost:8790/ocr"/>
+      </div>
+      <div class="field">
+        <label>URL do YOLOv8 (opcional – se separado)</label>
+        <input id="cfgYolo" value="http://localhost:8791/detect-digits"/>
+      </div>
+      <div class="field">
+        <label>Máximo de tentativas (retry)</label>
+        <input type="number" id="cfgRetries" value="3"/>
+      </div>
+      <div class="field">
+        <label>Timeout por tentativa (ms)</label>
+        <input type="number" id="cfgTimeout" value="18000"/>
+      </div>
+      
+      <label style="display:flex;align-items:center;gap:10px;margin:14px 0;cursor:pointer">
+        <input type="checkbox" id="cfgTesseract" checked/> Ativar Tesseract.js (fallback offline)
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;margin:14px 0;cursor:pointer">
+        <input type="checkbox" id="cfgDebug" checked/> Logs de depuração no console
+      </label>
+      
+      <button class="btn btn-prim btn-sm" onclick="salvarConfigOCR()">Salvar configurações</button>
+    </div>
+
+    <div class="panel" style="margin-top:16px">
+      <div class="panel-title">Ordem das 5 camadas</div>
+      <ol style="padding-left:20px;color:var(--muted);line-height:2.1">
+        <li><strong style="color:var(--cyan)">Vertex AI Gemini</strong> – máxima precisão</li>
+        <li><strong style="color:#60a5fa">Cloud Vision API</strong> – fallback cloud</li>
+        <li><strong style="color:var(--purple)">YOLOv8 (dígitos)</strong> – detecção precisa + bounding box</li>
+        <li><strong style="color:var(--amber)">TensorFlow.js CNN</strong> – modelo local</li>
+        <li><strong style="color:var(--mint)">Tesseract.js</strong> – último recurso offline</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   SETER PRO v4.2 – Arquitetura 5 Camadas
+   1. Vertex AI Gemini
+   2. Cloud Vision API
+   3. YOLOv8 (dígitos)
+   4. TensorFlow.js CNN
+   5. Tesseract.js
+   ═══════════════════════════════════════════════════════════════ */
+
+const OCR_CONFIG = {
+  proxyUrl: localStorage.getItem('seter_proxy') || 'http://localhost:8790/ocr',
+  yoloUrl: localStorage.getItem('seter_yolo') || 'http://localhost:8791/detect-digits',
+  maxRetries: Number(localStorage.getItem('seter_retries') || 3),
+  baseDelayMs: 800,
+  maxDelayMs: 8000,
+  timeoutMs: Number(localStorage.getItem('seter_timeout') || 18000),
+  enableTesseract: localStorage.getItem('seter_tesseract') !== 'false',
+  debug: localStorage.getItem('seter_debug') !== 'false'
+};
+
+let tipoSelecionado = 'AGUA';
+let fotoSelecionada = null;
+let historico = JSON.parse(localStorage.getItem('seter_historico') || '[]');
+let tfModel = null;
+let tfPronto = false;
+
+function ocrLog(level, msg, data = null) {
+  if (!OCR_CONFIG.debug && level === 'debug') return;
+  const ts = new Date().toISOString().substr(11, 12);
+  data ? console[level](`[OCR ${ts}] ${msg}`, data) : console[level](`[OCR ${ts}] ${msg}`);
+}
+
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms + Math.random() * 200));
+}
+
+async function withRetry(fn, label = 'operação') {
+  let lastError;
+  for (let attempt = 1; attempt <= OCR_CONFIG.maxRetries; attempt++) {
+    try {
+      ocrLog('debug', `${label} · tentativa ${attempt}/${OCR_CONFIG.maxRetries}`);
+      const result = await Promise.race([
+        fn(),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('Timeout')), OCR_CONFIG.timeoutMs))
+      ]);
+      ocrLog('info', `${label} · sucesso`);
+      return result;
+    } catch (err) {
+      lastError = err;
+      ocrLog('warn', `${label} · falha ${attempt}: ${err.message}`);
+      if (attempt < OCR_CONFIG.maxRetries) {
+        await sleep(Math.min(OCR_CONFIG.baseDelayMs * Math.pow(2, attempt - 1), OCR_CONFIG.maxDelayMs));
+      }
+    }
+  }
+  throw lastError;
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function toast(msg, tipo = 'ok') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${tipo}`;
+  el.textContent = (tipo === 'ok' ? '✓ ' : '✕ ') + msg;
+  document.getElementById('toastArea').appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+function irPara(secao, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('ativa'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('ativo'));
+  document.getElementById('s-' + secao).classList.add('ativa');
+  if (btn) btn.classList.add('ativo');
+  if (secao === 'historico') renderHistorico();
+}
+
+function selecionarTipo(tipo, el) {
+  tipoSelecionado = tipo;
+  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('ativo'));
+  el.classList.add('ativo');
+}
+
+function aoSelecionarFoto(e) {
+  fotoSelecionada = e.target.files[0];
+  if (!fotoSelecionada) return;
+  const prev = document.getElementById('dzPreview');
+  prev.src = URL.createObjectURL(fotoSelecionada);
+  prev.style.display = 'block';
+  document.getElementById('dzLabel').textContent = fotoSelecionada.name;
+  toast('Foto carregada', 'ok');
+}
+
+function animarVisor(val) {
+  const str = String(Math.round(val)).padStart(5, '0');
+  ['d0','d1','d2','d3','d4'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.classList.remove('on');
+    setTimeout(() => { el.textContent = str[i] || '0'; el.classList.add('on'); }, i * 130);
+  });
+}
+
+/* ── Camada 1+2: Proxy (Vertex AI → Cloud Vision) ── */
+async function ocrViaProxy(base64, tipo) {
+  const res = await fetch(OCR_CONFIG.proxyUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ imageBase64: base64, tipo })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return await res.json();
+}
+
+/* ── Camada 3: YOLOv8 (detecção de dígitos + bounding box) ── */
+async function ocrViaYOLOv8(file) {
+  ocrLog('info', 'Enviando para YOLOv8...');
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const res = await fetch(OCR_CONFIG.yoloUrl, {
+    method: 'POST',
+    body: formData
+  });
+  if (!res.ok) throw new Error(`YOLOv8 HTTP ${res.status}`);
+
+  const data = await res.json();
+  if (data.leitura === null || data.leitura === undefined) {
+    throw new Error('YOLOv8 não detectou dígitos');
+  }
+
+  return {
+    leitura: data.leitura,
+    confianca: data.confianca || 80,
+    modelo: data.modelo || 'YOLOv8 (dígitos)',
+    origem: 'yolov8',
+    digitos: data.digitos || [],
+    boundingBoxes: data.digitos || []
+  };
+}
+
+/* ── Camada 4: TensorFlow.js ── */
+async function carregarModeloTF() {
+  if (tfPronto) return;
+  ocrLog('info', 'Carregando TensorFlow.js...');
+  tfModel = await tf.loadLayersModel('https://cdn.jsdelivr.net/gh/tensorflow/tfjs-examples/mnist-cnn/dist/model.json');
+  const dummy = tf.zeros([1, 28, 28, 1]);
+  tfModel.predict(dummy).dispose();
+  dummy.dispose();
+  tfPronto = true;
+}
+
+async function ocrViaTensorFlow(file) {
+  await carregarModeloTF();
+  const img = await new Promise((res, rej) => {
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = rej;
+    i.src = URL.createObjectURL(file);
+  });
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 140; canvas.height = 28;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, 140, 28);
+  ctx.drawImage(img, 0, 0, 140, 28);
+
+  const digitos = [];
+  for (let i = 0; i < 5; i++) {
+    const dc = document.createElement('canvas');
+    dc.width = 28; dc.height = 28;
+    const dctx = dc.getContext('2d');
+    dctx.fillStyle = '#000';
+    dctx.fillRect(0, 0, 28, 28);
+    dctx.drawImage(canvas, i * 28, 0, 28, 28, 0, 0, 28, 28);
+
+    const tensor = tf.browser.fromPixels(dc, 1).toFloat().div(255).expandDims(0);
+    const pred = tfModel.predict(tensor);
+    const probs = await pred.data();
+    const digit = probs.indexOf(Math.max(...probs));
+    if (Math.max(...probs) > 0.30) digitos.push(digit);
+    tensor.dispose(); pred.dispose();
+  }
+
+  if (!digitos.length) throw new Error('TF.js não encontrou dígitos');
+  return {
+    leitura: Number(digitos.join('')),
+    confianca: Math.min(85, 55 + digitos.length * 5),
+    modelo: 'TensorFlow.js',
+    origem: 'tensorflow'
+  };
+}
+
+/* ── Camada 5: Tesseract.js ── */
+async function ocrViaTesseract(file) {
+  if (!window.Tesseract) throw new Error('Tesseract.js não carregado');
+
+  ocrLog('info', 'Iniciando Tesseract.js');
+  const { data } = await Tesseract.recognize(file, 'eng', {
+    logger: m => {
+      if (m.status === 'recognizing text') {
+        const pct = Math.round((m.progress || 0) * 100);
+        document.getElementById('confFill').style.width = (60 + pct * 0.3) + '%';
+        document.getElementById('statusTxt').innerHTML = `<span style="color:var(--amber)">Tesseract · ${pct}%</span>`;
+      }
+    },
+    tessedit_char_whitelist: '0123456789',
+    tessedit_pageseg_mode: '7'
+  });
+
+  const numeros = (data.text || '').match(/\d{3,8}/g) || [];
+  if (!numeros.length) throw new Error('Tesseract não encontrou números');
+
+  numeros.sort((a, b) => Number(b) - Number(a));
+  let confianca = 65;
+  if (numeros[0].length >= 5) confianca = 75;
+  if (data.confidence) confianca = Math.min(90, Math.round(data.confidence));
+
+  return {
+    leitura: Number(numeros[0]),
+    confianca,
+    modelo: 'Tesseract.js (local)',
+    origem: 'tesseract'
+  };
+}
+
+/* ── Pipeline completo de 5 camadas ── */
+async function ocrMedidorCompleto(file) {
+  const base64 = await fileToBase64(file);
+
+  // 1º + 2º – Vertex AI / Cloud Vision
+  try {
+    document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">1. Vertex AI / Cloud Vision…</span>';
+    document.getElementById('confFill').style.width = '20%';
+    return await withRetry(() => ocrViaProxy(base64, tipoSelecionado), 'Proxy OCR');
+  } catch (e1) {
+    ocrLog('warn', 'Camada 1-2 falhou', e1.message);
+
+    // 3º – YOLOv8
+    try {
+      document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">3. YOLOv8 (dígitos)…</span>';
+      document.getElementById('confFill').style.width = '40%';
+      return await withRetry(() => ocrViaYOLOv8(file), 'YOLOv8');
+    } catch (e2) {
+      ocrLog('warn', 'Camada 3 (YOLO) falhou', e2.message);
+
+      // 4º – TensorFlow.js
+      try {
+        document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">4. TensorFlow.js…</span>';
+        document.getElementById('confFill').style.width = '60%';
+        return await withRetry(() => ocrViaTensorFlow(file), 'TensorFlow.js');
+      } catch (e3) {
+        ocrLog('warn', 'Camada 4 (TF.js) falhou', e3.message);
+
+        // 5º – Tesseract
+        if (!OCR_CONFIG.enableTesseract) throw e3;
+        document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">5. Tesseract.js…</span>';
+        document.getElementById('confFill').style.width = '80%';
+        return await withRetry(() => ocrViaTesseract(file), 'Tesseract.js');
+      }
+    }
+  }
+}
+
+async function processarLeitura() {
+  const leiAnt = Number(document.getElementById('leiAnt').value) || 0;
+  const leiAtualManual = document.getElementById('leiAtual').value;
+  const btn = document.getElementById('btnProcessar');
+
+  if (!leiAtualManual && !fotoSelecionada) {
+    toast('Tire uma foto ou digite a leitura.', 'err');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Processando…';
+  document.getElementById('statusTxt').textContent = 'iniciando pipeline 5 camadas…';
+  document.getElementById('confFill').style.width = '5%';
+
+  try {
+    let leituraFinal, confianca, origemTxt, modeloUsado;
+
+    if (leiAtualManual) {
+      leituraFinal = Number(leiAtualManual);
+      confianca = 100;
+      origemTxt = '<span style="color:var(--mint)">leitura manual</span>';
+      modeloUsado = 'manual';
+    } else {
+      const r = await ocrMedidorCompleto(fotoSelecionada);
+      leituraFinal = r.leitura;
+      confianca = r.confianca;
+      modeloUsado = r.modelo || r.origem;
+      origemTxt = `<span style="color:var(--mint)">${modeloUsado} · ${confianca}%</span>`;
+    }
+
+    if (isNaN(leituraFinal) || leituraFinal < 0) throw new Error('Leitura inválida');
+
+    animarVisor(leituraFinal);
+    document.getElementById('statusTxt').innerHTML = origemTxt;
+    document.getElementById('statusConf').textContent = confianca + '%';
+    document.getElementById('confFill').style.width = confianca + '%';
+
+    const consumo = Math.max(0, leituraFinal - leiAnt);
+    const total = tipoSelecionado === 'AGUA' ? consumo * 6.5 + 17.46 : consumo * 0.89 + consumo * 0.02;
+
+    document.getElementById('faturaVazia').style.display = 'none';
+    document.getElementById('faturaConteudo').style.display = 'block';
+    document.getElementById('fvConsumo').textContent = `${consumo} ${tipoSelecionado === 'AGUA' ? 'm³' : 'kWh'}`;
+    document.getElementById('fvServico').textContent = 'R$ ' + (total * 0.75).toFixed(2);
+    document.getElementById('fvExtra').textContent = 'R$ ' + (total * 0.25).toFixed(2);
+    document.getElementById('fvTotal').textContent = 'R$ ' + total.toFixed(2);
+
+    historico.unshift({
+      id: Date.now(),
+      clienteNome: 'Consumidor',
+      tipo: tipoSelecionado,
+      leiAnt,
+      leiAtual: leituraFinal,
+      consumo,
+      valor: total,
+      confianca,
+      origem: modeloUsado,
+      data: new Date().toISOString()
+    });
+    if (historico.length > 300) historico.pop();
+    localStorage.setItem('seter_historico', JSON.stringify(historico));
+
+    toast('Leitura processada com sucesso!', 'ok');
+  } catch (err) {
+    console.error(err);
+    toast('Falha no OCR: ' + err.message, 'err');
+    document.getElementById('statusTxt').innerHTML = `<span style="color:var(--rose)">${err.message}</span>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Processar leitura com IA';
+  }
+}
+
+function renderHistorico() {
+  const tbody = document.getElementById('tabelaHistorico');
+  if (!historico.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:36px;color:var(--muted)">Nenhuma leitura ainda.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = historico.map(r => `
+    <tr>
+      <td>${r.clienteNome || '—'}</td>
+      <td><span class="pill ${r.tipo === 'AGUA' ? 'pill-mint' : 'pill-blue'}">${r.tipo === 'AGUA' ? '💧 Água' : '⚡ Energia'}</span></td>
+      <td style="font-family:'JetBrains Mono',monospace">${r.leiAnt}</td>
+      <td style="font-family:'JetBrains Mono',monospace">${r.leiAtual}</td>
+      <td style="font-family:'JetBrains Mono',monospace">${r.consumo}</td>
+      <td style="color:var(--mint)">R$ ${r.valor.toFixed(2)}</td>
+      <td><span class="pill pill-amber">${r.origem || '—'}</span></td>
+      <td style="font-size:11px;color:var(--muted)">${new Date(r.data).toLocaleString('pt-BR')}</td>
+      <td><button class="btn btn-rose btn-sm" onclick="apagarLeitura(${r.id})">🗑</button></td>
+    </tr>
+  `).join('');
+}
+
+function apagarLeitura(id) {
+  if (!confirm('Apagar esta leitura?')) return;
+  historico = historico.filter(r => r.id !== id);
+  localStorage.setItem('seter_historico', JSON.stringify(historico));
+  renderHistorico();
+  toast('Leitura removida', 'ok');
+}
+
+function salvarConfigOCR() {
+  OCR_CONFIG.proxyUrl = document.getElementById('cfgProxy').value.trim();
+  OCR_CONFIG.yoloUrl = document.getElementById('cfgYolo').value.trim();
+  OCR_CONFIG.maxRetries = Number(document.getElementById('cfgRetries').value) || 3;
+  OCR_CONFIG.timeoutMs = Number(document.getElementById('cfgTimeout').value) || 18000;
+  OCR_CONFIG.enableTesseract = document.getElementById('cfgTesseract').checked;
+  OCR_CONFIG.debug = document.getElementById('cfgDebug').checked;
+
+  localStorage.setItem('seter_proxy', OCR_CONFIG.proxyUrl);
+  localStorage.setItem('seter_yolo', OCR_CONFIG.yoloUrl);
+  localStorage.setItem('seter_retries', OCR_CONFIG.maxRetries);
+  localStorage.setItem('seter_timeout', OCR_CONFIG.timeoutMs);
+  localStorage.setItem('seter_tesseract', OCR_CONFIG.enableTesseract);
+  localStorage.setItem('seter_debug', OCR_CONFIG.debug);
+  toast('Configurações salvas', 'ok');
+}
+
+// Init
+document.getElementById('cfgProxy').value = OCR_CONFIG.proxyUrl;
+document.getElementById('cfgYolo').value = OCR_CONFIG.yoloUrl;
+document.getElementById('cfgRetries').value = OCR_CONFIG.maxRetries;
+document.getElementById('cfgTimeout').value = OCR_CONFIG.timeoutMs;
+document.getElementById('cfgTesseract').checked = OCR_CONFIG.enableTesseract;
+document.getElementById('cfgDebug').checked = OCR_CONFIG.debug;
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seter Pro · OCR 5 Camadas</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+  
+  <!-- TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+  
+  <!-- Tesseract.js v5 -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  
+  <style>
+    :root {
+      --bg: #050a14;
+      --card: #0c1525;
+      --card2: #111d30;
+      --border: rgba(0, 255, 255, 0.12);
+      --text: #f0f7ff;
+      --muted: #7b9bb8;
+      --cyan: #00f0ff;
+      --blue: #3b82f6;
+      --mint: #00ff9d;
+      --amber: #ffb020;
+      --rose: #ff4d6d;
+      --purple: #a855f7;
+      --radius: 14px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;font-size:14px;
+      background-image:radial-gradient(ellipse at 20% 0%,rgba(0,240,255,.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(0,255,157,.04) 0%,transparent 50%)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(5,10,20,.92);backdrop-filter:blur(16px);z-index:100}
+    .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
+    .logo-dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint)}
+    .nav-tabs{display:flex;gap:4px}
+    .tab{padding:8px 16px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;transition:.2s}
+    .tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
+    .tab.ativo{background:rgba(0,240,255,.12);color:var(--cyan)}
+    .badge-env{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 10px;border-radius:20px;border:1px solid rgba(0,240,255,.35);color:var(--cyan);background:rgba(0,240,255,.06)}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 16px 80px}
+    .section{display:none}.section.ativa{display:block}
+    .grid2{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+    @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+    .panel{background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:0 4px 24px rgba(0,0,0,.25)}
+    .panel-title{font-family:'Sora',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:16px}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+    .field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+    .field input{background:#0a1220;border:1px solid rgba(0,240,255,.15);border-radius:10px;padding:11px 14px;color:var(--text);font-size:13px;width:100%;transition:.2s}
+    .field input:focus{border-color:var(--cyan);outline:none;box-shadow:0 0 0 3px rgba(0,240,255,.1)}
+    .tipo-toggle{display:flex;gap:10px;margin-bottom:16px}
+    .tipo-btn{flex:1;padding:11px;border-radius:10px;border:1px solid rgba(0,240,255,.15);background:#0a1220;color:var(--muted);font-weight:600;cursor:pointer;transition:.2s}
+    .tipo-btn.ativo{background:rgba(0,240,255,.12);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 16px rgba(0,240,255,.15)}
+    .dropzone{border:1.5px dashed rgba(0,240,255,.3);border-radius:var(--radius);padding:32px 16px;text-align:center;cursor:pointer;position:relative;background:rgba(0,240,255,.03);transition:.2s}
+    .dropzone:hover{border-color:var(--cyan);background:rgba(0,240,255,.06)}
+    .dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .dz-preview{max-height:140px;margin-top:14px;border-radius:10px;display:none}
+    .visor{background:radial-gradient(ellipse at center,#0a1628,#03080f);border-radius:var(--radius);padding:20px;display:flex;justify-content:center;gap:6px;border:1px solid rgba(0,240,255,.2);box-shadow:inset 0 0 30px rgba(0,240,255,.05)}
+    .digito{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:700;width:36px;text-align:center;color:rgba(255,255,255,.08);transition:.35s}
+    .digito.on{color:var(--cyan);text-shadow:0 0 18px rgba(0,240,255,.6)}
+    .status-bar{display:flex;justify-content:space-between;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+    .conf-bar{height:5px;border-radius:3px;background:#0a1220;margin-top:10px;overflow:hidden}
+    .conf-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--mint));transition:width .5s ease}
+    .btn{padding:13px 22px;border-radius:12px;border:none;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+    .btn-full{width:100%}
+    .btn-prim{background:linear-gradient(135deg,#00d4ff,#3b82f6);color:#001018;box-shadow:0 4px 20px rgba(0,212,255,.3)}
+    .btn-prim:hover{filter:brightness(1.1);transform:translateY(-1px)}
+    .btn-prim:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .btn-rose{background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:var(--rose)}
+    .btn-sm{padding:7px 12px;font-size:12px;border-radius:8px}
+    .fatura-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px}
+    .total-box{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:16px;background:rgba(0,255,157,.08);border:1px solid rgba(0,255,157,.25);border-radius:12px}
+    .total-val{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--mint);text-shadow:0 0 20px rgba(0,255,157,.3)}
+    .tbl{width:100%;border-collapse:collapse;font-size:13px}
+    .tbl th{text-align:left;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+    .tbl td{padding:12px;border-bottom:1px solid rgba(255,255,255,.04)}
+    .toast-area{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:10px;z-index:999}
+    .toast{padding:13px 18px;border-radius:12px;font-size:13px;max-width:340px;animation:slideIn .25s ease;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+    .toast-ok{background:rgba(0,255,157,.12);border:1px solid rgba(0,255,157,.35);color:var(--mint)}
+    .toast-err{background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:var(--rose)}
+    @keyframes slideIn{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+    .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--cyan);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint)}
+    .pill{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+    .pill-mint{background:rgba(0,255,157,.12);color:var(--mint)}
+    .pill-blue{background:rgba(59,130,246,.15);color:#60a5fa}
+    .pill-amber{background:rgba(255,176,32,.12);color:var(--amber)}
+    .row{display:grid;gap:12px}.row.cols2{grid-template-columns:1fr 1fr}
+    @media(max-width:600px){.row.cols2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="logo"><div class="logo-dot"></div>Seter <span style="color:var(--cyan)">Pro</span></div>
+  <div class="nav-tabs">
+    <button class="tab ativo" onclick="irPara('leitura',this)">Leitura</button>
+    <button class="tab" onclick="irPara('historico',this)">Histórico</button>
+    <button class="tab" onclick="irPara('config',this)">Config OCR</button>
+  </div>
+  <div class="badge-env">v4.2 · 5 Camadas</div>
+</nav>
+
+<div class="toast-area" id="toastArea"></div>
+
+<!-- LEITURA -->
+<div class="section ativa" id="s-leitura">
+  <div class="wrap">
+    <div class="eyebrow">Vertex → Vision → YOLOv8 → TF.js → Tesseract</div>
+    <h1 style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px">
+      Seter <span style="color:var(--cyan)">Leitura</span>
+    </h1>
+    <p style="color:var(--muted);margin-bottom:24px">
+      Câmera → 5 camadas de IA → Leitura + Confiança + Bounding Box → Fatura
+    </p>
+
+    <div class="grid2">
+      <div class="panel">
+        <div class="panel-title">Captura e leitura</div>
+        <div class="tipo-toggle">
+          <button class="tipo-btn ativo" onclick="selecionarTipo('AGUA',this)">💧 Água</button>
+          <button class="tipo-btn" onclick="selecionarTipo('ENERGIA',this)">⚡ Energia</button>
+        </div>
+
+        <label class="dropzone">
+          <input type="file" id="inputFoto" accept="image/*" capture="environment" onchange="aoSelecionarFoto(event)"/>
+          <div style="font-size:32px;margin-bottom:8px">📷</div>
+          <div style="font-weight:600;font-size:15px" id="dzLabel">Tirar ou enviar foto do medidor</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">JPG, PNG · até 10 MB</div>
+          <img id="dzPreview" class="dz-preview"/>
+        </label>
+
+        <div class="row cols2" style="margin-top:16px">
+          <div class="field"><label>Leitura anterior</label><input type="number" id="leiAnt" value="12751"/></div>
+          <div class="field"><label>Leitura atual (manual)</label><input type="number" id="leiAtual" placeholder="ou use a foto"/></div>
+        </div>
+
+        <button class="btn btn-prim btn-full" id="btnProcessar" onclick="processarLeitura()" style="margin-top:18px">
+          Processar leitura com IA
+        </button>
+      </div>
+
+      <div>
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-title">Leitura detectada</div>
+          <div class="visor">
+            <span class="digito" id="d0">0</span><span class="digito" id="d1">0</span>
+            <span class="digito" id="d2">0</span>
+            <span style="font-size:28px;color:rgba(0,240,255,.25);align-self:center">.</span>
+            <span class="digito" id="d3">0</span><span class="digito" id="d4">0</span>
+          </div>
+          <div class="status-bar">
+            <span id="statusTxt">aguardando…</span>
+            <span id="statusConf"></span>
+          </div>
+          <div class="conf-bar"><div class="conf-fill" id="confFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Fatura calculada</div>
+          <div id="faturaVazia" style="text-align:center;padding:32px;color:var(--muted)">Processe uma leitura para ver o cálculo.</div>
+          <div id="faturaConteudo" style="display:none">
+            <div class="fatura-row"><span>Consumo</span><span id="fvConsumo">—</span></div>
+            <div class="fatura-row"><span>Serviço</span><span id="fvServico">—</span></div>
+            <div class="fatura-row"><span>Adicional</span><span id="fvExtra">—</span></div>
+            <div class="total-box">
+              <div style="font-size:12px;color:var(--muted)">Total a pagar</div>
+              <div class="total-val" id="fvTotal">R$ 0,00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTÓRICO -->
+<div class="section" id="s-historico">
+  <div class="wrap">
+    <div class="eyebrow">Registros</div>
+    <h2 style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;margin-bottom:18px">Histórico de leituras</h2>
+    <div class="panel" style="padding:0;overflow:hidden">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Cliente</th><th>Tipo</th><th>Anterior</th><th>Atual</th>
+            <th>Consumo</th><th>Valor</th><th>Motor</th><th>Data</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="tabelaHistorico">
+          <tr><td colspan="9" style="text-align:center;padding:36px;color:var(--muted)">Nenhuma leitura ainda.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div class="section" id="s-config">
+  <div class="wrap">
+    <div class="eyebrow">Pipeline OCR</div>
+    <h2 style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;margin-bottom:18px">Configuração das 5 camadas</h2>
+    
+    <div class="panel">
+      <div class="field">
+        <label>URL do Proxy (Vertex + Cloud Vision + YOLO)</label>
+        <input id="cfgProxy" value="http://localhost:8790/ocr"/>
+      </div>
+      <div class="field">
+        <label>URL do YOLOv8 (opcional – se separado)</label>
+        <input id="cfgYolo" value="http://localhost:8791/detect-digits"/>
+      </div>
+      <div class="field">
+        <label>Máximo de tentativas (retry)</label>
+        <input type="number" id="cfgRetries" value="3"/>
+      </div>
+      <div class="field">
+        <label>Timeout por tentativa (ms)</label>
+        <input type="number" id="cfgTimeout" value="18000"/>
+      </div>
+      
+      <label style="display:flex;align-items:center;gap:10px;margin:14px 0;cursor:pointer">
+        <input type="checkbox" id="cfgTesseract" checked/> Ativar Tesseract.js (fallback offline)
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;margin:14px 0;cursor:pointer">
+        <input type="checkbox" id="cfgDebug" checked/> Logs de depuração no console
+      </label>
+      
+      <button class="btn btn-prim btn-sm" onclick="salvarConfigOCR()">Salvar configurações</button>
+    </div>
+
+    <div class="panel" style="margin-top:16px">
+      <div class="panel-title">Ordem das 5 camadas</div>
+      <ol style="padding-left:20px;color:var(--muted);line-height:2.1">
+        <li><strong style="color:var(--cyan)">Vertex AI Gemini</strong> – máxima precisão</li>
+        <li><strong style="color:#60a5fa">Cloud Vision API</strong> – fallback cloud</li>
+        <li><strong style="color:var(--purple)">YOLOv8 (dígitos)</strong> – detecção precisa + bounding box</li>
+        <li><strong style="color:var(--amber)">TensorFlow.js CNN</strong> – modelo local</li>
+        <li><strong style="color:var(--mint)">Tesseract.js</strong> – último recurso offline</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   SETER PRO v4.2 – Arquitetura 5 Camadas
+   1. Vertex AI Gemini
+   2. Cloud Vision API
+   3. YOLOv8 (dígitos)
+   4. TensorFlow.js CNN
+   5. Tesseract.js
+   ═══════════════════════════════════════════════════════════════ */
+
+const OCR_CONFIG = {
+  proxyUrl: localStorage.getItem('seter_proxy') || 'http://localhost:8790/ocr',
+  yoloUrl: localStorage.getItem('seter_yolo') || 'http://localhost:8791/detect-digits',
+  maxRetries: Number(localStorage.getItem('seter_retries') || 3),
+  baseDelayMs: 800,
+  maxDelayMs: 8000,
+  timeoutMs: Number(localStorage.getItem('seter_timeout') || 18000),
+  enableTesseract: localStorage.getItem('seter_tesseract') !== 'false',
+  debug: localStorage.getItem('seter_debug') !== 'false'
+};
+
+let tipoSelecionado = 'AGUA';
+let fotoSelecionada = null;
+let historico = JSON.parse(localStorage.getItem('seter_historico') || '[]');
+let tfModel = null;
+let tfPronto = false;
+
+function ocrLog(level, msg, data = null) {
+  if (!OCR_CONFIG.debug && level === 'debug') return;
+  const ts = new Date().toISOString().substr(11, 12);
+  data ? console[level](`[OCR ${ts}] ${msg}`, data) : console[level](`[OCR ${ts}] ${msg}`);
+}
+
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms + Math.random() * 200));
+}
+
+async function withRetry(fn, label = 'operação') {
+  let lastError;
+  for (let attempt = 1; attempt <= OCR_CONFIG.maxRetries; attempt++) {
+    try {
+      ocrLog('debug', `${label} · tentativa ${attempt}/${OCR_CONFIG.maxRetries}`);
+      const result = await Promise.race([
+        fn(),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('Timeout')), OCR_CONFIG.timeoutMs))
+      ]);
+      ocrLog('info', `${label} · sucesso`);
+      return result;
+    } catch (err) {
+      lastError = err;
+      ocrLog('warn', `${label} · falha ${attempt}: ${err.message}`);
+      if (attempt < OCR_CONFIG.maxRetries) {
+        await sleep(Math.min(OCR_CONFIG.baseDelayMs * Math.pow(2, attempt - 1), OCR_CONFIG.maxDelayMs));
+      }
+    }
+  }
+  throw lastError;
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function toast(msg, tipo = 'ok') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${tipo}`;
+  el.textContent = (tipo === 'ok' ? '✓ ' : '✕ ') + msg;
+  document.getElementById('toastArea').appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+function irPara(secao, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('ativa'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('ativo'));
+  document.getElementById('s-' + secao).classList.add('ativa');
+  if (btn) btn.classList.add('ativo');
+  if (secao === 'historico') renderHistorico();
+}
+
+function selecionarTipo(tipo, el) {
+  tipoSelecionado = tipo;
+  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('ativo'));
+  el.classList.add('ativo');
+}
+
+function aoSelecionarFoto(e) {
+  fotoSelecionada = e.target.files[0];
+  if (!fotoSelecionada) return;
+  const prev = document.getElementById('dzPreview');
+  prev.src = URL.createObjectURL(fotoSelecionada);
+  prev.style.display = 'block';
+  document.getElementById('dzLabel').textContent = fotoSelecionada.name;
+  toast('Foto carregada', 'ok');
+}
+
+function animarVisor(val) {
+  const str = String(Math.round(val)).padStart(5, '0');
+  ['d0','d1','d2','d3','d4'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.classList.remove('on');
+    setTimeout(() => { el.textContent = str[i] || '0'; el.classList.add('on'); }, i * 130);
+  });
+}
+
+/* ── Camada 1+2: Proxy (Vertex AI → Cloud Vision) ── */
+async function ocrViaProxy(base64, tipo) {
+  const res = await fetch(OCR_CONFIG.proxyUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ imageBase64: base64, tipo })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return await res.json();
+}
+
+/* ── Camada 3: YOLOv8 (detecção de dígitos + bounding box) ── */
+async function ocrViaYOLOv8(file) {
+  ocrLog('info', 'Enviando para YOLOv8...');
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const res = await fetch(OCR_CONFIG.yoloUrl, {
+    method: 'POST',
+    body: formData
+  });
+  if (!res.ok) throw new Error(`YOLOv8 HTTP ${res.status}`);
+
+  const data = await res.json();
+  if (data.leitura === null || data.leitura === undefined) {
+    throw new Error('YOLOv8 não detectou dígitos');
+  }
+
+  return {
+    leitura: data.leitura,
+    confianca: data.confianca || 80,
+    modelo: data.modelo || 'YOLOv8 (dígitos)',
+    origem: 'yolov8',
+    digitos: data.digitos || [],
+    boundingBoxes: data.digitos || []
+  };
+}
+
+/* ── Camada 4: TensorFlow.js ── */
+async function carregarModeloTF() {
+  if (tfPronto) return;
+  ocrLog('info', 'Carregando TensorFlow.js...');
+  tfModel = await tf.loadLayersModel('https://cdn.jsdelivr.net/gh/tensorflow/tfjs-examples/mnist-cnn/dist/model.json');
+  const dummy = tf.zeros([1, 28, 28, 1]);
+  tfModel.predict(dummy).dispose();
+  dummy.dispose();
+  tfPronto = true;
+}
+
+async function ocrViaTensorFlow(file) {
+  await carregarModeloTF();
+  const img = await new Promise((res, rej) => {
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = rej;
+    i.src = URL.createObjectURL(file);
+  });
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 140; canvas.height = 28;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, 140, 28);
+  ctx.drawImage(img, 0, 0, 140, 28);
+
+  const digitos = [];
+  for (let i = 0; i < 5; i++) {
+    const dc = document.createElement('canvas');
+    dc.width = 28; dc.height = 28;
+    const dctx = dc.getContext('2d');
+    dctx.fillStyle = '#000';
+    dctx.fillRect(0, 0, 28, 28);
+    dctx.drawImage(canvas, i * 28, 0, 28, 28, 0, 0, 28, 28);
+
+    const tensor = tf.browser.fromPixels(dc, 1).toFloat().div(255).expandDims(0);
+    const pred = tfModel.predict(tensor);
+    const probs = await pred.data();
+    const digit = probs.indexOf(Math.max(...probs));
+    if (Math.max(...probs) > 0.30) digitos.push(digit);
+    tensor.dispose(); pred.dispose();
+  }
+
+  if (!digitos.length) throw new Error('TF.js não encontrou dígitos');
+  return {
+    leitura: Number(digitos.join('')),
+    confianca: Math.min(85, 55 + digitos.length * 5),
+    modelo: 'TensorFlow.js',
+    origem: 'tensorflow'
+  };
+}
+
+/* ── Camada 5: Tesseract.js ── */
+async function ocrViaTesseract(file) {
+  if (!window.Tesseract) throw new Error('Tesseract.js não carregado');
+
+  ocrLog('info', 'Iniciando Tesseract.js');
+  const { data } = await Tesseract.recognize(file, 'eng', {
+    logger: m => {
+      if (m.status === 'recognizing text') {
+        const pct = Math.round((m.progress || 0) * 100);
+        document.getElementById('confFill').style.width = (60 + pct * 0.3) + '%';
+        document.getElementById('statusTxt').innerHTML = `<span style="color:var(--amber)">Tesseract · ${pct}%</span>`;
+      }
+    },
+    tessedit_char_whitelist: '0123456789',
+    tessedit_pageseg_mode: '7'
+  });
+
+  const numeros = (data.text || '').match(/\d{3,8}/g) || [];
+  if (!numeros.length) throw new Error('Tesseract não encontrou números');
+
+  numeros.sort((a, b) => Number(b) - Number(a));
+  let confianca = 65;
+  if (numeros[0].length >= 5) confianca = 75;
+  if (data.confidence) confianca = Math.min(90, Math.round(data.confidence));
+
+  return {
+    leitura: Number(numeros[0]),
+    confianca,
+    modelo: 'Tesseract.js (local)',
+    origem: 'tesseract'
+  };
+}
+
+/* ── Pipeline completo de 5 camadas ── */
+async function ocrMedidorCompleto(file) {
+  const base64 = await fileToBase64(file);
+
+  // 1º + 2º – Vertex AI / Cloud Vision
+  try {
+    document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">1. Vertex AI / Cloud Vision…</span>';
+    document.getElementById('confFill').style.width = '20%';
+    return await withRetry(() => ocrViaProxy(base64, tipoSelecionado), 'Proxy OCR');
+  } catch (e1) {
+    ocrLog('warn', 'Camada 1-2 falhou', e1.message);
+
+    // 3º – YOLOv8
+    try {
+      document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">3. YOLOv8 (dígitos)…</span>';
+      document.getElementById('confFill').style.width = '40%';
+      return await withRetry(() => ocrViaYOLOv8(file), 'YOLOv8');
+    } catch (e2) {
+      ocrLog('warn', 'Camada 3 (YOLO) falhou', e2.message);
+
+      // 4º – TensorFlow.js
+      try {
+        document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">4. TensorFlow.js…</span>';
+        document.getElementById('confFill').style.width = '60%';
+        return await withRetry(() => ocrViaTensorFlow(file), 'TensorFlow.js');
+      } catch (e3) {
+        ocrLog('warn', 'Camada 4 (TF.js) falhou', e3.message);
+
+        // 5º – Tesseract
+        if (!OCR_CONFIG.enableTesseract) throw e3;
+        document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">5. Tesseract.js…</span>';
+        document.getElementById('confFill').style.width = '80%';
+        return await withRetry(() => ocrViaTesseract(file), 'Tesseract.js');
+      }
+    }
+  }
+}
+
+async function processarLeitura() {
+  const leiAnt = Number(document.getElementById('leiAnt').value) || 0;
+  const leiAtualManual = document.getElementById('leiAtual').value;
+  const btn = document.getElementById('btnProcessar');
+
+  if (!leiAtualManual && !fotoSelecionada) {
+    toast('Tire uma foto ou digite a leitura.', 'err');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Processando…';
+  document.getElementById('statusTxt').textContent = 'iniciando pipeline 5 camadas…';
+  document.getElementById('confFill').style.width = '5%';
+
+  try {
+    let leituraFinal, confianca, origemTxt, modeloUsado;
+
+    if (leiAtualManual) {
+      leituraFinal = Number(leiAtualManual);
+      confianca = 100;
+      origemTxt = '<span style="color:var(--mint)">leitura manual</span>';
+      modeloUsado = 'manual';
+    } else {
+      const r = await ocrMedidorCompleto(fotoSelecionada);
+      leituraFinal = r.leitura;
+      confianca = r.confianca;
+      modeloUsado = r.modelo || r.origem;
+      origemTxt = `<span style="color:var(--mint)">${modeloUsado} · ${confianca}%</span>`;
+    }
+
+    if (isNaN(leituraFinal) || leituraFinal < 0) throw new Error('Leitura inválida');
+
+    animarVisor(leituraFinal);
+    document.getElementById('statusTxt').innerHTML = origemTxt;
+    document.getElementById('statusConf').textContent = confianca + '%';
+    document.getElementById('confFill').style.width = confianca + '%';
+
+    const consumo = Math.max(0, leituraFinal - leiAnt);
+    const total = tipoSelecionado === 'AGUA' ? consumo * 6.5 + 17.46 : consumo * 0.89 + consumo * 0.02;
+
+    document.getElementById('faturaVazia').style.display = 'none';
+    document.getElementById('faturaConteudo').style.display = 'block';
+    document.getElementById('fvConsumo').textContent = `${consumo} ${tipoSelecionado === 'AGUA' ? 'm³' : 'kWh'}`;
+    document.getElementById('fvServico').textContent = 'R$ ' + (total * 0.75).toFixed(2);
+    document.getElementById('fvExtra').textContent = 'R$ ' + (total * 0.25).toFixed(2);
+    document.getElementById('fvTotal').textContent = 'R$ ' + total.toFixed(2);
+
+    historico.unshift({
+      id: Date.now(),
+      clienteNome: 'Consumidor',
+      tipo: tipoSelecionado,
+      leiAnt,
+      leiAtual: leituraFinal,
+      consumo,
+      valor: total,
+      confianca,
+      origem: modeloUsado,
+      data: new Date().toISOString()
+    });
+    if (historico.length > 300) historico.pop();
+    localStorage.setItem('seter_historico', JSON.stringify(historico));
+
+    toast('Leitura processada com sucesso!', 'ok');
+  } catch (err) {
+    console.error(err);
+    toast('Falha no OCR: ' + err.message, 'err');
+    document.getElementById('statusTxt').innerHTML = `<span style="color:var(--rose)">${err.message}</span>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Processar leitura com IA';
+  }
+}
+
+function renderHistorico() {
+  const tbody = document.getElementById('tabelaHistorico');
+  if (!historico.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:36px;color:var(--muted)">Nenhuma leitura ainda.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = historico.map(r => `
+    <tr>
+      <td>${r.clienteNome || '—'}</td>
+      <td><span class="pill ${r.tipo === 'AGUA' ? 'pill-mint' : 'pill-blue'}">${r.tipo === 'AGUA' ? '💧 Água' : '⚡ Energia'}</span></td>
+      <td style="font-family:'JetBrains Mono',monospace">${r.leiAnt}</td>
+      <td style="font-family:'JetBrains Mono',monospace">${r.leiAtual}</td>
+      <td style="font-family:'JetBrains Mono',monospace">${r.consumo}</td>
+      <td style="color:var(--mint)">R$ ${r.valor.toFixed(2)}</td>
+      <td><span class="pill pill-amber">${r.origem || '—'}</span></td>
+      <td style="font-size:11px;color:var(--muted)">${new Date(r.data).toLocaleString('pt-BR')}</td>
+      <td><button class="btn btn-rose btn-sm" onclick="apagarLeitura(${r.id})">🗑</button></td>
+    </tr>
+  `).join('');
+}
+
+function apagarLeitura(id) {
+  if (!confirm('Apagar esta leitura?')) return;
+  historico = historico.filter(r => r.id !== id);
+  localStorage.setItem('seter_historico', JSON.stringify(historico));
+  renderHistorico();
+  toast('Leitura removida', 'ok');
+}
+
+function salvarConfigOCR() {
+  OCR_CONFIG.proxyUrl = document.getElementById('cfgProxy').value.trim();
+  OCR_CONFIG.yoloUrl = document.getElementById('cfgYolo').value.trim();
+  OCR_CONFIG.maxRetries = Number(document.getElementById('cfgRetries').value) || 3;
+  OCR_CONFIG.timeoutMs = Number(document.getElementById('cfgTimeout').value) || 18000;
+  OCR_CONFIG.enableTesseract = document.getElementById('cfgTesseract').checked;
+  OCR_CONFIG.debug = document.getElementById('cfgDebug').checked;
+
+  localStorage.setItem('seter_proxy', OCR_CONFIG.proxyUrl);
+  localStorage.setItem('seter_yolo', OCR_CONFIG.yoloUrl);
+  localStorage.setItem('seter_retries', OCR_CONFIG.maxRetries);
+  localStorage.setItem('seter_timeout', OCR_CONFIG.timeoutMs);
+  localStorage.setItem('seter_tesseract', OCR_CONFIG.enableTesseract);
+  localStorage.setItem('seter_debug', OCR_CONFIG.debug);
+  toast('Configurações salvas', 'ok');
+}
+
+// Init
+document.getElementById('cfgProxy').value = OCR_CONFIG.proxyUrl;
+document.getElementById('cfgYolo').value = OCR_CONFIG.yoloUrl;
+document.getElementById('cfgRetries').value = OCR_CONFIG.maxRetries;
+document.getElementById('cfgTimeout').value = OCR_CONFIG.timeoutMs;
+document.getElementById('cfgTesseract').checked = OCR_CONFIG.enableTesseract;
+document.getElementById('cfgDebug').checked = OCR_CONFIG.debug;
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seter Pro · OCR 5 Camadas</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+  
+  <!-- TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+  
+  <!-- Tesseract.js v5 -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  
+  <style>
+    :root {
+      --bg: #050a14;
+      --card: #0c1525;
+      --card2: #111d30;
+      --border: rgba(0, 255, 255, 0.12);
+      --text: #f0f7ff;
+      --muted: #7b9bb8;
+      --cyan: #00f0ff;
+      --blue: #3b82f6;
+      --mint: #00ff9d;
+      --amber: #ffb020;
+      --rose: #ff4d6d;
+      --purple: #a855f7;
+      --radius: 14px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;font-size:14px;
+      background-image:radial-gradient(ellipse at 20% 0%,rgba(0,240,255,.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(0,255,157,.04) 0%,transparent 50%)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(5,10,20,.92);backdrop-filter:blur(16px);z-index:100}
+    .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
+    .logo-dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint)}
+    .nav-tabs{display:flex;gap:4px}
+    .tab{padding:8px 16px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;transition:.2s}
+    .tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
+    .tab.ativo{background:rgba(0,240,255,.12);color:var(--cyan)}
+    .badge-env{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 10px;border-radius:20px;border:1px solid rgba(0,240,255,.35);color:var(--cyan);background:rgba(0,240,255,.06)}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 16px 80px}
+    .section{display:none}.section.ativa{display:block}
+    .grid2{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+    @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+    .panel{background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:0 4px 24px rgba(0,0,0,.25)}
+    .panel-title{font-family:'Sora',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:16px}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+    .field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+    .field input{background:#0a1220;border:1px solid rgba(0,240,255,.15);border-radius:10px;padding:11px 14px;color:var(--text);font-size:13px;width:100%;transition:.2s}
+    .field input:focus{border-color:var(--cyan);outline:none;box-shadow:0 0 0 3px rgba(0,240,255,.1)}
+    .tipo-toggle{display:flex;gap:10px;margin-bottom:16px}
+    .tipo-btn{flex:1;padding:11px;border-radius:10px;border:1px solid rgba(0,240,255,.15);background:#0a1220;color:var(--muted);font-weight:600;cursor:pointer;transition:.2s}
+    .tipo-btn.ativo{background:rgba(0,240,255,.12);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 16px rgba(0,240,255,.15)}
+    .dropzone{border:1.5px dashed rgba(0,240,255,.3);border-radius:var(--radius);padding:32px 16px;text-align:center;cursor:pointer;position:relative;background:rgba(0,240,255,.03);transition:.2s}
+    .dropzone:hover{border-color:var(--cyan);background:rgba(0,240,255,.06)}
+    .dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .dz-preview{max-height:140px;margin-top:14px;border-radius:10px;display:none}
+    .visor{background:radial-gradient(ellipse at center,#0a1628,#03080f);border-radius:var(--radius);padding:20px;display:flex;justify-content:center;gap:6px;border:1px solid rgba(0,240,255,.2);box-shadow:inset 0 0 30px rgba(0,240,255,.05)}
+    .digito{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:700;width:36px;text-align:center;color:rgba(255,255,255,.08);transition:.35s}
+    .digito.on{color:var(--cyan);text-shadow:0 0 18px rgba(0,240,255,.6)}
+    .status-bar{display:flex;justify-content:space-between;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+    .conf-bar{height:5px;border-radius:3px;background:#0a1220;margin-top:10px;overflow:hidden}
+    .conf-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--mint));transition:width .5s ease}
+    .btn{padding:13px 22px;border-radius:12px;border:none;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+    .btn-full{width:100%}
+    .btn-prim{background:linear-gradient(135deg,#00d4ff,#3b82f6);color:#001018;box-shadow:0 4px 20px rgba(0,212,255,.3)}
+    .btn-prim:hover{filter:brightness(1.1);transform:translateY(-1px)}
+    .btn-prim:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .btn-rose{background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:var(--rose)}
+    .btn-sm{padding:7px 12px;font-size:12px;border-radius:8px}
+    .fatura-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px}
+    .total-box{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:16px;background:rgba(0,255,157,.08);border:1px solid rgba(0,255,157,.25);border-radius:12px}
+    .total-val{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--mint);text-shadow:0 0 20px rgba(0,255,157,.3)}
+    .tbl{width:100%;border-collapse:collapse;font-size:13px}
+    .tbl th{text-align:left;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+    .tbl td{padding:12px;border-bottom:1px solid rgba(255,255,255,.04)}
+    .toast-area{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:10px;z-index:999}
+    .toast{padding:13px 18px;border-radius:12px;font-size:13px;max-width:340px;animation:slideIn .25s ease;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+    .toast-ok{background:rgba(0,255,157,.12);border:1px solid rgba(0,255,157,.35);color:var(--mint)}
+    .toast-err{background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:var(--rose)}
+    @keyframes slideIn{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+    .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--cyan);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint)}
+    .pill{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+    .pill-mint{background:rgba(0,255,157,.12);color:var(--mint)}
+    .pill-blue{background:rgba(59,130,246,.15);color:#60a5fa}
+    .pill-amber{background:rgba(255,176,32,.12);color:var(--amber)}
+    .row{display:grid;gap:12px}.row.cols2{grid-template-columns:1fr 1fr}
+    @media(max-width:600px){.row.cols2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="logo"><div class="logo-dot"></div>Seter <span style="color:var(--cyan)">Pro</span></div>
+  <div class="nav-tabs">
+    <button class="tab ativo" onclick="irPara('leitura',this)">Leitura</button>
+    <button class="tab" onclick="irPara('historico',this)">Histórico</button>
+    <button class="tab" onclick="irPara('config',this)">Config OCR</button>
+  </div>
+  <div class="badge-env">v4.2 · 5 Camadas</div>
+</nav>
+
+<div class="toast-area" id="toastArea"></div>
+
+<!-- LEITURA -->
+<div class="section ativa" id="s-leitura">
+  <div class="wrap">
+    <div class="eyebrow">Vertex → Vision → YOLOv8 → TF.js → Tesseract</div>
+    <h1 style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px">
+      Seter <span style="color:var(--cyan)">Leitura</span>
+    </h1>
+    <p style="color:var(--muted);margin-bottom:24px">
+      Câmera → 5 camadas de IA → Leitura + Confiança + Bounding Box → Fatura
+    </p>
+
+    <div class="grid2">
+      <div class="panel">
+        <div class="panel-title">Captura e leitura</div>
+        <div class="tipo-toggle">
+          <button class="tipo-btn ativo" onclick="selecionarTipo('AGUA',this)">💧 Água</button>
+          <button class="tipo-btn" onclick="selecionarTipo('ENERGIA',this)">⚡ Energia</button>
+        </div>
+
+        <label class="dropzone">
+          <input type="file" id="inputFoto" accept="image/*" capture="environment" onchange="aoSelecionarFoto(event)"/>
+          <div style="font-size:32px;margin-bottom:8px">📷</div>
+          <div style="font-weight:600;font-size:15px" id="dzLabel">Tirar ou enviar foto do medidor</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:4px">JPG, PNG · até 10 MB</div>
+          <img id="dzPreview" class="dz-preview"/>
+        </label>
+
+        <div class="row cols2" style="margin-top:16px">
+          <div class="field"><label>Leitura anterior</label><input type="number" id="leiAnt" value="12751"/></div>
+          <div class="field"><label>Leitura atual (manual)</label><input type="number" id="leiAtual" placeholder="ou use a foto"/></div>
+        </div>
+
+        <button class="btn btn-prim btn-full" id="btnProcessar" onclick="processarLeitura()" style="margin-top:18px">
+          Processar leitura com IA
+        </button>
+      </div>
+
+      <div>
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-title">Leitura detectada</div>
+          <div class="visor">
+            <span class="digito" id="d0">0</span><span class="digito" id="d1">0</span>
+            <span class="digito" id="d2">0</span>
+            <span style="font-size:28px;color:rgba(0,240,255,.25);align-self:center">.</span>
+            <span class="digito" id="d3">0</span><span class="digito" id="d4">0</span>
+          </div>
+          <div class="status-bar">
+            <span id="statusTxt">aguardando…</span>
+            <span id="statusConf"></span>
+          </div>
+          <div class="conf-bar"><div class="conf-fill" id="confFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Fatura calculada</div>
+          <div id="faturaVazia" style="text-align:center;padding:32px;color:var(--muted)">Processe uma leitura para ver o cálculo.</div>
+          <div id="faturaConteudo" style="display:none">
+            <div class="fatura-row"><span>Consumo</span><span id="fvConsumo">—</span></div>
+            <div class="fatura-row"><span>Serviço</span><span id="fvServico">—</span></div>
+            <div class="fatura-row"><span>Adicional</span><span id="fvExtra">—</span></div>
+            <div class="total-box">
+              <div style="font-size:12px;color:var(--muted)">Total a pagar</div>
+              <div class="total-val" id="fvTotal">R$ 0,00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTÓRICO -->
+<div class="section" id="s-historico">
+  <div class="wrap">
+    <div class="eyebrow">Registros</div>
+    <h2 style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;margin-bottom:18px">Histórico de leituras</h2>
+    <div class="panel" style="padding:0;overflow:hidden">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Cliente</th><th>Tipo</th><th>Anterior</th><th>Atual</th>
+            <th>Consumo</th><th>Valor</th><th>Motor</th><th>Data</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="tabelaHistorico">
+          <tr><td colspan="9" style="text-align:center;padding:36px;color:var(--muted)">Nenhuma leitura ainda.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div class="section" id="s-config">
+  <div class="wrap">
+    <div class="eyebrow">Pipeline OCR</div>
+    <h2 style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;margin-bottom:18px">Configuração das 5 camadas</h2>
+    
+    <div class="panel">
+      <div class="field">
+        <label>URL do Proxy (Vertex + Cloud Vision + YOLO)</label>
+        <input id="cfgProxy" value="http://localhost:8790/ocr"/>
+      </div>
+      <div class="field">
+        <label>URL do YOLOv8 (opcional – se separado)</label>
+        <input id="cfgYolo" value="http://localhost:8791/detect-digits"/>
+      </div>
+      <div class="field">
+        <label>Máximo de tentativas (retry)</label>
+        <input type="number" id="cfgRetries" value="3"/>
+      </div>
+      <div class="field">
+        <label>Timeout por tentativa (ms)</label>
+        <input type="number" id="cfgTimeout" value="18000"/>
+      </div>
+      
+      <label style="display:flex;align-items:center;gap:10px;margin:14px 0;cursor:pointer">
+        <input type="checkbox" id="cfgTesseract" checked/> Ativar Tesseract.js (fallback offline)
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;margin:14px 0;cursor:pointer">
+        <input type="checkbox" id="cfgDebug" checked/> Logs de depuração no console
+      </label>
+      
+      <button class="btn btn-prim btn-sm" onclick="salvarConfigOCR()">Salvar configurações</button>
+    </div>
+
+    <div class="panel" style="margin-top:16px">
+      <div class="panel-title">Ordem das 5 camadas</div>
+      <ol style="padding-left:20px;color:var(--muted);line-height:2.1">
+        <li><strong style="color:var(--cyan)">Vertex AI Gemini</strong> – máxima precisão</li>
+        <li><strong style="color:#60a5fa">Cloud Vision API</strong> – fallback cloud</li>
+        <li><strong style="color:var(--purple)">YOLOv8 (dígitos)</strong> – detecção precisa + bounding box</li>
+        <li><strong style="color:var(--amber)">TensorFlow.js CNN</strong> – modelo local</li>
+        <li><strong style="color:var(--mint)">Tesseract.js</strong> – último recurso offline</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   SETER PRO v4.2 – Arquitetura 5 Camadas
+   1. Vertex AI Gemini
+   2. Cloud Vision API
+   3. YOLOv8 (dígitos)
+   4. TensorFlow.js CNN
+   5. Tesseract.js
+   ═══════════════════════════════════════════════════════════════ */
+
+const OCR_CONFIG = {
+  proxyUrl: localStorage.getItem('seter_proxy') || 'http://localhost:8790/ocr',
+  yoloUrl: localStorage.getItem('seter_yolo') || 'http://localhost:8791/detect-digits',
+  maxRetries: Number(localStorage.getItem('seter_retries') || 3),
+  baseDelayMs: 800,
+  maxDelayMs: 8000,
+  timeoutMs: Number(localStorage.getItem('seter_timeout') || 18000),
+  enableTesseract: localStorage.getItem('seter_tesseract') !== 'false',
+  debug: localStorage.getItem('seter_debug') !== 'false'
+};
+
+let tipoSelecionado = 'AGUA';
+let fotoSelecionada = null;
+let historico = JSON.parse(localStorage.getItem('seter_historico') || '[]');
+let tfModel = null;
+let tfPronto = false;
+
+function ocrLog(level, msg, data = null) {
+  if (!OCR_CONFIG.debug && level === 'debug') return;
+  const ts = new Date().toISOString().substr(11, 12);
+  data ? console[level](`[OCR ${ts}] ${msg}`, data) : console[level](`[OCR ${ts}] ${msg}`);
+}
+
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms + Math.random() * 200));
+}
+
+async function withRetry(fn, label = 'operação') {
+  let lastError;
+  for (let attempt = 1; attempt <= OCR_CONFIG.maxRetries; attempt++) {
+    try {
+      ocrLog('debug', `${label} · tentativa ${attempt}/${OCR_CONFIG.maxRetries}`);
+      const result = await Promise.race([
+        fn(),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('Timeout')), OCR_CONFIG.timeoutMs))
+      ]);
+      ocrLog('info', `${label} · sucesso`);
+      return result;
+    } catch (err) {
+      lastError = err;
+      ocrLog('warn', `${label} · falha ${attempt}: ${err.message}`);
+      if (attempt < OCR_CONFIG.maxRetries) {
+        await sleep(Math.min(OCR_CONFIG.baseDelayMs * Math.pow(2, attempt - 1), OCR_CONFIG.maxDelayMs));
+      }
+    }
+  }
+  throw lastError;
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function toast(msg, tipo = 'ok') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${tipo}`;
+  el.textContent = (tipo === 'ok' ? '✓ ' : '✕ ') + msg;
+  document.getElementById('toastArea').appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+function irPara(secao, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('ativa'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('ativo'));
+  document.getElementById('s-' + secao).classList.add('ativa');
+  if (btn) btn.classList.add('ativo');
+  if (secao === 'historico') renderHistorico();
+}
+
+function selecionarTipo(tipo, el) {
+  tipoSelecionado = tipo;
+  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('ativo'));
+  el.classList.add('ativo');
+}
+
+function aoSelecionarFoto(e) {
+  fotoSelecionada = e.target.files[0];
+  if (!fotoSelecionada) return;
+  const prev = document.getElementById('dzPreview');
+  prev.src = URL.createObjectURL(fotoSelecionada);
+  prev.style.display = 'block';
+  document.getElementById('dzLabel').textContent = fotoSelecionada.name;
+  toast('Foto carregada', 'ok');
+}
+
+function animarVisor(val) {
+  const str = String(Math.round(val)).padStart(5, '0');
+  ['d0','d1','d2','d3','d4'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.classList.remove('on');
+    setTimeout(() => { el.textContent = str[i] || '0'; el.classList.add('on'); }, i * 130);
+  });
+}
+
+/* ── Camada 1+2: Proxy (Vertex AI → Cloud Vision) ── */
+async function ocrViaProxy(base64, tipo) {
+  const res = await fetch(OCR_CONFIG.proxyUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ imageBase64: base64, tipo })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return await res.json();
+}
+
+/* ── Camada 3: YOLOv8 (detecção de dígitos + bounding box) ── */
+async function ocrViaYOLOv8(file) {
+  ocrLog('info', 'Enviando para YOLOv8...');
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const res = await fetch(OCR_CONFIG.yoloUrl, {
+    method: 'POST',
+    body: formData
+  });
+  if (!res.ok) throw new Error(`YOLOv8 HTTP ${res.status}`);
+
+  const data = await res.json();
+  if (data.leitura === null || data.leitura === undefined) {
+    throw new Error('YOLOv8 não detectou dígitos');
+  }
+
+  return {
+    leitura: data.leitura,
+    confianca: data.confianca || 80,
+    modelo: data.modelo || 'YOLOv8 (dígitos)',
+    origem: 'yolov8',
+    digitos: data.digitos || [],
+    boundingBoxes: data.digitos || []
+  };
+}
+
+/* ── Camada 4: TensorFlow.js ── */
+async function carregarModeloTF() {
+  if (tfPronto) return;
+  ocrLog('info', 'Carregando TensorFlow.js...');
+  tfModel = await tf.loadLayersModel('https://cdn.jsdelivr.net/gh/tensorflow/tfjs-examples/mnist-cnn/dist/model.json');
+  const dummy = tf.zeros([1, 28, 28, 1]);
+  tfModel.predict(dummy).dispose();
+  dummy.dispose();
+  tfPronto = true;
+}
+
+async function ocrViaTensorFlow(file) {
+  await carregarModeloTF();
+  const img = await new Promise((res, rej) => {
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = rej;
+    i.src = URL.createObjectURL(file);
+  });
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 140; canvas.height = 28;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, 140, 28);
+  ctx.drawImage(img, 0, 0, 140, 28);
+
+  const digitos = [];
+  for (let i = 0; i < 5; i++) {
+    const dc = document.createElement('canvas');
+    dc.width = 28; dc.height = 28;
+    const dctx = dc.getContext('2d');
+    dctx.fillStyle = '#000';
+    dctx.fillRect(0, 0, 28, 28);
+    dctx.drawImage(canvas, i * 28, 0, 28, 28, 0, 0, 28, 28);
+
+    const tensor = tf.browser.fromPixels(dc, 1).toFloat().div(255).expandDims(0);
+    const pred = tfModel.predict(tensor);
+    const probs = await pred.data();
+    const digit = probs.indexOf(Math.max(...probs));
+    if (Math.max(...probs) > 0.30) digitos.push(digit);
+    tensor.dispose(); pred.dispose();
+  }
+
+  if (!digitos.length) throw new Error('TF.js não encontrou dígitos');
+  return {
+    leitura: Number(digitos.join('')),
+    confianca: Math.min(85, 55 + digitos.length * 5),
+    modelo: 'TensorFlow.js',
+    origem: 'tensorflow'
+  };
+}
+
+/* ── Camada 5: Tesseract.js ── */
+async function ocrViaTesseract(file) {
+  if (!window.Tesseract) throw new Error('Tesseract.js não carregado');
+
+  ocrLog('info', 'Iniciando Tesseract.js');
+  const { data } = await Tesseract.recognize(file, 'eng', {
+    logger: m => {
+      if (m.status === 'recognizing text') {
+        const pct = Math.round((m.progress || 0) * 100);
+        document.getElementById('confFill').style.width = (60 + pct * 0.3) + '%';
+        document.getElementById('statusTxt').innerHTML = `<span style="color:var(--amber)">Tesseract · ${pct}%</span>`;
+      }
+    },
+    tessedit_char_whitelist: '0123456789',
+    tessedit_pageseg_mode: '7'
+  });
+
+  const numeros = (data.text || '').match(/\d{3,8}/g) || [];
+  if (!numeros.length) throw new Error('Tesseract não encontrou números');
+
+  numeros.sort((a, b) => Number(b) - Number(a));
+  let confianca = 65;
+  if (numeros[0].length >= 5) confianca = 75;
+  if (data.confidence) confianca = Math.min(90, Math.round(data.confidence));
+
+  return {
+    leitura: Number(numeros[0]),
+    confianca,
+    modelo: 'Tesseract.js (local)',
+    origem: 'tesseract'
+  };
+}
+
+/* ── Pipeline completo de 5 camadas ── */
+async function ocrMedidorCompleto(file) {
+  const base64 = await fileToBase64(file);
+
+  // 1º + 2º – Vertex AI / Cloud Vision
+  try {
+    document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">1. Vertex AI / Cloud Vision…</span>';
+    document.getElementById('confFill').style.width = '20%';
+    return await withRetry(() => ocrViaProxy(base64, tipoSelecionado), 'Proxy OCR');
+  } catch (e1) {
+    ocrLog('warn', 'Camada 1-2 falhou', e1.message);
+
+    // 3º – YOLOv8
+    try {
+      document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">3. YOLOv8 (dígitos)…</span>';
+      document.getElementById('confFill').style.width = '40%';
+      return await withRetry(() => ocrViaYOLOv8(file), 'YOLOv8');
+    } catch (e2) {
+      ocrLog('warn', 'Camada 3 (YOLO) falhou', e2.message);
+
+      // 4º – TensorFlow.js
+      try {
+        document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">4. TensorFlow.js…</span>';
+        document.getElementById('confFill').style.width = '60%';
+        return await withRetry(() => ocrViaTensorFlow(file), 'TensorFlow.js');
+      } catch (e3) {
+        ocrLog('warn', 'Camada 4 (TF.js) falhou', e3.message);
+
+        // 5º – Tesseract
+        if (!OCR_CONFIG.enableTesseract) throw e3;
+        document.getElementById('statusTxt').innerHTML = '<span style="color:var(--amber)">5. Tesseract.js…</span>';
+        document.getElementById('confFill').style.width = '80%';
+        return await withRetry(() => ocrViaTesseract(file), 'Tesseract.js');
+      }
+    }
+  }
+}
+
+async function processarLeitura() {
+  const leiAnt = Number(document.getElementById('leiAnt').value) || 0;
+  const leiAtualManual = document.getElementById('leiAtual').value;
+  const btn = document.getElementById('btnProcessar');
+
+  if (!leiAtualManual && !fotoSelecionada) {
+    toast('Tire uma foto ou digite a leitura.', 'err');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Processando…';
+  document.getElementById('statusTxt').textContent = 'iniciando pipeline 5 camadas…';
+  document.getElementById('confFill').style.width = '5%';
+
+  try {
+    let leituraFinal, confianca, origemTxt, modeloUsado;
+
+    if (leiAtualManual) {
+      leituraFinal = Number(leiAtualManual);
+      confianca = 100;
+      origemTxt = '<span style="color:var(--mint)">leitura manual</span>';
+      modeloUsado = 'manual';
+    } else {
+      const r = await ocrMedidorCompleto(fotoSelecionada);
+      leituraFinal = r.leitura;
+      confianca = r.confianca;
+      modeloUsado = r.modelo || r.origem;
+      origemTxt = `<span style="color:var(--mint)">${modeloUsado} · ${confianca}%</span>`;
+    }
+
+    if (isNaN(leituraFinal) || leituraFinal < 0) throw new Error('Leitura inválida');
+
+    animarVisor(leituraFinal);
+    document.getElementById('statusTxt').innerHTML = origemTxt;
+    document.getElementById('statusConf').textContent = confianca + '%';
+    document.getElementById('confFill').style.width = confianca + '%';
+
+    const consumo = Math.max(0, leituraFinal - leiAnt);
+    const total = tipoSelecionado === 'AGUA' ? consumo * 6.5 + 17.46 : consumo * 0.89 + consumo * 0.02;
+
+    document.getElementById('faturaVazia').style.display = 'none';
+    document.getElementById('faturaConteudo').style.display = 'block';
+    document.getElementById('fvConsumo').textContent = `${consumo} ${tipoSelecionado === 'AGUA' ? 'm³' : 'kWh'}`;
+    document.getElementById('fvServico').textContent = 'R$ ' + (total * 0.75).toFixed(2);
+    document.getElementById('fvExtra').textContent = 'R$ ' + (total * 0.25).toFixed(2);
+    document.getElementById('fvTotal').textContent = 'R$ ' + total.toFixed(2);
+
+    historico.unshift({
+      id: Date.now(),
+      clienteNome: 'Consumidor',
+      tipo: tipoSelecionado,
+      leiAnt,
+      leiAtual: leituraFinal,
+      consumo,
+      valor: total,
+      confianca,
+      origem: modeloUsado,
+      data: new Date().toISOString()
+    });
+    if (historico.length > 300) historico.pop();
+    localStorage.setItem('seter_historico', JSON.stringify(historico));
+
+    toast('Leitura processada com sucesso!', 'ok');
+  } catch (err) {
+    console.error(err);
+    toast('Falha no OCR: ' + err.message, 'err');
+    document.getElementById('statusTxt').innerHTML = `<span style="color:var(--rose)">${err.message}</span>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Processar leitura com IA';
+  }
+}
+
+function renderHistorico() {
+  const tbody = document.getElementById('tabelaHistorico');
+  if (!historico.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:36px;color:var(--muted)">Nenhuma leitura ainda.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = historico.map(r => `
+    <tr>
+      <td>${r.clienteNome || '—'}</td>
+      <td><span class="pill ${r.tipo === 'AGUA' ? 'pill-mint' : 'pill-blue'}">${r.tipo === 'AGUA' ? '💧 Água' : '⚡ Energia'}</span></td>
+      <td style="font-family:'JetBrains Mono',monospace">${r.leiAnt}</td>
+      <td style="font-family:'JetBrains Mono',monospace">${r.leiAtual}</td>
+      <td style="font-family:'JetBrains Mono',monospace">${r.consumo}</td>
+      <td style="color:var(--mint)">R$ ${r.valor.toFixed(2)}</td>
+      <td><span class="pill pill-amber">${r.origem || '—'}</span></td>
+      <td style="font-size:11px;color:var(--muted)">${new Date(r.data).toLocaleString('pt-BR')}</td>
+      <td><button class="btn btn-rose btn-sm" onclick="apagarLeitura(${r.id})">🗑</button></td>
+    </tr>
+  `).join('');
+}
+
+function apagarLeitura(id) {
+  if (!confirm('Apagar esta leitura?')) return;
+  historico = historico.filter(r => r.id !== id);
+  localStorage.setItem('seter_historico', JSON.stringify(historico));
+  renderHistorico();
+  toast('Leitura removida', 'ok');
+}
+
+function salvarConfigOCR() {
+  OCR_CONFIG.proxyUrl = document.getElementById('cfgProxy').value.trim();
+  OCR_CONFIG.yoloUrl = document.getElementById('cfgYolo').value.trim();
+  OCR_CONFIG.maxRetries = Number(document.getElementById('cfgRetries').value) || 3;
+  OCR_CONFIG.timeoutMs = Number(document.getElementById('cfgTimeout').value) || 18000;
+  OCR_CONFIG.enableTesseract = document.getElementById('cfgTesseract').checked;
+  OCR_CONFIG.debug = document.getElementById('cfgDebug').checked;
+
+  localStorage.setItem('seter_proxy', OCR_CONFIG.proxyUrl);
+  localStorage.setItem('seter_yolo', OCR_CONFIG.yoloUrl);
+  localStorage.setItem('seter_retries', OCR_CONFIG.maxRetries);
+  localStorage.setItem('seter_timeout', OCR_CONFIG.timeoutMs);
+  localStorage.setItem('seter_tesseract', OCR_CONFIG.enableTesseract);
+  localStorage.setItem('seter_debug', OCR_CONFIG.debug);
+  toast('Configurações salvas', 'ok');
+}
+
+// Init
+document.getElementById('cfgProxy').value = OCR_CONFIG.proxyUrl;
+document.getElementById('cfgYolo').value = OCR_CONFIG.yoloUrl;
 document.getElementById('cfgRetries').value = OCR_CONFIG.maxRetries;
 document.getElementById('cfgTimeout').value = OCR_CONFIG.timeoutMs;
 document.getElementById('cfgTesseract').checked = OCR_CONFIG.enableTesseract;
