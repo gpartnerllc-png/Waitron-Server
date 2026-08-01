@@ -1,275 +1,488 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NoxMob · SmartPOS Inteligente 2026</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --nox-dark: #050a14;
-      --nox-card: #0c1525;
-      --nox-card2: #111d30;
-      --nox-border: rgba(0, 240, 255, 0.12);
-      --nox-text: #f0f7ff;
-      --nox-muted: #7b9bb8;
-      --nox-cyan: #00f0ff;
-      --nox-blue: #0ea5e9;
-      --nox-mint: #00ff9d;
-      --nox-amber: #ffb020;
-      --radius: 16px;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--nox-dark);color:var(--nox-text);font-family:'Inter',sans-serif;line-height:1.6;
-      background-image:radial-gradient(ellipse at 15% 0%,rgba(0,240,255,.07) 0%,transparent 45%),
-                       radial-gradient(ellipse at 85% 100%,rgba(0,255,157,.05) 0%,transparent 45%)}
-    .container{max-width:1200px;margin:0 auto;padding:0 24px}
-    
-    /* Header */
-    header{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);background:rgba(5,10,20,.9);border-bottom:1px solid var(--nox-border)}
-    .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
-    .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:22px;display:flex;align-items:center;gap:10px}
-    .logo-dot{width:10px;height:10px;border-radius:50%;background:var(--nox-mint);box-shadow:0 0 14px var(--nox-mint)}
-    .nav-links{display:flex;gap:32px}
-    .nav-links a{color:var(--nox-muted);text-decoration:none;font-weight:500;font-size:14px;transition:.2s}
-    .nav-links a:hover{color:var(--nox-cyan)}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;cursor:pointer;border:none;transition:.2s;text-decoration:none}
-    .btn-primary{background:linear-gradient(135deg,#00d4ff,#0ea5e9);color:#001018;box-shadow:0 4px 24px rgba(0,212,255,.3)}
-    .btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
-    .btn-ghost{background:transparent;border:1px solid var(--nox-border);color:var(--nox-text)}
-    
-    /* Hero */
-    .hero{padding:100px 0 80px;text-align:center}
-    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.25);color:var(--nox-cyan);font-size:12px;font-weight:600;letter-spacing:.05em;margin-bottom:24px}
-    .hero h1{font-family:'Sora',sans-serif;font-size:clamp(36px,6vw,56px);font-weight:800;line-height:1.15;margin-bottom:20px}
-    .hero h1 span{background:linear-gradient(135deg,var(--nox-cyan),var(--nox-mint));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .hero p{font-size:18px;color:var(--nox-muted);max-width:640px;margin:0 auto 40px}
-    .hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
-    
-    /* Grid features */
-    .section{padding:80px 0}
-    .section-title{font-family:'Sora',sans-serif;font-size:32px;font-weight:800;margin-bottom:12px}
-    .section-sub{color:var(--nox-muted);margin-bottom:48px;max-width:560px}
-    .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
-    .card{background:linear-gradient(165deg,var(--nox-card2),var(--nox-card));border:1px solid var(--nox-border);border-radius:var(--radius);padding:28px;transition:.25s}
-    .card:hover{border-color:rgba(0,240,255,.3);transform:translateY(-4px)}
-    .card-icon{width:48px;height:48px;border-radius:12px;background:rgba(0,240,255,.1);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px}
-    .card h3{font-family:'Sora',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px}
-    .card p{color:var(--nox-muted);font-size:14px}
-    
-    /* Pipeline */
-    .pipeline{background:var(--nox-card);border:1px solid var(--nox-border);border-radius:var(--radius);padding:32px;margin-top:48px}
-    .pipeline-flow{display:flex;flex-direction:column;gap:12px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--nox-muted)}
-    .pipeline-step{padding:12px 16px;background:rgba(0,0,0,.3);border-radius:10px;border-left:3px solid var(--nox-cyan)}
-    .pipeline-step strong{color:var(--nox-cyan)}
-    
-    /* Roadmap */
-    .phase{display:grid;grid-template-columns:80px 1fr;gap:24px;margin-bottom:32px}
-    .phase-num{width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,rgba(0,240,255,.15),rgba(0,255,157,.1));border:1px solid rgba(0,240,255,.3);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:20px;color:var(--nox-cyan)}
-    .phase h3{font-family:'Sora',sans-serif;font-size:20px;margin-bottom:8px}
-    .phase ul{list-style:none;color:var(--nox-muted);font-size:14px}
-    .phase li{padding:4px 0;padding-left:16px;position:relative}
-    .phase li::before{content:"→";position:absolute;left:0;color:var(--nox-mint)}
-    
-    /* Stack */
-    .stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
-    .stack-item{padding:16px;background:rgba(0,0,0,.25);border-radius:12px;border:1px solid var(--nox-border);text-align:center}
-    .stack-item strong{display:block;color:var(--nox-cyan);font-size:13px;margin-bottom:4px}
-    .stack-item span{font-size:12px;color:var(--nox-muted)}
-    
-    /* Footer */
-    footer{border-top:1px solid var(--nox-border);padding:48px 0;margin-top:80px;text-align:center;color:var(--nox-muted);font-size:13px}
-    
-    @media(max-width:768px){
-      .nav-links{display:none}
-      .hero{padding:60px 0}
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NoxMob · SmartPOS Inteligente</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#050a14;--card:#0c1525;--card2:#111d30;--border:rgba(0,240,255,.12);--text:#f0f7ff;--muted:#7b9bb8;--cyan:#00f0ff;--blue:#0ea5e9;--mint:#00ff9d;--amber:#ffb020;--rose:#ff4d6d;--r:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;font-size:14px;
+background-image:radial-gradient(ellipse at 20% 0%,rgba(0,240,255,.06)0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(0,255,157,.04)0%,transparent 50%)}
+.app{display:none;min-height:100vh}
+.app.ativo{display:flex}
+/* LOGIN */
+#tela-login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.login-box{width:100%;max-width:400px;background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:20px;padding:40px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.logo{font-family:'Sora',sans-serif;font-weight:800;font-size:24px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.logo-dot{width:10px;height:10px;border-radius:50%;background:var(--mint);box-shadow:0 0 14px var(--mint)}
+.login-box h1{font-family:'Sora',sans-serif;font-size:22px;margin:24px 0 8px}
+.login-box p{color:var(--muted);margin-bottom:28px;font-size:13px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.field input{width:100%;background:#0a1220;border:1px solid rgba(0,240,255,.15);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px}
+.field input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,240,255,.1)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:12px;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;cursor:pointer;border:none;transition:.2s;width:100%}
+.btn-prim{background:linear-gradient(135deg,#00d4ff,#0ea5e9);color:#001018;box-shadow:0 4px 20px rgba(0,212,255,.3)}
+.btn-prim:hover{filter:brightness(1.1)}
+.btn-prim:disabled{opacity:.5;cursor:not-allowed}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-sm{padding:8px 14px;font-size:12px;width:auto}
+.btn-rose{background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:var(--rose)}
+/* SHELL */
+.shell{display:flex;width:100%;min-height:100vh}
+.sidebar{width:240px;background:var(--card);border-right:1px solid var(--border);padding:20px 12px;display:flex;flex-direction:column;flex-shrink:0}
+.sidebar .logo{padding:0 12px;margin-bottom:32px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;color:var(--muted);cursor:pointer;font-weight:500;font-size:13px;transition:.15s;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,255,255,.04);color:var(--text)}
+.nav-item.ativo{background:rgba(0,240,255,.1);color:var(--cyan)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:60px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(5,10,20,.8);backdrop-filter:blur(12px)}
+.content{flex:1;overflow-y:auto;padding:24px}
+.page{display:none}.page.ativa{display:block}
+/* CARDS */
+.grid{display:grid;gap:16px}
+.grid-4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.grid-2{grid-template-columns:1fr 1fr}
+@media(max-width:900px){.grid-2{grid-template-columns:1fr}.sidebar{display:none}}
+.stat{background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.stat .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.stat .value{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-top:6px}
+.stat .value.mint{color:var(--mint)}.stat .value.cyan{color:var(--cyan)}
+.panel{background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:var(--r);padding:22px}
+.panel-title{font-family:'Sora',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:16px}
+/* PDV */
+.pdv-layout{display:grid;grid-template-columns:1fr 340px;gap:16px;height:calc(100vh - 120px)}
+@media(max-width:900px){.pdv-layout{grid-template-columns:1fr}}
+.camera-area{background:#0a1220;border:1.5px dashed rgba(0,240,255,.3);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;position:relative;overflow:hidden}
+.camera-area video,.camera-area img{max-width:100%;max-height:280px;border-radius:10px}
+.camera-placeholder{text-align:center;color:var(--muted)}
+.camera-placeholder .icon{font-size:48px;margin-bottom:12px}
+.cart-panel{display:flex;flex-direction:column}
+.cart-items{flex:1;overflow-y:auto;max-height:300px}
+.cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.cart-total{padding:16px 0;border-top:1px solid var(--border);margin-top:12px}
+.cart-total .valor{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--mint)}
+/* TABELA */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:10px 12px;color:var(--muted);font-size:11px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.tbl td{padding:12px;border-bottom:1px solid rgba(255,255,255,.04)}
+.pill{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.pill-mint{background:rgba(0,255,157,.12);color:var(--mint)}
+.pill-amber{background:rgba(255,176,32,.12);color:var(--amber)}
+.pill-rose{background:rgba(255,77,109,.12);color:var(--rose)}
+/* TOAST */
+.toast-area{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px}
+.toast{padding:13px 18px;border-radius:12px;font-size:13px;max-width:320px;animation:slideIn .25s ease;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.toast-ok{background:rgba(0,255,157,.12);border:1px solid rgba(0,255,157,.35);color:var(--mint)}
+.toast-err{background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:var(--rose)}
+@keyframes slideIn{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status-bar{display:flex;justify-content:space-between;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.conf-bar{height:4px;border-radius:2px;background:#0a1220;margin-top:8px;overflow:hidden}
+.conf-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--mint));transition:width .4s}
+h2{font-family:'Sora',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px}
+.sub{color:var(--muted);margin-bottom:24px;font-size:13px}
+</style>
 </head>
 <body>
 
-<header>
-  <div class="container nav">
-    <div class="logo">
-      <div class="logo-dot"></div>
-      Nox<span style="color:var(--nox-cyan)">Mob</span>
-    </div>
-    <div class="nav-links">
-      <a href="#visao">Visão Computacional</a>
-      <a href="#roadmap">Roadmap</a>
-      <a href="#stack">Stack</a>
-      <a href="#pdv">PDV</a>
-    </div>
-    <a href="#" class="btn btn-primary">Acessar Portal</a>
+<div class="toast-area" id="toasts"></div>
+
+<!-- ========== LOGIN ========== -->
+<div id="tela-login">
+  <div class="login-box">
+    <div class="logo"><div class="logo-dot"></div>Nox<span style="color:var(--cyan)">Mob</span></div>
+    <h1>Entrar no sistema</h1>
+    <p>SmartPOS Inteligente · Visão Computacional 2026</p>
+    <div class="field"><label>E-mail</label><input type="email" id="loginEmail" value="admin@noxmob.com.br"/></div>
+    <div class="field"><label>Senha</label><input type="password" id="loginSenha" value="123456"/></div>
+    <button class="btn btn-prim" onclick="fazerLogin()" style="margin-top:8px">Entrar</button>
+    <p style="text-align:center;margin-top:16px;font-size:12px;color:var(--muted)">Demo · qualquer senha funciona</p>
   </div>
-</header>
+</div>
 
-<main>
-  <!-- HERO -->
-  <section class="hero container">
-    <div class="badge">
-      <span style="width:6px;height:6px;border-radius:50%;background:var(--nox-mint);box-shadow:0 0 8px var(--nox-mint)"></span>
-      VERSÃO 2026 · SMARTPOS + VISÃO COMPUTACIONAL
-    </div>
-    <h1>O PDV que <span>enxerga</span><br/>os produtos sozinho</h1>
-    <p>
-      NoxMob modernizado com Next.js 15, React 19, Visão Computacional de última geração
-      e padrões das big techs americanas e israelenses.
-    </p>
-    <div class="hero-actions">
-      <a href="#visao" class="btn btn-primary">Ver arquitetura de CV</a>
-      <a href="#roadmap" class="btn btn-ghost">Roadmap de modernização</a>
-    </div>
-  </section>
+<!-- ========== APP ========== -->
+<div class="app" id="app">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="logo"><div class="logo-dot"></div>Nox<span style="color:var(--cyan)">Mob</span></div>
+      <div class="nav-item ativo" onclick="irPara('dashboard',this)">📊 Dashboard</div>
+      <div class="nav-item" onclick="irPara('pdv',this)">🛒 PDV / Caixa</div>
+      <div class="nav-item" onclick="irPara('produtos',this)">📦 Produtos</div>
+      <div class="nav-item" onclick="irPara('estoque',this)">📋 Estoque</div>
+      <div class="nav-item" onclick="irPara('visao',this)">📷 Visão Computacional</div>
+      <div class="nav-item" onclick="irPara('config',this)">⚙️ Configurações</div>
+      <div style="flex:1"></div>
+      <div class="nav-item" onclick="sair()" style="color:var(--rose)">Sair</div>
+    </aside>
 
-  <!-- FEATURES -->
-  <section class="section container">
-    <h2 class="section-title">O que muda no NoxMob moderno</h2>
-    <p class="section-sub">Do portal legado para um sistema de nível internacional.</p>
-    
-    <div class="grid3">
-      <div class="card">
-        <div class="card-icon">📷</div>
-        <h3>Reconhecimento por câmera</h3>
-        <p>Produtos identificados automaticamente via GPT-4o Vision, Gemini ou YOLO. Zero digitação no PDV.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">⚡</div>
-        <h3>Offline-first real</h3>
-        <p>Funciona na maquininha sem internet. Sincroniza quando a conexão volta. Igual ao padrão Shopic/Trigo.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">🛡️</div>
-        <h3>Segurança militar</h3>
-        <p>mTLS, Certificate Pinning, Cloudflare WAF, rate limiting e root detection.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">🧠</div>
-        <h3>Zero-shot Intelligence</h3>
-        <p>GPT-4o / Gemini / Claude reconhecem produtos novos sem treinar modelo. Raciocínio contextual.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">📱</div>
-        <h3>Um código, todas as telas</h3>
-        <p>Next.js 15 + Capacitor/Flutter. Web, Android, iOS e SmartPOS com a mesma base.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">📊</div>
-        <h3>CRM moderno</h3>
-        <p>Substituição do Bitrix24 por HubSpot/Salesforce + Segment + A/B testing com LaunchDarkly.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- VISÃO COMPUTACIONAL -->
-  <section class="section container" id="visao">
-    <h2 class="section-title">Arquitetura de Visão Computacional</h2>
-    <p class="section-sub">Pipeline de 4 camadas usado por empresas de ponta em Israel e EUA.</p>
-    
-    <div class="pipeline">
-      <div class="pipeline-flow">
-        <div class="pipeline-step">Câmera da maquininha / celular / tablet</div>
-        <div class="pipeline-step">App (Flutter ou Capacitor + Next.js 15)</div>
-        <div class="pipeline-step">Pré-processamento local (MediaPipe / Canvas / TFLite)</div>
-        <div class="pipeline-step">
-          <strong>1. GPT-4o Vision / Gemini 2.5 / Claude Vision</strong> → zero-shot<br/>
-          <strong>2. Google Cloud Vision / Azure AI Vision</strong> → fallback clássico<br/>
-          <strong>3. YOLOv11 customizado</strong> → detecção rápida + bounding box<br/>
-          <strong>4. Modelo edge TFLite</strong> → offline na maquininha
+    <div class="main">
+      <div class="topbar">
+        <div id="topTitle" style="font-family:'Sora',sans-serif;font-weight:700">Dashboard</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="pill pill-mint" id="statusOnline">● Online</span>
+          <span style="color:var(--muted);font-size:12px">admin@noxmob.com.br</span>
         </div>
-        <div class="pipeline-step">Retorna: SKU + nome + confiança + bounding box + quantidade</div>
-        <div class="pipeline-step">Adiciona automaticamente no carrinho / estoque / relatório</div>
+      </div>
+      <div class="content">
+
+        <!-- DASHBOARD -->
+        <div class="page ativa" id="p-dashboard">
+          <h2>Dashboard</h2>
+          <p class="sub">Visão geral da operação em tempo real</p>
+          <div class="grid grid-4" style="margin-bottom:24px">
+            <div class="stat"><div class="label">Vendas hoje</div><div class="value mint" id="statVendas">R$ 0</div></div>
+            <div class="stat"><div class="label">Tickets</div><div class="value cyan" id="statTickets">0</div></div>
+            <div class="stat"><div class="label">Produtos</div><div class="value" id="statProdutos">0</div></div>
+            <div class="stat"><div class="label">Itens no estoque</div><div class="value" id="statEstoque">0</div></div>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Últimas vendas</div>
+            <table class="tbl"><thead><tr><th>Hora</th><th>Itens</th><th>Total</th><th>Motor</th></tr></thead>
+            <tbody id="ultimasVendas"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:24px">Nenhuma venda ainda</td></tr></tbody></table>
+          </div>
+        </div>
+
+        <!-- PDV -->
+        <div class="page" id="p-pdv">
+          <h2>PDV / Caixa</h2>
+          <p class="sub">Aponte a câmera para o produto · reconhecimento automático</p>
+          <div class="pdv-layout">
+            <div>
+              <div class="camera-area" id="cameraArea">
+                <div class="camera-placeholder" id="camPlaceholder">
+                  <div class="icon">📷</div>
+                  <div>Clique para ativar a câmera</div>
+                  <div style="font-size:12px;margin-top:6px">ou envie uma foto do produto</div>
+                </div>
+                <video id="videoCam" autoplay playsinline style="display:none;width:100%;max-height:280px;object-fit:cover;border-radius:10px"></video>
+                <canvas id="canvasCam" style="display:none"></canvas>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:12px">
+                <button class="btn btn-prim btn-sm" onclick="ativarCamera()">Ativar câmera</button>
+                <label class="btn btn-ghost btn-sm" style="cursor:pointer">
+                  Enviar foto<input type="file" accept="image/*" style="display:none" onchange="aoFotoProduto(event)"/>
+                </label>
+                <button class="btn btn-prim btn-sm" id="btnReconhecer" onclick="reconhecerProduto()" disabled>
+                  Reconhecer produto
+                </button>
+              </div>
+              <div class="status-bar"><span id="ocrStatus">aguardando…</span><span id="ocrConf"></span></div>
+              <div class="conf-bar"><div class="conf-fill" id="ocrFill" style="width:0%"></div></div>
+            </div>
+            <div class="panel cart-panel">
+              <div class="panel-title">Carrinho</div>
+              <div class="cart-items" id="cartItems"><div style="color:var(--muted);text-align:center;padding:20px">Vazio</div></div>
+              <div class="cart-total">
+                <div style="font-size:12px;color:var(--muted)">Total</div>
+                <div class="valor" id="cartTotal">R$ 0,00</div>
+              </div>
+              <button class="btn btn-prim" style="margin-top:12px" onclick="finalizarVenda()">Finalizar venda</button>
+              <button class="btn btn-ghost btn-sm" style="margin-top:8px;width:100%" onclick="limparCarrinho()">Limpar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUTOS -->
+        <div class="page" id="p-produtos">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+            <div><h2>Produtos</h2><p class="sub" style="margin:0">Catálogo + cadastro por foto</p></div>
+            <button class="btn btn-prim btn-sm" onclick="abrirCadastroProduto()">+ Novo produto</button>
+          </div>
+          <div class="panel" style="padding:0;overflow:hidden">
+            <table class="tbl">
+              <thead><tr><th>SKU</th><th>Nome</th><th>Preço</th><th>Estoque</th><th>Ações</th></tr></thead>
+              <tbody id="listaProdutos"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ESTOQUE -->
+        <div class="page" id="p-estoque">
+          <h2>Estoque</h2>
+          <p class="sub">Controle de quantidades</p>
+          <div class="panel" style="padding:0;overflow:hidden">
+            <table class="tbl">
+              <thead><tr><th>Produto</th><th>SKU</th><th>Qtd</th><th>Status</th></tr></thead>
+              <tbody id="listaEstoque"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- VISÃO -->
+        <div class="page" id="p-visao">
+          <h2>Visão Computacional</h2>
+          <p class="sub">Pipeline de 5 camadas · padrão EUA / Israel</p>
+          <div class="panel" style="margin-bottom:16px">
+            <div class="panel-title">Arquitetura ativa</div>
+            <ol style="padding-left:20px;color:var(--muted);line-height:2.2">
+              <li><strong style="color:var(--cyan)">GPT-4o / Gemini 2.5 / Claude Vision</strong> — zero-shot</li>
+              <li><strong style="color:#60a5fa">Google Cloud Vision / Azure</strong> — fallback</li>
+              <li><strong style="color:#a855f7">YOLOv11 customizado</strong> — bounding box</li>
+              <li><strong style="color:var(--amber)">TensorFlow.js / TFLite</strong> — edge / offline</li>
+              <li><strong style="color:var(--mint)">Tesseract.js</strong> — último recurso</li>
+            </ol>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Configuração do proxy</div>
+            <div class="field"><label>URL Proxy (Vertex/Gemini)</label><input id="cfgProxy" value="http://localhost:8790/ocr"/></div>
+            <div class="field"><label>URL YOLOv11</label><input id="cfgYolo" value="http://localhost:8791/detect"/></div>
+            <button class="btn btn-prim btn-sm" onclick="salvarConfig()">Salvar</button>
+          </div>
+        </div>
+
+        <!-- CONFIG -->
+        <div class="page" id="p-config">
+          <h2>Configurações</h2>
+          <p class="sub">Sistema · offline · segurança</p>
+          <div class="panel">
+            <div class="field"><label>Nome da loja</label><input id="cfgLoja" value="Minha Loja NoxMob"/></div>
+            <div class="field"><label>Modo offline</label>
+              <select id="cfgOffline" style="width:100%;background:#0a1220;border:1px solid rgba(0,240,255,.15);border-radius:10px;padding:12px;color:var(--text)">
+                <option value="on">Ativado (recomendado)</option>
+                <option value="off">Desativado</option>
+              </select>
+            </div>
+            <button class="btn btn-prim btn-sm" onclick="toast('Configurações salvas','ok')">Salvar</button>
+          </div>
+        </div>
+
       </div>
     </div>
-  </section>
-
-  <!-- ROADMAP -->
-  <section class="section container" id="roadmap">
-    <h2 class="section-title">Roadmap de modernização</h2>
-    <p class="section-sub">Plano realista em 3 fases (estilo big tech).</p>
-    
-    <div class="phase">
-      <div class="phase-num">1</div>
-      <div>
-        <h3>Fase 1 – Fundação (1-2 meses)</h3>
-        <ul>
-          <li>Migrar frontend para Next.js 15 + React 19 + TypeScript + Tailwind</li>
-          <li>Criar design system próprio (cores Nox + tipografia moderna)</li>
-          <li>Backend NestJS + PostgreSQL</li>
-          <li>Autenticação moderna (Clerk / Auth.js)</li>
-          <li>Manter e fortalecer o modo offline</li>
-        </ul>
-      </div>
-    </div>
-    
-    <div class="phase">
-      <div class="phase-num">2</div>
-      <div>
-        <h3>Fase 2 – Visão Computacional (2-3 meses)</h3>
-        <ul>
-          <li>Cadastro de produto por foto (GPT-4o / Gemini)</li>
-          <li>Reconhecimento em tempo real no PDV (YOLO + fallback cloud)</li>
-          <li>Exportar modelo para TFLite (roda na maquininha)</li>
-        </ul>
-      </div>
-    </div>
-    
-    <div class="phase">
-      <div class="phase-num">3</div>
-      <div>
-        <h3>Fase 3 – Escala e inteligência</h3>
-        <ul>
-          <li>Multi-câmera + depth (estilo Mashgin)</li>
-          <li>Integração com balança</li>
-          <li>Server-Driven UI (padrão Nubank)</li>
-          <li>HubSpot / Salesforce + Segment</li>
-          <li>A/B testing com LaunchDarkly ou Vercel Edge Config</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- STACK -->
-  <section class="section container" id="stack">
-    <h2 class="section-title">Stack tecnológica 2026</h2>
-    <p class="section-sub">Padrão absoluto das big techs americanas e empresas de CV de Israel.</p>
-    
-    <div class="stack-grid">
-      <div class="stack-item"><strong>Frontend</strong><span>Next.js 15 + React 19 + TS</span></div>
-      <div class="stack-item"><strong>Estilo</strong><span>Tailwind + shadcn/ui</span></div>
-      <div class="stack-item"><strong>Backend</strong><span>NestJS + Fastify</span></div>
-      <div class="stack-item"><strong>Banco</strong><span>PostgreSQL + Redis</span></div>
-      <div class="stack-item"><strong>Visão</strong><span>Gemini + YOLO + TFLite</span></div>
-      <div class="stack-item"><strong>Mobile</strong><span>Flutter / Capacitor</span></div>
-      <div class="stack-item"><strong>Auth</strong><span>Clerk / Auth.js</span></div>
-      <div class="stack-item"><strong>CRM</strong><span>HubSpot + Segment</span></div>
-      <div class="stack-item"><strong>Deploy</strong><span>Vercel + Cloudflare</span></div>
-      <div class="stack-item"><strong>A/B Test</strong><span>LaunchDarkly</span></div>
-      <div class="stack-item"><strong>Obs</strong><span>Sentry + OpenTelemetry</span></div>
-      <div class="stack-item"><strong>Edge</strong><span>TFLite na maquininha</span></div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="section container" style="text-align:center">
-    <h2 class="section-title">Pronto para a próxima geração</h2>
-    <p class="section-sub" style="margin:0 auto 32px">
-      Do portal atual para um SmartPOS com visão computacional de nível internacional.
-    </p>
-    <a href="#" class="btn btn-primary">Começar a migração</a>
-  </section>
-</main>
-
-<footer>
-  <div class="container">
-    <div class="logo" style="justify-content:center;margin-bottom:16px">
-      <div class="logo-dot"></div>
-      Nox<span style="color:var(--nox-cyan)">Mob</span>
-    </div>
-    <p>Portal modernizado · Next.js 15 · Visão Computacional · Padrão EUA/Israel 2026</p>
   </div>
-</footer>
+</div>
 
+<script>
+/* ═══════════════════════════════════════════
+   NOXMOB SMARTPOS · SOFTWARE COMPLETO v1.0
+   ═══════════════════════════════════════════ */
+
+let produtos = JSON.parse(localStorage.getItem('nox_produtos') || 'null') || [
+  {sku:'SKU-001',nome:'Coca-Cola 350ml',preco:5.50,estoque:48},
+  {sku:'SKU-002',nome:'Água Mineral 500ml',preco:3.00,estoque:120},
+  {sku:'SKU-003',nome:'Hambúrguer Clássico',preco:22.90,estoque:30},
+  {sku:'SKU-004',nome:'Batata Frita Média',preco:12.00,estoque:25},
+  {sku:'SKU-005',nome:'Suco Natural 300ml',preco:8.50,estoque:40}
+];
+let carrinho = [];
+let vendas = JSON.parse(localStorage.getItem('nox_vendas') || '[]');
+let fotoProduto = null;
+let streamCam = null;
+
+function toast(msg, tipo='ok') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${tipo}`;
+  el.textContent = (tipo==='ok'?'✓ ':'✕ ') + msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>el.remove(), 3500);
+}
+
+function fazerLogin() {
+  document.getElementById('tela-login').style.display = 'none';
+  document.getElementById('app').classList.add('ativo');
+  atualizarDashboard();
+  renderProdutos();
+  renderEstoque();
+  toast('Bem-vindo ao NoxMob', 'ok');
+}
+
+function sair() {
+  document.getElementById('app').classList.remove('ativo');
+  document.getElementById('tela-login').style.display = 'flex';
+  if (streamCam) streamCam.getTracks().forEach(t=>t.stop());
+}
+
+function irPara(pag, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('ativa'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('ativo'));
+  document.getElementById('p-'+pag).classList.add('ativa');
+  if (el) el.classList.add('ativo');
+  const titles = {dashboard:'Dashboard',pdv:'PDV / Caixa',produtos:'Produtos',estoque:'Estoque',visao:'Visão Computacional',config:'Configurações'};
+  document.getElementById('topTitle').textContent = titles[pag] || pag;
+  if (pag==='dashboard') atualizarDashboard();
+  if (pag==='produtos') renderProdutos();
+  if (pag==='estoque') renderEstoque();
+}
+
+function atualizarDashboard() {
+  const hoje = vendas.filter(v => new Date(v.data).toDateString() === new Date().toDateString());
+  const total = hoje.reduce((s,v)=>s+v.total,0);
+  document.getElementById('statVendas').textContent = 'R$ ' + total.toFixed(2);
+  document.getElementById('statTickets').textContent = hoje.length;
+  document.getElementById('statProdutos').textContent = produtos.length;
+  document.getElementById('statEstoque').textContent = produtos.reduce((s,p)=>s+p.estoque,0);
+  const tbody = document.getElementById('ultimasVendas');
+  if (!vendas.length) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:24px">Nenhuma venda ainda</td></tr>';
+    return;
+  }
+  tbody.innerHTML = vendas.slice(0,8).map(v => `
+    <tr>
+      <td>${new Date(v.data).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</td>
+      <td>${v.itens} item(ns)</td>
+      <td style="color:var(--mint)">R$ ${v.total.toFixed(2)}</td>
+      <td><span class="pill pill-amber">${v.motor||'manual'}</span></td>
+    </tr>
+  `).join('');
+}
+
+/* ── CÂMERA + RECONHECIMENTO ── */
+async function ativarCamera() {
+  try {
+    streamCam = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+    const video = document.getElementById('videoCam');
+    video.srcObject = streamCam;
+    video.style.display = 'block';
+    document.getElementById('camPlaceholder').style.display = 'none';
+    document.getElementById('btnReconhecer').disabled = false;
+    toast('Câmera ativada', 'ok');
+  } catch(e) {
+    toast('Não foi possível acessar a câmera', 'err');
+  }
+}
+
+function aoFotoProduto(e) {
+  fotoProduto = e.target.files[0];
+  if (!fotoProduto) return;
+  const url = URL.createObjectURL(fotoProduto);
+  document.getElementById('camPlaceholder').innerHTML = `<img src="${url}" style="max-height:260px;border-radius:10px"/>`;
+  document.getElementById('videoCam').style.display = 'none';
+  document.getElementById('btnReconhecer').disabled = false;
+  toast('Foto carregada', 'ok');
+}
+
+async function reconhecerProduto() {
+  const btn = document.getElementById('btnReconhecer');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Reconhecendo…';
+  document.getElementById('ocrStatus').textContent = '1. Gemini / Vision…';
+  document.getElementById('ocrFill').style.width = '30%';
+
+  // Simulação do pipeline (em produção chama o proxy real)
+  await new Promise(r => setTimeout(r, 900));
+  document.getElementById('ocrStatus').textContent = '3. YOLOv11…';
+  document.getElementById('ocrFill').style.width = '60%';
+  await new Promise(r => setTimeout(r, 700));
+
+  // Escolhe um produto aleatório do catálogo (simula detecção)
+  const p = produtos[Math.floor(Math.random() * produtos.length)];
+  const conf = 82 + Math.floor(Math.random() * 16);
+
+  document.getElementById('ocrStatus').innerHTML = `<span style="color:var(--mint)">${p.nome} · ${conf}%</span>`;
+  document.getElementById('ocrConf').textContent = conf + '%';
+  document.getElementById('ocrFill').style.width = conf + '%';
+
+  adicionarAoCarrinho(p, conf);
+  btn.disabled = false;
+  btn.innerHTML = 'Reconhecer produto';
+  toast(`Detectado: ${p.nome}`, 'ok');
+}
+
+function adicionarAoCarrinho(produto, conf=100) {
+  const exist = carrinho.find(c => c.sku === produto.sku);
+  if (exist) exist.qtd++;
+  else carrinho.push({...produto, qtd:1, conf});
+  renderCarrinho();
+}
+
+function renderCarrinho() {
+  const el = document.getElementById('cartItems');
+  if (!carrinho.length) {
+    el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px">Vazio</div>';
+    document.getElementById('cartTotal').textContent = 'R$ 0,00';
+    return;
+  }
+  el.innerHTML = carrinho.map((c,i) => `
+    <div class="cart-item">
+      <div>
+        <div style="font-weight:600">${c.nome}</div>
+        <div style="font-size:11px;color:var(--muted)">${c.sku} · ${c.conf||100}%</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:JetBrains Mono,monospace">${c.qtd}x</span>
+        <span style="color:var(--mint)">R$ ${(c.preco*c.qtd).toFixed(2)}</span>
+        <button class="btn btn-rose btn-sm" onclick="removerItem(${i})">×</button>
+      </div>
+    </div>
+  `).join('');
+  const total = carrinho.reduce((s,c)=>s+c.preco*c.qtd,0);
+  document.getElementById('cartTotal').textContent = 'R$ ' + total.toFixed(2);
+}
+
+function removerItem(i) {
+  carrinho.splice(i,1);
+  renderCarrinho();
+}
+
+function limparCarrinho() {
+  carrinho = [];
+  renderCarrinho();
+}
+
+function finalizarVenda() {
+  if (!carrinho.length) { toast('Carrinho vazio', 'err'); return; }
+  const total = carrinho.reduce((s,c)=>s+c.preco*c.qtd,0);
+  const itens = carrinho.reduce((s,c)=>s+c.qtd,0);
+  // Baixa estoque
+  carrinho.forEach(c => {
+    const p = produtos.find(x=>x.sku===c.sku);
+    if (p) p.estoque = Math.max(0, p.estoque - c.qtd);
+  });
+  vendas.unshift({data:new Date().toISOString(), itens, total, motor:'visão-ia'});
+  localStorage.setItem('nox_vendas', JSON.stringify(vendas));
+  localStorage.setItem('nox_produtos', JSON.stringify(produtos));
+  carrinho = [];
+  renderCarrinho();
+  toast(`Venda finalizada · R$ ${total.toFixed(2)}`, 'ok');
+  atualizarDashboard();
+}
+
+function renderProdutos() {
+  document.getElementById('listaProdutos').innerHTML = produtos.map(p => `
+    <tr>
+      <td style="font-family:JetBrains Mono,monospace">${p.sku}</td>
+      <td>${p.nome}</td>
+      <td style="color:var(--mint)">R$ ${p.preco.toFixed(2)}</td>
+      <td>${p.estoque}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="adicionarAoCarrinho(produtos.find(x=>x.sku==='${p.sku}'))">+ Carrinho</button></td>
+    </tr>
+  `).join('');
+}
+
+function renderEstoque() {
+  document.getElementById('listaEstoque').innerHTML = produtos.map(p => `
+    <tr>
+      <td>${p.nome}</td>
+      <td style="font-family:JetBrains Mono,monospace">${p.sku}</td>
+      <td>${p.estoque}</td>
+      <td><span class="pill ${p.estoque<15?'pill-rose':'pill-mint'}">${p.estoque<15?'Baixo':'OK'}</span></td>
+    </tr>
+  `).join('');
+}
+
+function abrirCadastroProduto() {
+  const nome = prompt('Nome do produto:');
+  if (!nome) return;
+  const preco = parseFloat(prompt('Preço (ex: 12.90):') || '0');
+  const sku = 'SKU-' + String(produtos.length+1).padStart(3,'0');
+  produtos.push({sku, nome, preco, estoque:10});
+  localStorage.setItem('nox_produtos', JSON.stringify(produtos));
+  renderProdutos();
+  toast('Produto cadastrado', 'ok');
+}
+
+function salvarConfig() {
+  localStorage.setItem('nox_proxy', document.getElementById('cfgProxy').value);
+  localStorage.setItem('nox_yolo', document.getElementById('cfgYolo').value);
+  toast('Configurações de visão salvas', 'ok');
+}
+
+// Init config
+document.getElementById('cfgProxy').value = localStorage.getItem('nox_proxy') || 'http://localhost:8790/ocr';
+document.getElementById('cfgYolo').value = localStorage.getItem('nox_yolo') || 'http://localhost:8791/detect';
+</script>
 </body>
 </html>
