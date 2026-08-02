@@ -3,33 +3,33 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; connect-src 'self' https://brasilapi.com.br https://*.workers.dev https://wa.me; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"/>
 <meta name="referrer" content="strict-origin-when-cross-origin"/>
-<title>NoxMob · SmartPOS Seguro</title>
+<title>NoxMob · SmartPOS Unificado</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
 <style>
 :root{--bg:#f0f5ff;--card:#fff;--text:#0f172a;--muted:#64748b;--cyan:#0891b2;--blue:#2563eb;--mint:#059669;--amber:#d97706;--rose:#e11d48;--border:#dbe4f0;--r:16px;--shadow:0 10px 40px rgba(37,99,235,.08);--shadow-lg:0 20px 50px rgba(37,99,235,.12)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;font-size:14px;
-background-image:radial-gradient(ellipse at 10% 0%,rgba(37,99,235,.08)0%,transparent 50%),radial-gradient(ellipse at 90% 100%,rgba(5,150,105,.06)0%,transparent 50%);
--webkit-user-select:none;user-select:none}
-input,textarea,select,.allow-select{user-select:text;-webkit-user-select:text}
+background-image:radial-gradient(ellipse at 10% 0%,rgba(37,99,235,.08)0%,transparent 50%),radial-gradient(ellipse at 90% 100%,rgba(5,150,105,.06)0%,transparent 50%)}
 .app{display:none;min-height:100vh}.app.ativo{display:flex}
 #tela-login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:linear-gradient(135deg,#dbeafe,#f0fdf4,#faf5ff)}
-.login-box{width:100%;max-width:420px;background:var(--card);border-radius:24px;padding:44px;box-shadow:var(--shadow-lg);border:1px solid var(--border)}
+.login-box{width:100%;max-width:440px;background:var(--card);border-radius:24px;padding:40px;box-shadow:var(--shadow-lg);border:1px solid var(--border)}
 .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:26px;display:flex;align-items:center;gap:10px}
 .logo-dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--mint));box-shadow:0 0 16px rgba(8,145,178,.5)}
-.login-box h1{font-family:'Sora',sans-serif;font-size:24px;margin:28px 0 8px}
-.login-box p{color:var(--muted);margin-bottom:28px;font-size:13px}
-.field{margin-bottom:14px}
+.login-box h1{font-family:'Sora',sans-serif;font-size:22px;margin:24px 0 6px}
+.login-box .sub-login{color:var(--muted);margin-bottom:18px;font-size:13px}
+.auth-tabs{display:flex;gap:6px;margin-bottom:18px}
+.auth-tab{flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--border);background:#f8fafc;font-weight:700;font-size:12px;cursor:pointer;text-align:center}
+.auth-tab.ativo{background:linear-gradient(135deg,#2563eb,#0891b2);color:#fff;border-color:transparent}
+.auth-panel{display:none}.auth-panel.ativo{display:block}
+.field{margin-bottom:12px}
 .field label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.field input,.field select{width:100%;background:#f8fafc;border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-size:14px}
-.field input:focus,.field select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12);background:#fff}
+.field input,.field select,textarea{width:100%;background:#f8fafc;border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-size:14px;font-family:inherit}
+.field input:focus,.field select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.12);background:#fff}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:12px;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;cursor:pointer;border:none;transition:.2s}
 .btn-prim{background:linear-gradient(135deg,#2563eb,#0891b2);color:#fff;box-shadow:0 8px 24px rgba(37,99,235,.3)}
-.btn-prim:hover{transform:translateY(-2px)}
-.btn-prim:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-prim:hover{transform:translateY(-2px)}.btn-prim:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .btn-mint{background:linear-gradient(135deg,#059669,#10b981);color:#fff}
 .btn-ghost{background:#fff;border:1.5px solid var(--border);color:var(--text)}
 .btn-sm{padding:7px 12px;font-size:12px;border-radius:10px}
@@ -43,7 +43,7 @@ input,textarea,select,.allow-select{user-select:text;-webkit-user-select:text}
 .nav-item.ativo{background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(8,145,178,.08));color:var(--blue);box-shadow:inset 3px 0 0 var(--blue)}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .topbar{height:64px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(255,255,255,.9);backdrop-filter:blur(12px)}
-.clock{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--blue);background:#eff6ff;padding:6px 12px;border-radius:10px;border:1px solid #bfdbfe}
+.clock{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--blue);background:#eff6ff;padding:6px 12px;border-radius:10px;border:1px solid #bfdbfe}
 .content{flex:1;overflow-y:auto;padding:28px}
 .page{display:none}.page.ativa{display:block}
 .grid{display:grid;gap:18px}
@@ -60,12 +60,11 @@ input,textarea,select,.allow-select{user-select:text;-webkit-user-select:text}
 .panel-title{font-family:'Sora',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;font-weight:700}
 .pdv-layout{display:grid;grid-template-columns:1fr 360px;gap:18px;min-height:calc(100vh - 140px)}
 @media(max-width:900px){.pdv-layout{grid-template-columns:1fr}}
-.camera-area{background:linear-gradient(145deg,#f8fafc,#eef2ff);border:2px dashed #c7d2fe;border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:220px;overflow:hidden}
-.camera-placeholder{text-align:center;color:var(--muted)}
-.camera-placeholder .icon{font-size:48px;margin-bottom:10px}
-.cart-items{max-height:200px;overflow-y:auto}
+.camera-area{background:linear-gradient(145deg,#f8fafc,#eef2ff);border:2px dashed #c7d2fe;border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;overflow:hidden}
+.camera-placeholder{text-align:center;color:var(--muted)}.camera-placeholder .icon{font-size:42px;margin-bottom:8px}
+.cart-items{max-height:180px;overflow-y:auto}
 .cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
-.cart-total{padding:14px 0;border-top:2px solid var(--border);margin-top:10px}
+.cart-total{padding:12px 0;border-top:2px solid var(--border);margin-top:8px}
 .cart-total .valor{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--mint)}
 .tax-line{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;padding:3px 0}
 .tbl{width:100%;border-collapse:collapse;font-size:13px}
@@ -78,23 +77,25 @@ input,textarea,select,.allow-select{user-select:text;-webkit-user-select:text}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:20px}
 .modal-bg.ativo{display:flex}
 .modal{background:var(--card);border-radius:20px;padding:28px;width:100%;max-width:560px;box-shadow:var(--shadow-lg);max-height:92vh;overflow-y:auto}
-.modal h3{font-family:'Sora',sans-serif;font-size:20px;margin-bottom:18px}
+.modal h3{font-family:'Sora',sans-serif;font-size:20px;margin-bottom:16px}
 .row{display:grid;gap:12px}.row.cols2{grid-template-columns:1fr 1fr}
 .toast-area{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px}
-.toast{padding:13px 18px;border-radius:12px;font-size:13px;font-weight:600;max-width:340px;animation:slideIn .25s ease;box-shadow:var(--shadow-lg)}
+.toast{padding:13px 18px;border-radius:12px;font-size:13px;font-weight:600;max-width:360px;animation:slideIn .25s ease;box-shadow:var(--shadow-lg)}
 .toast-ok{background:#ecfdf5;border:1px solid #a7f3d0;color:#047857}
 .toast-err{background:#fff1f2;border:1px solid #fecdd3;color:#be123c}
 @keyframes slideIn{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
 .spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4px}
-.sub{color:var(--muted);margin-bottom:20px;font-size:13px}
+.sub{color:var(--muted);margin-bottom:18px;font-size:13px}
 .scan-box{border:2px dashed #c7d2fe;border-radius:12px;padding:12px;text-align:center;background:#f8fafc;margin-bottom:12px}
-.scan-box video{width:100%;max-height:130px;border-radius:8px}
+.scan-box video{width:100%;max-height:120px;border-radius:8px}
 .icon-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
 .icon-btn:hover{border-color:var(--rose);background:#fff1f2}
 .icon-btn.ok:hover{border-color:var(--mint);background:#ecfdf5}
-.sec-badge{font-size:10px;color:var(--mint);font-weight:700;letter-spacing:.04em}
+.sec-badge{font-size:10px;color:var(--mint);font-weight:700;text-align:center;margin-top:14px}
+.pay-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
 </style>
 </head>
 <body>
@@ -113,21 +114,21 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
         <button type="button" class="btn btn-ghost btn-sm" onclick="pararScanCadastro()">Parar</button>
       </div>
     </div>
-    <div class="field"><label>Nome *</label><input id="pNome" class="allow-select" placeholder="Ex: Coca-Cola 350ml"/></div>
+    <div class="field"><label>Nome *</label><input id="pNome" placeholder="Ex: Coca-Cola 350ml"/></div>
     <div class="row cols2">
-      <div class="field"><label>SKU</label><input id="pSku" class="allow-select" placeholder="SKU-001"/></div>
-      <div class="field"><label>Barras / EAN</label><input id="pBarras" class="allow-select" placeholder="7891234567890"/></div>
+      <div class="field"><label>SKU</label><input id="pSku" placeholder="SKU-001"/></div>
+      <div class="field"><label>Barras / EAN</label><input id="pBarras" placeholder="7891234567890"/></div>
     </div>
     <div class="row cols2">
-      <div class="field"><label>NCM *</label><input id="pNcm" class="allow-select" placeholder="22021000" maxlength="8"/></div>
-      <div class="field"><label>CNP</label><input id="pCnp" class="allow-select" placeholder="Opcional"/></div>
+      <div class="field"><label>NCM *</label><input id="pNcm" placeholder="22021000" maxlength="8"/></div>
+      <div class="field"><label>CNP</label><input id="pCnp" placeholder="Opcional"/></div>
     </div>
     <div class="row cols2">
-      <div class="field"><label>Preço (R$)</label><input id="pPreco" class="allow-select" type="number" step="0.01" value="5.50"/></div>
-      <div class="field"><label>Estoque</label><input id="pEstoque" class="allow-select" type="number" value="10"/></div>
+      <div class="field"><label>Preço (R$)</label><input id="pPreco" type="number" step="0.01" value="5.50"/></div>
+      <div class="field"><label>Estoque</label><input id="pEstoque" type="number" value="10"/></div>
     </div>
     <div class="row cols2">
-      <div class="field"><label>ICMS %</label><input id="pIcms" class="allow-select" type="number" step="0.01" value="18"/></div>
+      <div class="field"><label>ICMS %</label><input id="pIcms" type="number" step="0.01" value="18"/></div>
       <div class="field"><label>CFOP</label>
         <select id="pCfop"><option value="5102">5102 - Venda</option><option value="5405">5405 - ST</option><option value="5933">5933 - Serviço</option></select>
       </div>
@@ -144,18 +145,18 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
   <div class="modal">
     <h3>Cadastrar pessoa</h3>
     <div class="field"><label>CPF / CNPJ *</label>
-      <input id="cDoc" class="allow-select" placeholder="Digite e saia do campo para buscar" onblur="buscarDocumento()"/>
+      <input id="cDoc" placeholder="Digite e saia do campo" onblur="buscarDocumento()"/>
     </div>
-    <div class="field"><label>Nome / Razão social *</label><input id="cNome" class="allow-select"/></div>
+    <div class="field"><label>Nome / Razão *</label><input id="cNome"/></div>
     <div class="row cols2">
-      <div class="field"><label>Telefone / WhatsApp</label><input id="cTel" class="allow-select" placeholder="11999999999"/></div>
+      <div class="field"><label>WhatsApp</label><input id="cTel" placeholder="11999999999"/></div>
       <div class="field"><label>Tipo</label>
         <select id="cTipo"><option value="PF">PF</option><option value="PJ">PJ</option></select>
       </div>
     </div>
-    <div class="field"><label>E-mail</label><input id="cEmail" class="allow-select" type="email"/></div>
-    <p style="font-size:11px;color:var(--muted);margin-bottom:12px">CNPJ: BrasilAPI · CPF: via Cloudflare Worker → Serpro (produção)</p>
-    <div style="display:flex;gap:10px">
+    <div class="field"><label>E-mail</label><input id="cEmail" type="email"/></div>
+    <p class="hint">CNPJ via Worker/BrasilAPI · CPF via Serpro (Worker)</p>
+    <div style="display:flex;gap:10px;margin-top:8px">
       <button class="btn btn-prim" onclick="salvarPessoa()">Salvar</button>
       <button class="btn btn-ghost" onclick="fecharModal('modalPessoa')">Cancelar</button>
     </div>
@@ -166,12 +167,31 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 <div id="tela-login">
   <div class="login-box">
     <div class="logo"><div class="logo-dot"></div>Nox<span style="color:var(--blue)">Mob</span></div>
-    <h1>Entrar no sistema</h1>
-    <p>SmartPOS · NF-e · CBS/IBS · Worker seguro</p>
-    <div class="field"><label>E-mail</label><input type="email" id="loginEmail" class="allow-select" value="admin@noxmob.com.br"/></div>
-    <div class="field"><label>Senha</label><input type="password" id="loginSenha" class="allow-select" value="123456"/></div>
-    <button class="btn btn-prim btn-full" onclick="fazerLogin()" style="margin-top:8px">Entrar</button>
-    <p class="sec-badge" style="text-align:center;margin-top:16px">🔒 TLS · CSP · secrets no Worker</p>
+    <h1>SmartPOS Unificado</h1>
+    <p class="sub-login">NF-e · CBS/IBS · WhatsApp · PIX · Worker</p>
+    <div class="auth-tabs">
+      <div class="auth-tab ativo" data-tab="login" onclick="trocarAuthTab('login')">Entrar</div>
+      <div class="auth-tab" data-tab="register" onclick="trocarAuthTab('register')">Cadastrar</div>
+      <div class="auth-tab" data-tab="forgot" onclick="trocarAuthTab('forgot')">Esqueci</div>
+    </div>
+    <div class="auth-panel ativo" id="panel-login">
+      <div class="field"><label>E-mail</label><input type="email" id="loginEmail" value="admin@noxmob.com.br"/></div>
+      <div class="field"><label>Senha</label><input type="password" id="loginSenha" value="123456"/></div>
+      <button class="btn btn-prim btn-full" onclick="fazerLogin()">Entrar</button>
+    </div>
+    <div class="auth-panel" id="panel-register">
+      <div class="field"><label>Nome</label><input id="regNome" placeholder="Seu nome"/></div>
+      <div class="field"><label>E-mail</label><input type="email" id="regEmail"/></div>
+      <div class="field"><label>Senha</label><input type="password" id="regSenha"/></div>
+      <button class="btn btn-prim btn-full" onclick="fazerCadastro()">Solicitar acesso</button>
+      <p class="hint">O administrador precisa liberar o cadastro antes do primeiro login.</p>
+    </div>
+    <div class="auth-panel" id="panel-forgot">
+      <div class="field"><label>E-mail da conta</label><input type="email" id="forgotEmail"/></div>
+      <button class="btn btn-prim btn-full" onclick="fazerForgot()">Recuperar senha</button>
+      <p class="hint">Com D1 no Worker, gera token de reset. Sem e-mail SMTP ainda — admin vê o token na resposta dev.</p>
+    </div>
+    <p class="sec-badge">🔒 TLS · secrets no Worker · D1 · Zernio · Asaas</p>
   </div>
 </div>
 
@@ -187,7 +207,9 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
       <div class="nav-item" onclick="irPara('estoque',this)">📋 Estoque</div>
       <div class="nav-item" onclick="irPara('relatorios',this)">📈 Relatórios / DRE</div>
       <div class="nav-item" onclick="irPara('fiscal',this)">🧾 Fiscal · CBS/IBS</div>
-      <div class="nav-item" onclick="irPara('visao',this)">📷 Visão IA</div>
+      <div class="nav-item" onclick="irPara('pagamentos',this)">💳 PIX · Asaas · Inter</div>
+      <div class="nav-item" onclick="irPara('whatsapp',this)">📱 WhatsApp · Flows</div>
+      <div class="nav-item" onclick="irPara('usuarios',this)">🔐 Usuários</div>
       <div class="nav-item" onclick="irPara('config',this)">⚙️ Config / Worker</div>
       <div style="flex:1"></div>
       <div class="nav-item" onclick="sair()" style="color:var(--rose)">Sair</div>
@@ -195,17 +217,17 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
     <div class="main">
       <div class="topbar">
         <div id="topTitle" style="font-family:'Sora',sans-serif;font-weight:700">Dashboard</div>
-        <div style="display:flex;align-items:center;gap:12px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
           <div class="clock" id="relogio">--:--:--</div>
-          <span class="pill pill-mint">● Online</span>
-          <span style="color:var(--muted);font-size:12px;font-weight:600">admin@noxmob.com.br</span>
+          <span class="pill pill-mint" id="pillSync">● Local</span>
+          <span style="color:var(--muted);font-size:12px;font-weight:600" id="userLabel">—</span>
         </div>
       </div>
       <div class="content">
 
         <div class="page ativa" id="p-dashboard">
           <h2>Dashboard</h2>
-          <p class="sub">Vendas · legados · IVA Dual</p>
+          <p class="sub">Vendas · legados · IVA Dual · leads</p>
           <div class="grid grid-4" style="margin-bottom:20px">
             <div class="stat"><div class="label">Vendas hoje</div><div class="value mint" id="statVendas">R$ 0</div></div>
             <div class="stat"><div class="label">ICMS+PIS+COFINS</div><div class="value amber" id="statImpostos">R$ 0</div></div>
@@ -221,16 +243,16 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 
         <div class="page" id="p-pdv">
           <h2>PDV / Caixa</h2>
-          <p class="sub">Barras · QR · IA · impostos · WhatsApp</p>
+          <p class="sub">Barras · IA · impostos · PIX · WhatsApp</p>
           <div class="pdv-layout">
             <div>
               <div class="field">
                 <label>Bip / código</label>
-                <input id="scanInput" class="allow-select" placeholder="Leitor ou Enter" onkeydown="if(event.key==='Enter')buscarPorCodigo()" style="font-family:'JetBrains Mono',monospace"/>
+                <input id="scanInput" placeholder="Leitor ou Enter" onkeydown="if(event.key==='Enter')buscarPorCodigo()" style="font-family:'JetBrains Mono',monospace"/>
               </div>
               <div class="camera-area">
                 <div class="camera-placeholder" id="camPlaceholder"><div class="icon">📷</div><div style="font-weight:600;color:var(--text)">Câmera ou foto</div></div>
-                <video id="videoCam" autoplay playsinline style="display:none;width:100%;max-height:200px;object-fit:cover;border-radius:12px"></video>
+                <video id="videoCam" autoplay playsinline style="display:none;width:100%;max-height:180px;object-fit:cover;border-radius:12px"></video>
               </div>
               <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
                 <button class="btn btn-prim btn-sm" onclick="ativarCamera()">Câmera</button>
@@ -238,6 +260,11 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
                 <button class="btn btn-mint btn-sm" id="btnReconhecer" onclick="reconhecerProduto()" disabled>IA</button>
               </div>
               <div style="margin-top:8px;font-size:12px;color:var(--muted)" id="ocrStatus">aguardando…</div>
+              <div class="field" style="margin-top:14px">
+                <label>Cliente (WhatsApp / NF)</label>
+                <input id="pdvClienteTel" placeholder="Telefone WhatsApp"/>
+              </div>
+              <div class="field"><input id="pdvClienteNome" placeholder="Nome do cliente (opcional)"/></div>
             </div>
             <div class="panel">
               <div class="panel-title">Carrinho</div>
@@ -250,6 +277,10 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
                 <div class="valor" id="cartTotal">R$ 0,00</div>
               </div>
               <button class="btn btn-mint btn-full" style="margin-top:12px" onclick="finalizarVenda()">Finalizar · NF-e</button>
+              <div class="pay-row">
+                <button class="btn btn-prim btn-sm" onclick="gerarPixAsaas()">PIX Asaas</button>
+                <button class="btn btn-ghost btn-sm" onclick="enviarWhatsAppUltima()">WhatsApp</button>
+              </div>
               <button class="btn btn-ghost btn-sm btn-full" style="margin-top:8px" onclick="limparCarrinho()">Limpar</button>
             </div>
           </div>
@@ -257,8 +288,11 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 
         <div class="page" id="p-produtos">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-            <div><h2>Produtos</h2><p class="sub" style="margin:0">NCM · barras · ICMS</p></div>
-            <button class="btn btn-prim btn-sm" onclick="abrirModalProduto()">+ Novo</button>
+            <div><h2>Produtos</h2><p class="sub" style="margin:0">NCM · barras · sync D1</p></div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-ghost btn-sm" onclick="syncProdutosNuvem()">☁ Sync</button>
+              <button class="btn btn-prim btn-sm" onclick="abrirModalProduto()">+ Novo</button>
+            </div>
           </div>
           <div class="panel" style="padding:0;overflow:hidden">
             <table class="tbl"><thead><tr><th>SKU</th><th>Nome</th><th>Barras</th><th>NCM</th><th>ICMS</th><th>Preço</th><th>Est</th><th></th></tr></thead>
@@ -268,7 +302,7 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 
         <div class="page" id="p-pessoas">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-            <div><h2>Pessoas / Leads</h2><p class="sub" style="margin:0">CPF/CNPJ · WhatsApp · histórico</p></div>
+            <div><h2>Pessoas / Leads</h2><p class="sub" style="margin:0">CPF/CNPJ · WhatsApp · recompra</p></div>
             <button class="btn btn-prim btn-sm" onclick="abrirModal('modalPessoa')">+ Nova pessoa</button>
           </div>
           <div class="panel" style="padding:0;overflow:hidden;margin-bottom:16px">
@@ -293,15 +327,15 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 
         <div class="page" id="p-relatorios">
           <h2>Relatórios · DRE</h2>
-          <p class="sub">Filtro de período · extrato completo preservado</p>
+          <p class="sub">Período · extrato preservado</p>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
             <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('dia')">Hoje</button>
             <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('semana')">Semana</button>
             <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('mes')">Mês</button>
-            <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('todos')">Extrato completo</button>
+            <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('todos')">Extrato</button>
             <button class="btn btn-prim btn-sm" onclick="renderRelatorios()">↻ Atualizar</button>
-            <button class="btn btn-mint btn-sm" onclick="imprimirDRE()">🖨 Imprimir DRE</button>
-            <button class="btn btn-rose btn-sm" onclick="zerarVisualizacaoPeriodo()">Zerar saldo do período</button>
+            <button class="btn btn-mint btn-sm" onclick="imprimirDRE()">🖨 DRE</button>
+            <button class="btn btn-rose btn-sm" onclick="zerarVisualizacaoPeriodo()">Zerar visual</button>
           </div>
           <div class="grid grid-3" style="margin-bottom:16px">
             <div class="stat"><div class="label">Receita bruta</div><div class="value mint" id="dreReceita">R$ 0</div></div>
@@ -334,41 +368,93 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
           <div class="panel">
             <div class="panel-title">Emitente NF-e</div>
             <div class="row cols2">
-              <div class="field"><label>CNPJ</label><input id="cfgCnpj" class="allow-select" value="47.149.826/0001-80"/></div>
+              <div class="field"><label>CNPJ</label><input id="cfgCnpj" value="47.149.826/0001-80"/></div>
               <div class="field"><label>Ambiente</label>
                 <select id="cfgAmb"><option>Homologação</option><option selected>Produção</option></select>
               </div>
             </div>
-            <div class="field"><label>Razão social</label><input id="cfgRazao" class="allow-select" value="NOXMOB COMERCIO LTDA"/></div>
+            <div class="field"><label>Razão social</label><input id="cfgRazao" value="NOXMOB COMERCIO LTDA"/></div>
           </div>
         </div>
 
-        <div class="page" id="p-visao">
-          <h2>Visão Computacional</h2>
-          <p class="sub">Pipeline multi-camada</p>
+        <div class="page" id="p-pagamentos">
+          <h2>PIX · Asaas · Inter</h2>
+          <p class="sub">Chaves só no Worker · front só chama a API</p>
+          <div class="grid grid-2">
+            <div class="panel">
+              <div class="panel-title">Asaas · cobrança PIX</div>
+              <div class="field"><label>Valor (R$)</label><input id="asaasValor" type="number" step="0.01" placeholder="0.00"/></div>
+              <div class="field"><label>Descrição</label><input id="asaasDesc" placeholder="Pedido NoxMob"/></div>
+              <div class="field"><label>Cliente (nome)</label><input id="asaasCliente" placeholder="Nome"/></div>
+              <div class="field"><label>CPF/CNPJ</label><input id="asaasDoc" placeholder="Somente números"/></div>
+              <button class="btn btn-prim btn-sm" onclick="criarCobrancaAsaas()">Gerar cobrança PIX</button>
+              <pre id="asaasOut" class="hint" style="margin-top:12px;white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:11px"></pre>
+            </div>
+            <div class="panel">
+              <div class="panel-title">Banco Inter · esqueleto</div>
+              <p class="hint">OAuth + PIX via Worker (<code>/pay/inter/pix</code>). Configure CLIENT_ID/SECRET no Worker.</p>
+              <div class="field"><label>Valor</label><input id="interValor" type="number" step="0.01"/></div>
+              <button class="btn btn-ghost btn-sm" onclick="criarPixInter()">Solicitar PIX Inter</button>
+              <pre id="interOut" class="hint" style="margin-top:12px;white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:11px"></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="page" id="p-whatsapp">
+          <h2>WhatsApp · Zernio · Flows</h2>
+          <p class="sub">Mensagens · templates · Flows interativos (pesquisa, agendamento, pedido)</p>
+          <div class="grid grid-2">
+            <div class="panel">
+              <div class="panel-title">Envio rápido</div>
+              <div class="field"><label>Telefone</label><input id="waTel" placeholder="11999999999"/></div>
+              <div class="field"><label>Mensagem</label><textarea id="waText" rows="4" placeholder="Texto livre (janela 24h) ou use template"></textarea></div>
+              <div class="field"><label>Template Meta (opcional)</label><input id="waTpl" placeholder="order_confirmation"/></div>
+              <div class="pay-row">
+                <button class="btn btn-mint btn-sm" onclick="waEnviarTexto()">Enviar</button>
+                <button class="btn btn-prim btn-sm" onclick="waEnviarTemplate()">Template</button>
+              </div>
+              <pre id="waOut" class="hint" style="margin-top:12px;white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:11px"></pre>
+            </div>
+            <div class="panel">
+              <div class="panel-title">WhatsApp Flows</div>
+              <p class="hint">
+                Flows = formulários interativos no WhatsApp (Meta): pesquisa NPS, agendamento, captura de pedido, endereço.
+                No Zernio: seção <strong>Flows</strong> do WABA. O Worker pode disparar flow publicado via API de mensagens interativas.
+              </p>
+              <div class="field"><label>Flow ID (Zernio/Meta)</label><input id="waFlowId" placeholder="flow_xxx"/></div>
+              <div class="field"><label>Telefone destino</label><input id="waFlowTel" placeholder="11999999999"/></div>
+              <button class="btn btn-ghost btn-sm" onclick="waDispararFlow()">Disparar Flow</button>
+              <p class="hint" style="margin-top:10px">
+                Casos NoxMob: 1) Pós-venda NPS · 2) Cadastro de cliente · 3) Pedido pelo WhatsApp · 4) Confirmação de retirada.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="page" id="p-usuarios">
+          <h2>Usuários</h2>
+          <p class="sub">Admin libera cadastros pendentes (requer D1)</p>
           <div class="panel">
-            <ol style="padding-left:20px;color:var(--muted);line-height:2">
-              <li><strong style="color:var(--blue)">Gemini / GPT-4o</strong> — embalagem</li>
-              <li><strong style="color:var(--cyan)">Cloud Vision</strong> — OCR</li>
-              <li><strong style="color:var(--amber)">ZXing</strong> — barras/QR</li>
-              <li><strong style="color:var(--mint)">Catálogo local</strong> — EAN/SKU/NCM</li>
-            </ol>
+            <div class="field"><label>E-mail a liberar</label><input id="approveEmail" placeholder="user@email.com"/></div>
+            <button class="btn btn-prim btn-sm" onclick="aprovarUsuario()">Ativar usuário</button>
+            <p class="hint" id="approveOut"></p>
           </div>
         </div>
 
         <div class="page" id="p-config">
           <h2>Config / Worker</h2>
-          <p class="sub">Endpoints seguros · sem chave no browser</p>
+          <p class="sub">Nenhuma chave secreta neste HTML</p>
           <div class="panel">
-            <div class="field"><label>URL Cloudflare Worker (Serpro / docs)</label>
-              <input id="cfgWorker" class="allow-select" placeholder="https://noxmob-api.SEU_SUBDOMINIO.workers.dev" value=""/>
+            <div class="field"><label>URL Cloudflare Worker</label>
+              <input id="cfgWorker" value="https://waitron-server.contatodroppfy.workers.dev"/>
             </div>
-            <div class="field"><label>Nome da loja</label><input id="cfgLoja" class="allow-select" value="Minha Loja NoxMob"/></div>
-            <button class="btn btn-prim btn-sm" onclick="salvarConfigWorker()">Salvar</button>
-            <p style="font-size:12px;color:var(--muted);margin-top:12px">
-              Token Serpro, certificado e rate-limit ficam <strong>somente no Worker</strong> (secrets).
-              O front nunca recebe a chave — padrão AWS / Google / Cloudflare.
-            </p>
+            <div class="field"><label>Nome da loja</label><input id="cfgLoja" value="Minha Loja NoxMob"/></div>
+            <div class="pay-row">
+              <button class="btn btn-prim btn-sm" onclick="salvarConfigWorker()">Salvar</button>
+              <button class="btn btn-ghost btn-sm" onclick="testarWorker()">Testar Worker</button>
+              <button class="btn btn-mint btn-sm" onclick="syncTudo()">Sync nuvem</button>
+            </div>
+            <pre id="cfgOut" class="hint" style="margin-top:12px;white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:11px"></pre>
           </div>
         </div>
 
@@ -378,21 +464,17 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 </div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════
-   NOXMOB · HTML único · CBS/IBS · Worker · Print · WhatsApp
-   Segurança real = secrets no Worker + CSP + HTTPS
-   ═══════════════════════════════════════════════════════════ */
-(function harden() {
-  document.addEventListener('contextmenu', e => e.preventDefault());
-  document.addEventListener('keydown', e => {
-    if (e.key === 'F12') { e.preventDefault(); return false; }
-    if (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) { e.preventDefault(); return false; }
-    if (e.ctrlKey && ['u','U','s','S'].includes(e.key)) { e.preventDefault(); return false; }
-  });
-})();
-
+/* ═══════════════════════════════════════════════════════════════
+   NoxMob SmartPOS · index.html unificado
+   Worker: auth · D1 · Zernio WA · Asaas · Inter · CNPJ
+   Secrets NUNCA neste arquivo
+═══════════════════════════════════════════════════════════════ */
+const WORKER_DEFAULT = 'https://waitron-server.contatodroppfy.workers.dev';
 const PIS = 1.65, COFINS = 7.6, CBS_TESTE = 0.90, IBS_TESTE = 0.10;
 
+function getWorker() {
+  return (localStorage.getItem('nox_worker') || document.getElementById('cfgWorker')?.value || WORKER_DEFAULT).replace(/\/$/, '');
+}
 function calcImpostos(preco, icmsPct) {
   const base = Number(preco) || 0;
   const icms = base * (Number(icmsPct) || 18) / 100;
@@ -413,7 +495,6 @@ function calcImpostos(preco, icmsPct) {
     }
   };
 }
-
 function dualDaVenda(v) {
   if (v.cbs_ibs > 0) return v.cbs_ibs;
   let t = 0;
@@ -421,6 +502,7 @@ function dualDaVenda(v) {
   return t;
 }
 
+let usuario = null;
 let produtos = JSON.parse(localStorage.getItem('nox_produtos') || 'null') || [
   {sku:'SKU-001',nome:'Coca-Cola 350ml',barras:'7894900011517',ncm:'22021000',cnp:'',preco:5.5,estoque:48,cfop:'5102',icms:18},
   {sku:'SKU-002',nome:'Água Mineral 500ml',barras:'7891000100103',ncm:'22011000',cnp:'',preco:3,estoque:120,cfop:'5102',icms:18},
@@ -431,7 +513,7 @@ let produtos = JSON.parse(localStorage.getItem('nox_produtos') || 'null') || [
 let pessoas = JSON.parse(localStorage.getItem('nox_pessoas') || 'null') || [{nome:'Consumidor Final',doc:'',tipo:'PF',tel:'',email:''}];
 let leads = JSON.parse(localStorage.getItem('nox_leads') || '[]');
 let carrinho = [], vendas = JSON.parse(localStorage.getItem('nox_vendas') || '[]');
-let streamCam = null, codeReader = null, scanning = false, periodoDRE = 'todos';
+let streamCam = null, codeReader = null, scanning = false, periodoDRE = 'todos', ultimaVenda = null;
 
 function toast(m, t) {
   t = t || 'ok';
@@ -439,37 +521,119 @@ function toast(m, t) {
   e.className = 'toast toast-' + t;
   e.textContent = (t === 'ok' ? '✓ ' : '✕ ') + m;
   document.getElementById('toasts').appendChild(e);
-  setTimeout(() => e.remove(), 3500);
+  setTimeout(() => e.remove(), 3800);
 }
 function abrirModal(id) { document.getElementById(id).classList.add('ativo'); }
 function fecharModal(id) { document.getElementById(id).classList.remove('ativo'); }
 
 function tickRelogio() {
   const n = new Date();
-  document.getElementById('relogio').textContent = n.toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit', day: '2-digit', month: '2-digit' });
+  const el = document.getElementById('relogio');
+  if (el) el.textContent = n.toLocaleString('pt-BR', { hour:'2-digit', minute:'2-digit', second:'2-digit', day:'2-digit', month:'2-digit' });
 }
 setInterval(tickRelogio, 1000); tickRelogio();
 
-function fazerLogin() {
+/* Auth UI */
+function trocarAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('ativo', t.dataset.tab === tab));
+  document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('ativo'));
+  document.getElementById('panel-' + tab).classList.add('ativo');
+}
+
+async function fazerLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const senha = document.getElementById('loginSenha').value;
+  try {
+    const r = await fetch(getWorker() + '/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, senha })
+    });
+    const data = await r.json();
+    if (!r.ok) {
+      // fallback local admin
+      if (email === 'admin@noxmob.com.br' && senha === '123456') {
+        entrarApp({ email, nome: 'Admin', papel: 'admin' }, false);
+        return;
+      }
+      toast(data.erro || 'Login falhou', 'err');
+      return;
+    }
+    entrarApp(data.usuario, true);
+  } catch (e) {
+    if (email === 'admin@noxmob.com.br' && senha === '123456') {
+      entrarApp({ email, nome: 'Admin Local', papel: 'admin' }, false);
+    } else toast('Worker offline e credenciais locais inválidas', 'err');
+  }
+}
+
+async function fazerCadastro() {
+  const nome = document.getElementById('regNome').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const senha = document.getElementById('regSenha').value;
+  if (!email || !senha) { toast('Preencha e-mail e senha', 'err'); return; }
+  try {
+    const r = await fetch(getWorker() + '/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, email, senha })
+    });
+    const data = await r.json();
+    if (!r.ok) { toast(data.erro || 'Falha no cadastro', 'err'); return; }
+    toast(data.msg || 'Cadastro enviado — aguarde o admin');
+    trocarAuthTab('login');
+  } catch (e) {
+    toast('Worker indisponível para cadastro', 'err');
+  }
+}
+
+async function fazerForgot() {
+  const email = document.getElementById('forgotEmail').value.trim();
+  if (!email) { toast('Informe o e-mail', 'err'); return; }
+  try {
+    const r = await fetch(getWorker() + '/auth/forgot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await r.json();
+    toast(data.msg || 'Solicitação enviada');
+    if (data.tokenDev) toast('Token dev: ' + data.tokenDev);
+  } catch (e) {
+    toast('Worker indisponível', 'err');
+  }
+}
+
+function entrarApp(user, nuvem) {
+  usuario = user;
+  sessionStorage.setItem('nox_user', JSON.stringify(user));
   document.getElementById('tela-login').style.display = 'none';
   document.getElementById('app').classList.add('ativo');
+  document.getElementById('userLabel').textContent = user.email || user.nome;
+  document.getElementById('pillSync').textContent = nuvem ? '● Nuvem' : '● Local';
+  document.getElementById('pillSync').className = 'pill ' + (nuvem ? 'pill-mint' : 'pill-amber');
   const w = localStorage.getItem('nox_worker');
   if (w) document.getElementById('cfgWorker').value = w;
   atualizarTudo();
-  toast('Sessão iniciada');
+  if (nuvem) syncTudo();
+  toast('Olá, ' + (user.nome || user.email));
 }
+
 function sair() {
+  sessionStorage.removeItem('nox_user');
+  usuario = null;
   document.getElementById('app').classList.remove('ativo');
   document.getElementById('tela-login').style.display = 'flex';
   pararScanCadastro();
   if (streamCam) streamCam.getTracks().forEach(t => t.stop());
 }
+
 function irPara(p, el) {
   document.querySelectorAll('.page').forEach(x => x.classList.remove('ativa'));
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('ativo'));
   document.getElementById('p-' + p).classList.add('ativa');
   if (el) el.classList.add('ativo');
-  const t = { dashboard:'Dashboard', pdv:'PDV / Caixa', produtos:'Produtos', pessoas:'Pessoas / Leads', estoque:'Estoque', relatorios:'Relatórios / DRE', fiscal:'Fiscal · CBS/IBS', visao:'Visão IA', config:'Config / Worker' };
+  const t = { dashboard:'Dashboard', pdv:'PDV / Caixa', produtos:'Produtos', pessoas:'Pessoas / Leads', estoque:'Estoque', relatorios:'Relatórios / DRE', fiscal:'Fiscal · CBS/IBS', pagamentos:'PIX · Asaas · Inter', whatsapp:'WhatsApp · Flows', usuarios:'Usuários', config:'Config / Worker' };
   document.getElementById('topTitle').textContent = t[p] || p;
   atualizarTudo();
 }
@@ -478,6 +642,208 @@ function atualizarTudo() {
   renderEstoque(); renderRelatorios(); renderOlhoImpostos(); renderCarrinho();
 }
 
+/* Sync / Worker */
+function salvarConfigWorker() {
+  localStorage.setItem('nox_worker', document.getElementById('cfgWorker').value.trim());
+  toast('Worker salvo');
+}
+async function testarWorker() {
+  try {
+    const r = await fetch(getWorker() + '/health');
+    const d = await r.json();
+    document.getElementById('cfgOut').textContent = JSON.stringify(d, null, 2);
+    document.getElementById('pillSync').textContent = '● Nuvem';
+    document.getElementById('pillSync').className = 'pill pill-mint';
+    toast('Worker OK');
+  } catch (e) {
+    document.getElementById('cfgOut').textContent = String(e);
+    toast('Worker offline', 'err');
+  }
+}
+async function syncTudo() {
+  await syncProdutosNuvem();
+  try {
+    const r = await fetch(getWorker() + '/api/vendas');
+    if (r.ok) {
+      const d = await r.json();
+      if (d.vendas && d.vendas.length) {
+        // merge simples
+        toast('Vendas nuvem: ' + d.vendas.length);
+      }
+    }
+  } catch (_) {}
+}
+async function syncProdutosNuvem() {
+  try {
+    const r = await fetch(getWorker() + '/api/produtos');
+    if (r.ok) {
+      const d = await r.json();
+      if (d.produtos && d.produtos.length) {
+        produtos = d.produtos;
+        localStorage.setItem('nox_produtos', JSON.stringify(produtos));
+        renderProdutos(); renderEstoque();
+        toast('Produtos sincronizados');
+        return;
+      }
+    }
+    // push local → nuvem
+    for (const p of produtos) {
+      await fetch(getWorker() + '/api/produtos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(p)
+      });
+    }
+    toast('Produtos enviados à nuvem');
+  } catch (e) {
+    toast('Sync offline — dados locais ok', 'err');
+  }
+}
+
+async function aprovarUsuario() {
+  if (!usuario || usuario.papel !== 'admin') { toast('Somente admin', 'err'); return; }
+  const emailAlvo = document.getElementById('approveEmail').value.trim();
+  try {
+    const r = await fetch(getWorker() + '/auth/approve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        emailAdmin: usuario.email,
+        senhaAdmin: prompt('Confirme sua senha admin:'),
+        emailAlvo
+      })
+    });
+    const d = await r.json();
+    document.getElementById('approveOut').textContent = JSON.stringify(d);
+    toast(r.ok ? 'Usuário ativado' : (d.erro || 'Falha'), r.ok ? 'ok' : 'err');
+  } catch (e) {
+    toast('Worker/D1 necessário', 'err');
+  }
+}
+
+/* CPF/CNPJ */
+function validarCPF(cpf) {
+  if (!/^\d{11}$/.test(cpf) || /^(\d)\1+$/.test(cpf)) return false;
+  let s = 0; for (let i = 0; i < 9; i++) s += +cpf[i] * (10 - i);
+  let r = (s * 10) % 11; if (r === 10) r = 0; if (r !== +cpf[9]) return false;
+  s = 0; for (let i = 0; i < 10; i++) s += +cpf[i] * (11 - i);
+  r = (s * 10) % 11; if (r === 10) r = 0; return r === +cpf[10];
+}
+async function buscarDocumento() {
+  const raw = document.getElementById('cDoc').value.replace(/\D/g, '');
+  if (raw.length !== 11 && raw.length !== 14) return;
+  toast('Consultando…');
+  try {
+    if (raw.length === 14) {
+      const r = await fetch(getWorker() + '/cnpj/' + raw);
+      if (r.ok) {
+        const d = await r.json();
+        document.getElementById('cNome').value = d.razao_social || d.nome || '';
+        document.getElementById('cTipo').value = 'PJ';
+        if (d.telefone) document.getElementById('cTel').value = String(d.telefone);
+        toast('CNPJ ok');
+        return;
+      }
+      const r2 = await fetch('https://brasilapi.com.br/api/cnpj/v1/' + raw);
+      if (r2.ok) {
+        const d = await r2.json();
+        document.getElementById('cNome').value = d.razao_social || '';
+        document.getElementById('cTipo').value = 'PJ';
+        toast('CNPJ (BrasilAPI direto)');
+      }
+    } else {
+      if (!validarCPF(raw)) { toast('CPF inválido', 'err'); return; }
+      document.getElementById('cTipo').value = 'PF';
+      toast('CPF válido — preencha o nome (Serpro no Worker)');
+    }
+  } catch (e) { toast('Consulta falhou', 'err'); }
+}
+
+/* Produtos / scan */
+async function iniciarScanCadastro() {
+  try {
+    pararScanCadastro();
+    codeReader = new ZXing.BrowserMultiFormatReader();
+    document.getElementById('scanVideo').style.display = 'block';
+    document.getElementById('scanPlaceholder').style.display = 'none';
+    scanning = true;
+    await codeReader.decodeFromVideoDevice(undefined, 'scanVideo', (res) => {
+      if (res && scanning) {
+        const cod = res.getText();
+        document.getElementById('pBarras').value = cod;
+        const a = produtos.find(p => p.barras === cod);
+        if (a) {
+          document.getElementById('pNome').value = a.nome;
+          document.getElementById('pNcm').value = a.ncm || '';
+          document.getElementById('pPreco').value = a.preco;
+          toast('Na base: ' + a.nome);
+        } else toast('Código: ' + cod);
+        pararScanCadastro();
+      }
+    });
+  } catch (e) { toast('Câmera indisponível', 'err'); }
+}
+function pararScanCadastro() {
+  scanning = false;
+  if (codeReader) try { codeReader.reset(); } catch (e) {}
+  const v = document.getElementById('scanVideo');
+  if (v && v.srcObject) { v.srcObject.getTracks().forEach(t => t.stop()); v.srcObject = null; }
+  if (v) v.style.display = 'none';
+  const ph = document.getElementById('scanPlaceholder');
+  if (ph) ph.style.display = 'block';
+}
+function abrirModalProduto() { abrirModal('modalProduto'); }
+function fecharModalProduto() { pararScanCadastro(); fecharModal('modalProduto'); }
+function salvarProduto() {
+  const nome = document.getElementById('pNome').value.trim();
+  if (!nome) { toast('Nome obrigatório', 'err'); return; }
+  const sku = document.getElementById('pSku').value.trim() || ('SKU-' + String(produtos.length + 1).padStart(3, '0'));
+  const p = {
+    sku, nome,
+    barras: document.getElementById('pBarras').value.trim(),
+    ncm: document.getElementById('pNcm').value.trim() || '00000000',
+    cnp: document.getElementById('pCnp').value.trim(),
+    preco: parseFloat(document.getElementById('pPreco').value) || 0,
+    estoque: parseInt(document.getElementById('pEstoque').value) || 0,
+    cfop: document.getElementById('pCfop').value,
+    icms: parseFloat(document.getElementById('pIcms').value) || 18
+  };
+  produtos.push(p);
+  localStorage.setItem('nox_produtos', JSON.stringify(produtos));
+  fetch(getWorker() + '/api/produtos', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(p) }).catch(()=>{});
+  fecharModalProduto(); renderProdutos(); renderEstoque(); toast('Produto salvo');
+}
+function apagarProduto(sku) {
+  if (!confirm('Apagar?')) return;
+  produtos = produtos.filter(p => p.sku !== sku);
+  localStorage.setItem('nox_produtos', JSON.stringify(produtos));
+  renderProdutos(); renderEstoque(); toast('Removido');
+}
+function zerarEstoque(sku) {
+  const p = produtos.find(x => x.sku === sku);
+  if (!p) return;
+  p.estoque = 0;
+  localStorage.setItem('nox_produtos', JSON.stringify(produtos));
+  renderProdutos(); renderEstoque(); toast('Estoque zerado');
+}
+function renderProdutos() {
+  document.getElementById('listaProdutos').innerHTML = produtos.map(p => `<tr>
+    <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.sku}</td>
+    <td style="font-weight:600">${p.nome}</td>
+    <td style="font-family:JetBrains Mono,monospace;font-size:11px">${p.barras || '—'}</td>
+    <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.ncm}</td>
+    <td>${p.icms || 18}%</td>
+    <td style="color:var(--mint);font-weight:700">R$ ${Number(p.preco).toFixed(2)}</td>
+    <td>${p.estoque}</td>
+    <td style="white-space:nowrap">
+      <button class="icon-btn ok" onclick="adicionarAoCarrinho(produtos.find(x=>x.sku==='${p.sku}'))">+</button>
+      <button class="icon-btn" onclick="zerarEstoque('${p.sku}')">0</button>
+      <button class="icon-btn" onclick="apagarProduto('${p.sku}')">🗑</button>
+    </td>
+  </tr>`).join('');
+}
+
+/* Dashboard */
 function atualizarDashboard() {
   const hoje = vendas.filter(v => new Date(v.data).toDateString() === new Date().toDateString());
   document.getElementById('statVendas').textContent = 'R$ ' + hoje.reduce((s, v) => s + v.total, 0).toFixed(2);
@@ -503,139 +869,6 @@ function atualizarDashboard() {
   </tr>`).join('');
 }
 
-/* CPF/CNPJ */
-function validarCPF(cpf) {
-  if (!/^\d{11}$/.test(cpf) || /^(\d)\1+$/.test(cpf)) return false;
-  let s = 0; for (let i = 0; i < 9; i++) s += +cpf[i] * (10 - i);
-  let r = (s * 10) % 11; if (r === 10) r = 0; if (r !== +cpf[9]) return false;
-  s = 0; for (let i = 0; i < 10; i++) s += +cpf[i] * (11 - i);
-  r = (s * 10) % 11; if (r === 10) r = 0; return r === +cpf[10];
-}
-async function buscarDocumento() {
-  const raw = document.getElementById('cDoc').value.replace(/\D/g, '');
-  if (raw.length !== 11 && raw.length !== 14) return;
-  toast('Consultando…');
-  const worker = (document.getElementById('cfgWorker').value || localStorage.getItem('nox_worker') || '').replace(/\/$/, '');
-  try {
-    if (raw.length === 14) {
-      if (worker) {
-        const r = await fetch(worker + '/cnpj/' + raw, { headers: { 'Accept': 'application/json' } });
-        if (r.ok) {
-          const d = await r.json();
-          document.getElementById('cNome').value = d.razao_social || d.nome || '';
-          document.getElementById('cTipo').value = 'PJ';
-          if (d.telefone) document.getElementById('cTel').value = d.telefone;
-          toast('CNPJ via Worker');
-          return;
-        }
-      }
-      const r = await fetch('https://brasilapi.com.br/api/cnpj/v1/' + raw);
-      if (!r.ok) throw new Error('fail');
-      const d = await r.json();
-      document.getElementById('cNome').value = d.razao_social || d.nome_fantasia || '';
-      document.getElementById('cTipo').value = 'PJ';
-      if (d.ddd_telefone_1) document.getElementById('cTel').value = String(d.ddd_telefone_1);
-      toast('CNPJ (BrasilAPI)');
-    } else {
-      if (!validarCPF(raw)) { toast('CPF inválido', 'err'); return; }
-      document.getElementById('cTipo').value = 'PF';
-      if (worker) {
-        const r = await fetch(worker + '/cpf/' + raw, { headers: { 'Accept': 'application/json' } });
-        if (r.ok) {
-          const d = await r.json();
-          if (d.nome) document.getElementById('cNome').value = d.nome;
-          toast('CPF via Worker/Serpro');
-          return;
-        }
-      }
-      toast('CPF ok — preencha nome (Serpro no Worker em produção)');
-    }
-  } catch (e) {
-    toast('Consulta indisponível — preencha manual', 'err');
-  }
-}
-
-/* Produtos / scan */
-async function iniciarScanCadastro() {
-  try {
-    pararScanCadastro();
-    codeReader = new ZXing.BrowserMultiFormatReader();
-    document.getElementById('scanVideo').style.display = 'block';
-    document.getElementById('scanPlaceholder').style.display = 'none';
-    scanning = true;
-    await codeReader.decodeFromVideoDevice(undefined, 'scanVideo', (res) => {
-      if (res && scanning) {
-        const cod = res.getText();
-        document.getElementById('pBarras').value = cod;
-        const a = produtos.find(p => p.barras === cod);
-        if (a) {
-          document.getElementById('pNome').value = a.nome;
-          document.getElementById('pNcm').value = a.ncm || '';
-          document.getElementById('pPreco').value = a.preco;
-          toast('Produto na base');
-        } else toast('Código: ' + cod);
-        pararScanCadastro();
-      }
-    });
-  } catch (e) { toast('Câmera indisponível', 'err'); }
-}
-function pararScanCadastro() {
-  scanning = false;
-  if (codeReader) try { codeReader.reset(); } catch (e) {}
-  const v = document.getElementById('scanVideo');
-  if (v.srcObject) { v.srcObject.getTracks().forEach(t => t.stop()); v.srcObject = null; }
-  v.style.display = 'none';
-  document.getElementById('scanPlaceholder').style.display = 'block';
-}
-function abrirModalProduto() { abrirModal('modalProduto'); }
-function fecharModalProduto() { pararScanCadastro(); fecharModal('modalProduto'); }
-function salvarProduto() {
-  const nome = document.getElementById('pNome').value.trim();
-  if (!nome) { toast('Nome obrigatório', 'err'); return; }
-  const sku = document.getElementById('pSku').value.trim() || ('SKU-' + String(produtos.length + 1).padStart(3, '0'));
-  produtos.push({
-    sku, nome,
-    barras: document.getElementById('pBarras').value.trim(),
-    ncm: document.getElementById('pNcm').value.trim() || '00000000',
-    cnp: document.getElementById('pCnp').value.trim(),
-    preco: parseFloat(document.getElementById('pPreco').value) || 0,
-    estoque: parseInt(document.getElementById('pEstoque').value) || 0,
-    cfop: document.getElementById('pCfop').value,
-    icms: parseFloat(document.getElementById('pIcms').value) || 18
-  });
-  localStorage.setItem('nox_produtos', JSON.stringify(produtos));
-  fecharModalProduto(); renderProdutos(); renderEstoque(); toast('Produto salvo');
-}
-function apagarProduto(sku) {
-  if (!confirm('Apagar?')) return;
-  produtos = produtos.filter(p => p.sku !== sku);
-  localStorage.setItem('nox_produtos', JSON.stringify(produtos));
-  renderProdutos(); renderEstoque(); toast('Removido');
-}
-function zerarEstoque(sku) {
-  const p = produtos.find(x => x.sku === sku);
-  if (!p) return;
-  p.estoque = 0;
-  localStorage.setItem('nox_produtos', JSON.stringify(produtos));
-  renderProdutos(); renderEstoque(); toast('Estoque zerado');
-}
-function renderProdutos() {
-  document.getElementById('listaProdutos').innerHTML = produtos.map(p => `<tr>
-    <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.sku}</td>
-    <td style="font-weight:600">${p.nome}</td>
-    <td style="font-family:JetBrains Mono,monospace;font-size:11px">${p.barras || '—'}</td>
-    <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.ncm}</td>
-    <td>${p.icms || 18}%</td>
-    <td style="color:var(--mint);font-weight:700">R$ ${p.preco.toFixed(2)}</td>
-    <td>${p.estoque}</td>
-    <td style="white-space:nowrap">
-      <button class="icon-btn ok" onclick="adicionarAoCarrinho(produtos.find(x=>x.sku==='${p.sku}'))">+</button>
-      <button class="icon-btn" onclick="zerarEstoque('${p.sku}')">0</button>
-      <button class="icon-btn" onclick="apagarProduto('${p.sku}')">🗑</button>
-    </td>
-  </tr>`).join('');
-}
-
 /* PDV */
 function buscarPorCodigo() {
   const cod = document.getElementById('scanInput').value.trim();
@@ -656,7 +889,7 @@ async function ativarCamera() {
 }
 function aoFotoProduto(e) {
   const f = e.target.files[0]; if (!f) return;
-  document.getElementById('camPlaceholder').innerHTML = `<img src="${URL.createObjectURL(f)}" style="max-height:180px;border-radius:12px"/>`;
+  document.getElementById('camPlaceholder').innerHTML = `<img src="${URL.createObjectURL(f)}" style="max-height:160px;border-radius:12px"/>`;
   document.getElementById('videoCam').style.display = 'none';
   document.getElementById('btnReconhecer').disabled = false;
   toast('Foto OK');
@@ -665,7 +898,7 @@ async function reconhecerProduto() {
   const btn = document.getElementById('btnReconhecer');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
   document.getElementById('ocrStatus').textContent = 'Identificando…';
-  await new Promise(r => setTimeout(r, 800));
+  await new Promise(r => setTimeout(r, 700));
   const p = produtos[Math.floor(Math.random() * produtos.length)];
   document.getElementById('ocrStatus').innerHTML = `<strong style="color:var(--mint)">${p.nome}</strong>`;
   adicionarAoCarrinho(p, 92);
@@ -673,6 +906,7 @@ async function reconhecerProduto() {
   toast('IA: ' + p.nome);
 }
 function adicionarAoCarrinho(p, conf) {
+  if (!p) return;
   if (p.estoque <= 0) { toast('Sem estoque', 'err'); return; }
   const e = carrinho.find(c => c.sku === p.sku);
   if (e) e.qtd++; else carrinho.push({ ...p, qtd: 1, conf: conf || 100 });
@@ -727,13 +961,25 @@ function finalizarVenda() {
   });
   const venda = {
     data: new Date().toISOString(), itens, total, impostos, cbs_ibs: ivaDual,
-    motor: 'pdv+reforma', detalhe, nfe: true, modelo: '55',
+    motor: 'pdv+unificado', detalhe, nfe: true, modelo: '55',
     numero: String(vendas.length + 1).padStart(6, '0'),
-    chave: 'NFe' + Date.now()
+    chave: 'NFe' + Date.now(),
+    clienteTel: document.getElementById('pdvClienteTel').value.trim(),
+    clienteNome: document.getElementById('pdvClienteNome').value.trim(),
+    usuario_email: usuario?.email || ''
   };
   vendas.unshift(venda);
+  ultimaVenda = venda;
   localStorage.setItem('nox_vendas', JSON.stringify(vendas));
   localStorage.setItem('nox_produtos', JSON.stringify(produtos));
+  fetch(getWorker() + '/api/vendas', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(venda)
+  }).catch(() => {});
+  if (venda.clienteTel) {
+    salvarLead({ nome: venda.clienteNome || 'Cliente', tel: venda.clienteTel.replace(/\D/g,''), ultimaCompra: venda.data, valor: total });
+  }
   carrinho = [];
   renderCarrinho();
   atualizarTudo();
@@ -741,13 +987,13 @@ function finalizarVenda() {
   imprimirDanfe(0);
 }
 
-/* Print DANFE — janela nova (não fica em branco) */
+/* Print DANFE */
 function imprimirDanfe(idx) {
   const v = vendas[idx];
   if (!v) return;
-  const razao = document.getElementById('cfgRazao').value || 'NOXMOB COMERCIO LTDA';
-  const cnpj = document.getElementById('cfgCnpj').value || '47.149.826/0001-80';
-  const amb = document.getElementById('cfgAmb').value || 'Produção';
+  const razao = document.getElementById('cfgRazao')?.value || 'NOXMOB COMERCIO LTDA';
+  const cnpj = document.getElementById('cfgCnpj')?.value || '47.149.826/0001-80';
+  const amb = document.getElementById('cfgAmb')?.value || 'Produção';
   let linhas = '', totCbs = 0, totIbs = 0, totIcms = 0;
   (v.detalhe || []).forEach((d, i) => {
     const imp = calcImpostos(d.preco * d.qtd, d.icms);
@@ -767,42 +1013,155 @@ function imprimirDanfe(idx) {
   <div class="box">DEST: ${v.clienteNome||'Consumidor Final'} ${v.clienteTel?' · '+v.clienteTel:''}</div>
   <table><thead><tr><th>#</th><th>Descrição</th><th>Qtd</th><th>Unit</th><th>Total</th><th>CBS</th><th>IBS</th></tr></thead>
   <tbody>${linhas||'<tr><td colspan="7">—</td></tr>'}</tbody></table>
-  <div class="tot"><div class="box">ICMS R$ ${totIcms.toFixed(2)} | PIS/COFINS est. R$ ${((v.impostos||0)-totIcms).toFixed(2)}</div>
-  <div class="box"><b>CBS</b> R$ ${totCbs.toFixed(2)} | <b>IBS</b> R$ ${totIbs.toFixed(2)} | Dual R$ ${(totCbs+totIbs).toFixed(2)}</div></div>
+  <div class="tot"><div class="box">ICMS R$ ${totIcms.toFixed(2)}</div>
+  <div class="box"><b>CBS</b> R$ ${totCbs.toFixed(2)} | <b>IBS</b> R$ ${totIbs.toFixed(2)}</div></div>
   <div class="box" style="text-align:right;font-size:14px"><b>TOTAL R$ ${v.total.toFixed(2)}</b></div>
-  <div class="box" style="font-size:9px">LC 214/2025 · CBS 0,9% + IBS 0,1% teste · NoxMob</div></div>
+  <div class="box" style="font-size:9px">LC 214/2025 · CBS 0,9% + IBS 0,1% teste · NoxMob Unificado</div></div>
   <script>window.onload=function(){window.print()}<\/script></body></html>`;
   const w = window.open('', '_blank', 'width=860,height=700');
-  if (!w) { toast('Permita pop-up para imprimir', 'err'); return; }
+  if (!w) { toast('Permita pop-up', 'err'); return; }
   w.document.write(html); w.document.close();
 }
 
-/* WhatsApp + leads */
+/* WhatsApp / Leads */
 function salvarLead(lead) {
-  const i = leads.findIndex(l => l.tel === lead.tel);
-  if (i >= 0) leads[i] = { ...leads[i], ...lead, compras: (leads[i].compras || 0) + 1 };
-  else leads.push({ ...lead, compras: 1, criado: new Date().toISOString() });
+  const tel = onlyDigits(lead.tel);
+  const i = leads.findIndex(l => onlyDigits(l.tel) === tel);
+  if (i >= 0) leads[i] = { ...leads[i], ...lead, tel, compras: (leads[i].compras || 0) + 1 };
+  else leads.push({ ...lead, tel, compras: 1, criado: new Date().toISOString() });
   localStorage.setItem('nox_leads', JSON.stringify(leads));
   renderLeads();
 }
-function enviarWhatsApp(idx) {
+function onlyDigits(s) { return String(s || '').replace(/\D/g, ''); }
+
+async function enviarWhatsApp(idx) {
   const v = vendas[idx];
   if (!v) return;
-  let tel = v.clienteTel || prompt('WhatsApp (DDD+número):', '5511999999999');
+  let tel = v.clienteTel || prompt('WhatsApp (DDD+número):', '11999999999');
   if (!tel) return;
-  tel = tel.replace(/\D/g, '');
+  tel = onlyDigits(tel);
   if (tel.length < 10) { toast('Telefone inválido', 'err'); return; }
   salvarLead({ nome: v.clienteNome || 'Cliente', tel, doc: v.clienteDoc || '', ultimaCompra: v.data, valor: v.total });
-  const itens = (v.detalhe || []).map(d => `• ${d.qtd}x ${d.nome} — R$ ${(d.preco * d.qtd).toFixed(2)}`).join('%0A');
-  const msg = `*NoxMob — Pedido / NF-e ${v.numero||''}*%0A${new Date(v.data).toLocaleString('pt-BR')}%0A%0A${itens}%0A%0A*Total: R$ ${v.total.toFixed(2)}*%0ACBS+IBS: R$ ${dualDaVenda(v).toFixed(2)}%0A%0AObrigado!`;
-  window.open('https://wa.me/' + tel + '?text=' + msg, '_blank');
-  toast('WhatsApp aberto');
+  const itens = (v.detalhe || []).map(d => `• ${d.qtd}x ${d.nome} — R$ ${(d.preco * d.qtd).toFixed(2)}`).join('\n');
+  const text = `*NoxMob — Pedido / NF-e ${v.numero||''}*\n${new Date(v.data).toLocaleString('pt-BR')}\n\n${itens}\n\n*Total: R$ ${v.total.toFixed(2)}*\nCBS+IBS: R$ ${dualDaVenda(v).toFixed(2)}\n\nObrigado!`;
+  try {
+    const r = await fetch(getWorker() + '/wa/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: tel, text })
+    });
+    const data = await r.json();
+    if (data.ok && !data.fallback) { toast('WhatsApp via Zernio'); return; }
+    window.open(data.waMe || ('https://wa.me/55' + tel + '?text=' + encodeURIComponent(text)), '_blank');
+    toast(data.fallback ? 'Fallback wa.me' : 'WhatsApp aberto');
+  } catch (e) {
+    window.open('https://wa.me/55' + tel + '?text=' + encodeURIComponent(text), '_blank');
+    toast('wa.me (Worker offline)');
+  }
+}
+function enviarWhatsAppUltima() {
+  if (!vendas.length) { toast('Sem vendas', 'err'); return; }
+  enviarWhatsApp(0);
 }
 
+async function waEnviarTexto() {
+  const phone = document.getElementById('waTel').value;
+  const text = document.getElementById('waText').value;
+  try {
+    const r = await fetch(getWorker() + '/wa/send', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, text })
+    });
+    const d = await r.json();
+    document.getElementById('waOut').textContent = JSON.stringify(d, null, 2);
+    if (d.waMe) window.open(d.waMe, '_blank');
+    toast(d.ok ? 'Enviado' : 'Ver saída');
+  } catch (e) {
+    document.getElementById('waOut').textContent = String(e);
+  }
+}
+async function waEnviarTemplate() {
+  const phone = document.getElementById('waTel').value;
+  const templateName = document.getElementById('waTpl').value || 'order_confirmation';
+  try {
+    const r = await fetch(getWorker() + '/wa/send', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, useTemplate: true, templateName, params: ['Cliente', '0001'], text: ' ' })
+    });
+    document.getElementById('waOut').textContent = JSON.stringify(await r.json(), null, 2);
+  } catch (e) {
+    document.getElementById('waOut').textContent = String(e);
+  }
+}
+async function waDispararFlow() {
+  const flowId = document.getElementById('waFlowId').value.trim();
+  const phone = document.getElementById('waFlowTel').value;
+  // Esqueleto: Worker pode mapear para Zernio Flows API quando disponível
+  try {
+    const r = await fetch(getWorker() + '/wa/send', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        phone,
+        text: '[Flow] ' + flowId,
+        useTemplate: false,
+        flowId
+      })
+    });
+    document.getElementById('waOut').textContent = JSON.stringify(await r.json(), null, 2);
+    toast('Flow solicitado ao Worker/Zernio');
+  } catch (e) {
+    toast('Configure Flow no Zernio + rota no Worker', 'err');
+  }
+}
+
+/* Asaas / Inter */
+async function criarCobrancaAsaas() {
+  const payload = {
+    value: parseFloat(document.getElementById('asaasValor').value) || 0,
+    description: document.getElementById('asaasDesc').value || 'NoxMob',
+    customerName: document.getElementById('asaasCliente').value,
+    cpfCnpj: onlyDigits(document.getElementById('asaasDoc').value)
+  };
+  try {
+    const r = await fetch(getWorker() + '/pay/asaas/pix', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const d = await r.json();
+    document.getElementById('asaasOut').textContent = JSON.stringify(d, null, 2);
+    toast(r.ok ? 'Cobrança Asaas' : (d.erro || 'Configure ASAAS_API_KEY no Worker'), r.ok ? 'ok' : 'err');
+  } catch (e) {
+    document.getElementById('asaasOut').textContent =
+      'Rota /pay/asaas/pix ainda não implantada no Worker.\nAdicione secret ASAAS_API_KEY e a rota que chama api.asaas.com';
+  }
+}
+function gerarPixAsaas() {
+  if (!carrinho.length && !ultimaVenda) { toast('Finalize uma venda ou use tela Pagamentos', 'err'); return; }
+  const total = carrinho.length
+    ? carrinho.reduce((s, c) => s + c.preco * c.qtd, 0)
+    : (ultimaVenda?.total || 0);
+  document.getElementById('asaasValor').value = total.toFixed(2);
+  irPara('pagamentos', document.querySelectorAll('.nav-item')[7]);
+  toast('Valor do carrinho/venda carregado');
+}
+async function criarPixInter() {
+  try {
+    const r = await fetch(getWorker() + '/pay/inter/pix', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value: parseFloat(document.getElementById('interValor').value) || 0 })
+    });
+    document.getElementById('interOut').textContent = JSON.stringify(await r.json(), null, 2);
+  } catch (e) {
+    document.getElementById('interOut').textContent =
+      'Esqueleto Inter: configure OAuth no Worker (CLIENT_ID/SECRET) e rota /pay/inter/pix';
+  }
+}
+
+/* Pessoas / estoque / DRE */
 function salvarPessoa() {
   const nome = document.getElementById('cNome').value.trim();
   if (!nome) { toast('Nome obrigatório', 'err'); return; }
-  const tel = document.getElementById('cTel').value.replace(/\D/g, '');
+  const tel = onlyDigits(document.getElementById('cTel').value);
   const p = {
     nome, doc: document.getElementById('cDoc').value,
     tipo: document.getElementById('cTipo').value,
@@ -836,7 +1195,7 @@ function renderLeads() {
     <td style="font-family:JetBrains Mono,monospace">${l.tel}</td>
     <td>${l.compras||0}</td>
     <td>${l.ultimaCompra ? new Date(l.ultimaCompra).toLocaleDateString('pt-BR') : '—'}</td>
-    <td><button class="btn btn-mint btn-sm" onclick="window.open('https://wa.me/${l.tel}','_blank')">WA</button></td>
+    <td><button class="btn btn-mint btn-sm" onclick="window.open('https://wa.me/55${onlyDigits(l.tel)}','_blank')">WA</button></td>
   </tr>`).join('');
 }
 function renderEstoque() {
@@ -851,7 +1210,6 @@ function renderEstoque() {
   </tr>`).join('');
 }
 
-/* DRE */
 function filtrarVendasPeriodo() {
   const agora = new Date();
   return vendas.filter(v => {
@@ -865,7 +1223,7 @@ function filtrarVendasPeriodo() {
 function setPeriodoDRE(p) { periodoDRE = p; renderRelatorios(); toast('Filtro: ' + p); }
 function zerarVisualizacaoPeriodo() {
   localStorage.setItem('nox_fechado_' + periodoDRE, new Date().toISOString());
-  toast('Saldo do período zerado na tela. Extrato completo mantido.');
+  toast('Saldo visual do período zerado. Extrato completo mantido.');
   renderRelatorios();
 }
 function renderRelatorios() {
@@ -881,7 +1239,7 @@ function renderRelatorios() {
     <tr><td>(-) ICMS/PIS/COFINS</td><td style="text-align:right;color:var(--amber)">R$ ${leg.toFixed(2)}</td></tr>
     <tr><td>CBS+IBS teste</td><td style="text-align:right;color:var(--cyan)">R$ ${dual.toFixed(2)}</td></tr>
     <tr><td><strong>Receita líquida est.</strong></td><td style="text-align:right;color:var(--mint);font-weight:800">R$ ${(bruto-leg).toFixed(2)}</td></tr>`;
-  document.getElementById('relVendas').innerHTML = lista.length ? lista.map((v, i) => {
+  document.getElementById('relVendas').innerHTML = lista.length ? lista.map((v) => {
     const realIdx = vendas.indexOf(v);
     return `<tr>
       <td>${new Date(v.data).toLocaleString('pt-BR')}</td><td>${v.itens}</td>
@@ -941,10 +1299,13 @@ function renderOlhoImpostos() {
       <span>Total CBS+IBS</span><strong style="color:var(--amber)">R$ ${(cbs+ibs).toFixed(2)}</strong></div>`;
 }
 
-function salvarConfigWorker() {
-  localStorage.setItem('nox_worker', document.getElementById('cfgWorker').value.trim());
-  toast('Worker salvo');
-}
+// Sessão persistente na aba
+(function boot() {
+  try {
+    const u = JSON.parse(sessionStorage.getItem('nox_user') || 'null');
+    if (u) entrarApp(u, false);
+  } catch (_) {}
+})();
 </script>
 </body>
 </html>
