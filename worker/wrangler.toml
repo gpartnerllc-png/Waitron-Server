@@ -6,10 +6,11 @@ workers_dev = true
 [vars]
 ENV = "production"
 ZERNIO_BASE = "https://zernio.com/api/v1"
-ALLOWED_ORIGIN = "https://ws.droppfy.com,https://droppfy.com,https://SEU_PROJETO.pages.dev,http://localhost:5500"
+ASAAS_BASE = "https://api-sandbox.asaas.com"
+ALLOWED_ORIGIN = "https://ws.droppfy.com,https://droppfy.com,https://www.droppfy.com,http://localhost:5500,http://127.0.0.1:5500,http://localhost:3000"
 
-# D1 — preencha depois de criar o banco no painel
+# Descomente após: npx wrangler d1 create noxmob-db
 # [[d1_databases]]
 # binding = "DB"
 # database_name = "noxmob-db"
-# database_id = "cole-o-id-aqui"
+# database_id = "cole-o-uuid-aqui"
