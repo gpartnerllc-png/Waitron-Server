@@ -1,0 +1,15 @@
+name = "waitron-server"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+workers_dev = true
+
+[vars]
+ENV = "production"
+ZERNIO_BASE = "https://zernio.com/api/v1"
+ALLOWED_ORIGIN = "https://ws.droppfy.com,https://droppfy.com,https://SEU_PROJETO.pages.dev,http://localhost:5500"
+
+# D1 — preencha depois de criar o banco no painel
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "noxmob-db"
+# database_id = "cole-o-id-aqui"
