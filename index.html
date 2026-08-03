@@ -2,9 +2,16 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="referrer" content="strict-origin-when-cross-origin"/>
+<meta name="theme-color" content="#2563eb"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="NoxMob"/>
 <title>NoxMob · SmartPOS Unificado</title>
+<link rel="manifest" href="/manifest.webmanifest"/>
+<link rel="apple-touch-icon" href="/icon-192.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
 <style>
@@ -41,7 +48,7 @@ background-image:radial-gradient(ellipse at 10% 0%,rgba(37,99,235,.08)0%,transpa
 .nav-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;color:var(--muted);cursor:pointer;font-weight:600;font-size:13px;margin-bottom:3px}
 .nav-item:hover{background:#f1f5f9;color:var(--text)}
 .nav-item.ativo{background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(8,145,178,.08));color:var(--blue);box-shadow:inset 3px 0 0 var(--blue)}
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 .topbar{height:64px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(255,255,255,.9);backdrop-filter:blur(12px)}
 .clock{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--blue);background:#eff6ff;padding:6px 12px;border-radius:10px;border:1px solid #bfdbfe}
 .content{flex:1;overflow-y:auto;padding:28px}
@@ -50,7 +57,6 @@ background-image:radial-gradient(ellipse at 10% 0%,rgba(37,99,235,.08)0%,transpa
 .grid-4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
 .grid-3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 .grid-2{grid-template-columns:1fr 1fr}
-@media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}.sidebar{display:none}}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);transition:.25s}
 .stat:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
 .stat .label{font-size:11px;color:var(--muted);text-transform:uppercase;font-weight:700}
@@ -59,7 +65,6 @@ background-image:radial-gradient(ellipse at 10% 0%,rgba(37,99,235,.08)0%,transpa
 .panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
 .panel-title{font-family:'Sora',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;font-weight:700}
 .pdv-layout{display:grid;grid-template-columns:1fr 360px;gap:18px;min-height:calc(100vh - 140px)}
-@media(max-width:900px){.pdv-layout{grid-template-columns:1fr}}
 .camera-area{background:linear-gradient(145deg,#f8fafc,#eef2ff);border:2px dashed #c7d2fe;border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;overflow:hidden}
 .camera-placeholder{text-align:center;color:var(--muted)}.camera-placeholder .icon{font-size:42px;margin-bottom:8px}
 .cart-items{max-height:180px;overflow-y:auto}
@@ -96,10 +101,36 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 .sec-badge{font-size:10px;color:var(--mint);font-weight:700;text-align:center;margin-top:14px}
 .pay-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
+/* Menu inferior mobile */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);
+  padding:6px 2px calc(6px + env(safe-area-inset-bottom));z-index:150;justify-content:space-around;box-shadow:0 -4px 20px rgba(0,0,0,.06)}
+.bottom-nav button{flex:1;border:none;background:transparent;font-size:10px;font-weight:700;color:var(--muted);padding:6px 2px;cursor:pointer;font-family:inherit;max-width:20%}
+.bottom-nav button .ico{font-size:18px;display:block;margin-bottom:2px;line-height:1}
+.bottom-nav button.ativo{color:var(--blue)}
+.install-banner{display:none;position:fixed;bottom:72px;left:12px;right:12px;z-index:160;background:#0f172a;color:#fff;padding:12px 14px;border-radius:14px;font-size:13px;align-items:center;justify-content:space-between;gap:10px;box-shadow:var(--shadow-lg)}
+.install-banner.show{display:flex}
+.install-banner button{border:none;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
+@media(max-width:900px){
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .sidebar{display:none!important}
+  .bottom-nav{display:flex}
+  .content{padding:16px 16px 92px}
+  .pdv-layout{grid-template-columns:1fr}
+  .topbar{padding:0 12px;height:56px}
+  .toast-area{bottom:96px;right:12px;left:12px}
+  h2{font-size:20px}
+}
 </style>
 </head>
 <body>
 <div class="toast-area" id="toasts"></div>
+<div class="install-banner" id="installBanner">
+  <span>Instalar NoxMob neste aparelho</span>
+  <span style="display:flex;gap:8px">
+    <button type="button" style="background:#334155;color:#fff" onclick="document.getElementById('installBanner').classList.remove('show')">Agora não</button>
+    <button type="button" style="background:#2563eb;color:#fff" id="btnInstallPwa">Instalar</button>
+  </span>
+</div>
 
 <!-- MODAL PRODUTO -->
 <div class="modal-bg" id="modalProduto">
@@ -163,12 +194,30 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
   </div>
 </div>
 
+<!-- MODAL MAIS (mobile) -->
+<div class="modal-bg" id="modalMais">
+  <div class="modal" style="max-width:360px">
+    <h3>Mais seções</h3>
+    <div style="display:grid;gap:8px">
+      <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('pessoas')">👥 Pessoas / Leads</button>
+      <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('estoque')">📋 Estoque</button>
+      <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('fiscal')">🧾 Fiscal CBS/IBS</button>
+      <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('pagamentos')">💳 PIX Asaas / Inter</button>
+      <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('whatsapp')">📱 WhatsApp</button>
+      <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('usuarios')">🔐 Usuários</button>
+      <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('config')">⚙️ Config / Worker</button>
+      <button class="btn btn-rose btn-full" onclick="fecharModal('modalMais');sair()">Sair</button>
+    </div>
+    <button class="btn btn-prim btn-full" style="margin-top:12px" onclick="fecharModal('modalMais')">Fechar</button>
+  </div>
+</div>
+
 <!-- LOGIN -->
 <div id="tela-login">
   <div class="login-box">
     <div class="logo"><div class="logo-dot"></div>Nox<span style="color:var(--blue)">Mob</span></div>
     <h1>SmartPOS Unificado</h1>
-    <p class="sub-login">NF-e · CBS/IBS · WhatsApp · PIX · Worker</p>
+    <p class="sub-login">NF-e · CBS/IBS · WhatsApp · PIX · Worker · App</p>
     <div class="auth-tabs">
       <div class="auth-tab ativo" data-tab="login" onclick="trocarAuthTab('login')">Entrar</div>
       <div class="auth-tab" data-tab="register" onclick="trocarAuthTab('register')">Cadastrar</div>
@@ -189,9 +238,9 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
     <div class="auth-panel" id="panel-forgot">
       <div class="field"><label>E-mail da conta</label><input type="email" id="forgotEmail"/></div>
       <button class="btn btn-prim btn-full" onclick="fazerForgot()">Recuperar senha</button>
-      <p class="hint">Com D1 no Worker, gera token de reset. Sem e-mail SMTP ainda — admin vê o token na resposta dev.</p>
+      <p class="hint">Com D1 no Worker, gera token de reset.</p>
     </div>
-    <p class="sec-badge">🔒 TLS · secrets no Worker · D1 · Zernio · Asaas</p>
+    <p class="sec-badge">🔒 TLS · D1 · Zernio · Asaas · PWA</p>
   </div>
 </div>
 
@@ -200,26 +249,26 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
   <div class="shell">
     <aside class="sidebar">
       <div class="logo"><div class="logo-dot"></div>Nox<span style="color:var(--blue)">Mob</span></div>
-      <div class="nav-item ativo" onclick="irPara('dashboard',this)">📊 Dashboard</div>
-      <div class="nav-item" onclick="irPara('pdv',this)">🛒 PDV / Caixa</div>
-      <div class="nav-item" onclick="irPara('produtos',this)">📦 Produtos</div>
-      <div class="nav-item" onclick="irPara('pessoas',this)">👥 Pessoas / Leads</div>
-      <div class="nav-item" onclick="irPara('estoque',this)">📋 Estoque</div>
-      <div class="nav-item" onclick="irPara('relatorios',this)">📈 Relatórios / DRE</div>
-      <div class="nav-item" onclick="irPara('fiscal',this)">🧾 Fiscal · CBS/IBS</div>
-      <div class="nav-item" onclick="irPara('pagamentos',this)">💳 PIX · Asaas · Inter</div>
-      <div class="nav-item" onclick="irPara('whatsapp',this)">📱 WhatsApp · Flows</div>
-      <div class="nav-item" onclick="irPara('usuarios',this)">🔐 Usuários</div>
-      <div class="nav-item" onclick="irPara('config',this)">⚙️ Config / Worker</div>
+      <div class="nav-item ativo" data-page="dashboard" onclick="irPara('dashboard',this)">📊 Dashboard</div>
+      <div class="nav-item" data-page="pdv" onclick="irPara('pdv',this)">🛒 PDV / Caixa</div>
+      <div class="nav-item" data-page="produtos" onclick="irPara('produtos',this)">📦 Produtos</div>
+      <div class="nav-item" data-page="pessoas" onclick="irPara('pessoas',this)">👥 Pessoas / Leads</div>
+      <div class="nav-item" data-page="estoque" onclick="irPara('estoque',this)">📋 Estoque</div>
+      <div class="nav-item" data-page="relatorios" onclick="irPara('relatorios',this)">📈 Relatórios / DRE</div>
+      <div class="nav-item" data-page="fiscal" onclick="irPara('fiscal',this)">🧾 Fiscal · CBS/IBS</div>
+      <div class="nav-item" data-page="pagamentos" onclick="irPara('pagamentos',this)">💳 PIX · Asaas · Inter</div>
+      <div class="nav-item" data-page="whatsapp" onclick="irPara('whatsapp',this)">📱 WhatsApp · Flows</div>
+      <div class="nav-item" data-page="usuarios" onclick="irPara('usuarios',this)">🔐 Usuários</div>
+      <div class="nav-item" data-page="config" onclick="irPara('config',this)">⚙️ Config / Worker</div>
       <div style="flex:1"></div>
       <div class="nav-item" onclick="sair()" style="color:var(--rose)">Sair</div>
     </aside>
     <div class="main">
       <div class="topbar">
         <div id="topTitle" style="font-family:'Sora',sans-serif;font-weight:700">Dashboard</div>
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <div class="clock" id="relogio">--:--:--</div>
-          <span class="pill pill-mint" id="pillSync">● Local</span>
+          <span class="pill pill-amber" id="pillSync">● Local</span>
           <span style="color:var(--muted);font-size:12px;font-weight:600" id="userLabel">—</span>
         </div>
       </div>
@@ -256,14 +305,11 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
               </div>
               <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
                 <button class="btn btn-prim btn-sm" onclick="ativarCamera()">Câmera</button>
-                <label class="btn btn-ghost btn-sm" style="cursor:pointer">Foto<input type="file" accept="image/*" style="display:none" onchange="aoFotoProduto(event)"/></label>
+                <label class="btn btn-ghost btn-sm" style="cursor:pointer">Foto<input type="file" accept="image/*" capture="environment" style="display:none" onchange="aoFotoProduto(event)"/></label>
                 <button class="btn btn-mint btn-sm" id="btnReconhecer" onclick="reconhecerProduto()" disabled>IA</button>
               </div>
               <div style="margin-top:8px;font-size:12px;color:var(--muted)" id="ocrStatus">aguardando…</div>
-              <div class="field" style="margin-top:14px">
-                <label>Cliente (WhatsApp / NF)</label>
-                <input id="pdvClienteTel" placeholder="Telefone WhatsApp"/>
-              </div>
+              <div class="field" style="margin-top:14px"><label>Cliente WhatsApp / NF</label><input id="pdvClienteTel" placeholder="Telefone WhatsApp"/></div>
               <div class="field"><input id="pdvClienteNome" placeholder="Nome do cliente (opcional)"/></div>
             </div>
             <div class="panel">
@@ -294,7 +340,7 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
               <button class="btn btn-prim btn-sm" onclick="abrirModalProduto()">+ Novo</button>
             </div>
           </div>
-          <div class="panel" style="padding:0;overflow:hidden">
+          <div class="panel" style="padding:0;overflow:auto">
             <table class="tbl"><thead><tr><th>SKU</th><th>Nome</th><th>Barras</th><th>NCM</th><th>ICMS</th><th>Preço</th><th>Est</th><th></th></tr></thead>
             <tbody id="listaProdutos"></tbody></table>
           </div>
@@ -302,14 +348,14 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 
         <div class="page" id="p-pessoas">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-            <div><h2>Pessoas / Leads</h2><p class="sub" style="margin:0">CPF/CNPJ · WhatsApp · recompra</p></div>
+            <div><h2>Pessoas / Leads</h2><p class="sub" style="margin:0">CPF/CNPJ · WhatsApp</p></div>
             <button class="btn btn-prim btn-sm" onclick="abrirModal('modalPessoa')">+ Nova pessoa</button>
           </div>
-          <div class="panel" style="padding:0;overflow:hidden;margin-bottom:16px">
+          <div class="panel" style="padding:0;overflow:auto;margin-bottom:16px">
             <table class="tbl"><thead><tr><th>Nome</th><th>Doc</th><th>Tipo</th><th>Tel</th><th></th></tr></thead>
             <tbody id="listaPessoas"></tbody></table>
           </div>
-          <div class="panel" style="padding:0;overflow:hidden">
+          <div class="panel" style="padding:0;overflow:auto">
             <div class="panel-title" style="padding:16px 16px 0">Leads WhatsApp</div>
             <table class="tbl"><thead><tr><th>Nome</th><th>Tel</th><th>Compras</th><th>Última</th><th></th></tr></thead>
             <tbody id="listaLeads"></tbody></table>
@@ -319,7 +365,7 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
         <div class="page" id="p-estoque">
           <h2>Estoque</h2>
           <p class="sub">Zerar · lixeira</p>
-          <div class="panel" style="padding:0;overflow:hidden">
+          <div class="panel" style="padding:0;overflow:auto">
             <table class="tbl"><thead><tr><th>Produto</th><th>SKU</th><th>NCM</th><th>Qtd</th><th>Status</th><th></th></tr></thead>
             <tbody id="listaEstoque"></tbody></table>
           </div>
@@ -346,7 +392,7 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
             <div class="panel-title">DRE simplificado</div>
             <table class="tbl"><tbody id="dreLinhas"></tbody></table>
           </div>
-          <div class="panel">
+          <div class="panel" style="overflow:auto">
             <div class="panel-title">Vendas do período</div>
             <table class="tbl"><thead><tr><th>Data</th><th>Itens</th><th>Bruto</th><th>Legados</th><th>CBS+IBS</th><th></th></tr></thead>
             <tbody id="relVendas"></tbody></table>
@@ -355,16 +401,13 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 
         <div class="page" id="p-fiscal">
           <h2>Fiscal · CBS / IBS</h2>
-          <p class="sub">IVA Dual teste 2026 · NF-e 55 / NFC-e 65</p>
+          <p class="sub">IVA Dual teste 2026 · NF-e 55</p>
           <div class="grid grid-3" style="margin-bottom:16px">
             <div class="stat"><div class="label">NF-e hoje</div><div class="value blue" id="statNfe">0</div></div>
             <div class="stat"><div class="label">CBS 0,9%</div><div class="value cyan" id="statCbs">R$ 0</div></div>
             <div class="stat"><div class="label">IBS 0,1%</div><div class="value amber" id="statIbs">R$ 0</div></div>
           </div>
-          <div class="panel" style="margin-bottom:16px">
-            <div class="panel-title">Resumo de impostos</div>
-            <div id="olhoImpostos"></div>
-          </div>
+          <div class="panel" style="margin-bottom:16px"><div class="panel-title">Resumo de impostos</div><div id="olhoImpostos"></div></div>
           <div class="panel">
             <div class="panel-title">Emitente NF-e</div>
             <div class="row cols2">
@@ -379,20 +422,19 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 
         <div class="page" id="p-pagamentos">
           <h2>PIX · Asaas · Inter</h2>
-          <p class="sub">Chaves só no Worker · front só chama a API</p>
+          <p class="sub">Chaves só no Worker</p>
           <div class="grid grid-2">
             <div class="panel">
-              <div class="panel-title">Asaas · cobrança PIX</div>
-              <div class="field"><label>Valor (R$)</label><input id="asaasValor" type="number" step="0.01" placeholder="0.00"/></div>
+              <div class="panel-title">Asaas · PIX</div>
+              <div class="field"><label>Valor (R$)</label><input id="asaasValor" type="number" step="0.01"/></div>
               <div class="field"><label>Descrição</label><input id="asaasDesc" placeholder="Pedido NoxMob"/></div>
-              <div class="field"><label>Cliente (nome)</label><input id="asaasCliente" placeholder="Nome"/></div>
+              <div class="field"><label>Cliente</label><input id="asaasCliente" placeholder="Nome"/></div>
               <div class="field"><label>CPF/CNPJ</label><input id="asaasDoc" placeholder="Somente números"/></div>
               <button class="btn btn-prim btn-sm" onclick="criarCobrancaAsaas()">Gerar cobrança PIX</button>
               <pre id="asaasOut" class="hint" style="margin-top:12px;white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:11px"></pre>
             </div>
             <div class="panel">
-              <div class="panel-title">Banco Inter · esqueleto</div>
-              <p class="hint">OAuth + PIX via Worker (<code>/pay/inter/pix</code>). Configure CLIENT_ID/SECRET no Worker.</p>
+              <div class="panel-title">Banco Inter</div>
               <div class="field"><label>Valor</label><input id="interValor" type="number" step="0.01"/></div>
               <button class="btn btn-ghost btn-sm" onclick="criarPixInter()">Solicitar PIX Inter</button>
               <pre id="interOut" class="hint" style="margin-top:12px;white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:11px"></pre>
@@ -402,13 +444,13 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 
         <div class="page" id="p-whatsapp">
           <h2>WhatsApp · Zernio · Flows</h2>
-          <p class="sub">Mensagens · templates · Flows interativos (pesquisa, agendamento, pedido)</p>
+          <p class="sub">Mensagens · templates · flows</p>
           <div class="grid grid-2">
             <div class="panel">
               <div class="panel-title">Envio rápido</div>
               <div class="field"><label>Telefone</label><input id="waTel" placeholder="11999999999"/></div>
-              <div class="field"><label>Mensagem</label><textarea id="waText" rows="4" placeholder="Texto livre (janela 24h) ou use template"></textarea></div>
-              <div class="field"><label>Template Meta (opcional)</label><input id="waTpl" placeholder="order_confirmation"/></div>
+              <div class="field"><label>Mensagem</label><textarea id="waText" rows="4"></textarea></div>
+              <div class="field"><label>Template Meta</label><input id="waTpl" placeholder="order_confirmation"/></div>
               <div class="pay-row">
                 <button class="btn btn-mint btn-sm" onclick="waEnviarTexto()">Enviar</button>
                 <button class="btn btn-prim btn-sm" onclick="waEnviarTemplate()">Template</button>
@@ -417,23 +459,16 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
             </div>
             <div class="panel">
               <div class="panel-title">WhatsApp Flows</div>
-              <p class="hint">
-                Flows = formulários interativos no WhatsApp (Meta): pesquisa NPS, agendamento, captura de pedido, endereço.
-                No Zernio: seção <strong>Flows</strong> do WABA. O Worker pode disparar flow publicado via API de mensagens interativas.
-              </p>
-              <div class="field"><label>Flow ID (Zernio/Meta)</label><input id="waFlowId" placeholder="flow_xxx"/></div>
-              <div class="field"><label>Telefone destino</label><input id="waFlowTel" placeholder="11999999999"/></div>
+              <div class="field"><label>Flow ID</label><input id="waFlowId" placeholder="flow_xxx"/></div>
+              <div class="field"><label>Telefone</label><input id="waFlowTel" placeholder="11999999999"/></div>
               <button class="btn btn-ghost btn-sm" onclick="waDispararFlow()">Disparar Flow</button>
-              <p class="hint" style="margin-top:10px">
-                Casos NoxMob: 1) Pós-venda NPS · 2) Cadastro de cliente · 3) Pedido pelo WhatsApp · 4) Confirmação de retirada.
-              </p>
             </div>
           </div>
         </div>
 
         <div class="page" id="p-usuarios">
           <h2>Usuários</h2>
-          <p class="sub">Admin libera cadastros pendentes (requer D1)</p>
+          <p class="sub">Admin libera cadastros (D1)</p>
           <div class="panel">
             <div class="field"><label>E-mail a liberar</label><input id="approveEmail" placeholder="user@email.com"/></div>
             <button class="btn btn-prim btn-sm" onclick="aprovarUsuario()">Ativar usuário</button>
@@ -443,7 +478,7 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
 
         <div class="page" id="p-config">
           <h2>Config / Worker</h2>
-          <p class="sub">Nenhuma chave secreta neste HTML</p>
+          <p class="sub">Sem secrets neste HTML</p>
           <div class="panel">
             <div class="field"><label>URL Cloudflare Worker</label>
               <input id="cfgWorker" value="https://waitron-server.contatodroppfy.workers.dev"/>
@@ -452,8 +487,9 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
             <div class="pay-row">
               <button class="btn btn-prim btn-sm" onclick="salvarConfigWorker()">Salvar</button>
               <button class="btn btn-ghost btn-sm" onclick="testarWorker()">Testar Worker</button>
-              <button class="btn btn-mint btn-sm" onclick="syncTudo()">Sync nuvem</button>
+              <button class="btn btn-mint btn-sm" onclick="carregarNuvem()">Sync nuvem</button>
             </div>
+            <p class="hint">No celular: Chrome ⋮ Instalar app · iPhone: Compartilhar → Tela de Início · Ubuntu: ícone instalar na barra.</p>
             <pre id="cfgOut" class="hint" style="margin-top:12px;white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:11px"></pre>
           </div>
         </div>
@@ -461,14 +497,18 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
       </div>
     </div>
   </div>
+
+  <!-- Navegação mobile -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button type="button" class="ativo" data-page="dashboard" onclick="irParaMobile('dashboard',this)"><span class="ico">📊</span>Início</button>
+    <button type="button" data-page="pdv" onclick="irParaMobile('pdv',this)"><span class="ico">🛒</span>PDV</button>
+    <button type="button" data-page="produtos" onclick="irParaMobile('produtos',this)"><span class="ico">📦</span>Produtos</button>
+    <button type="button" data-page="relatorios" onclick="irParaMobile('relatorios',this)"><span class="ico">📈</span>DRE</button>
+    <button type="button" onclick="abrirModal('modalMais')"><span class="ico">☰</span>Mais</button>
+  </nav>
 </div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════════
-   NoxMob SmartPOS · index.html unificado
-   Worker: auth · D1 · Zernio WA · Asaas · Inter · CNPJ
-   Secrets NUNCA neste arquivo
-═══════════════════════════════════════════════════════════════ */
 const WORKER_DEFAULT = 'https://waitron-server.contatodroppfy.workers.dev';
 const PIS = 1.65, COFINS = 7.6, CBS_TESTE = 0.90, IBS_TESTE = 0.10;
 
@@ -496,11 +536,12 @@ function calcImpostos(preco, icmsPct) {
   };
 }
 function dualDaVenda(v) {
-  if (v.cbs_ibs > 0) return v.cbs_ibs;
+  if (v && v.cbs_ibs > 0) return v.cbs_ibs;
   let t = 0;
-  (v.detalhe || []).forEach(d => { t += calcImpostos(d.preco * d.qtd, d.icms).ivaDual; });
+  (v?.detalhe || []).forEach(d => { t += calcImpostos(d.preco * d.qtd, d.icms).ivaDual; });
   return t;
 }
+function onlyDigits(s) { return String(s || '').replace(/\D/g, ''); }
 
 let usuario = null;
 let produtos = JSON.parse(localStorage.getItem('nox_produtos') || 'null') || [
@@ -514,6 +555,7 @@ let pessoas = JSON.parse(localStorage.getItem('nox_pessoas') || 'null') || [{nom
 let leads = JSON.parse(localStorage.getItem('nox_leads') || '[]');
 let carrinho = [], vendas = JSON.parse(localStorage.getItem('nox_vendas') || '[]');
 let streamCam = null, codeReader = null, scanning = false, periodoDRE = 'todos', ultimaVenda = null;
+let deferredPrompt = null;
 
 function toast(m, t) {
   t = t || 'ok';
@@ -533,11 +575,67 @@ function tickRelogio() {
 }
 setInterval(tickRelogio, 1000); tickRelogio();
 
-/* Auth UI */
 function trocarAuthTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('ativo', t.dataset.tab === tab));
   document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('ativo'));
   document.getElementById('panel-' + tab).classList.add('ativo');
+}
+
+/* ── Nuvem / conta ─────────────────────────────────── */
+async function carregarNuvem() {
+  try {
+    const w = getWorker();
+    const [rp, rv] = await Promise.all([
+      fetch(w + '/api/produtos'),
+      fetch(w + '/api/vendas')
+    ]);
+    let ok = false;
+    if (rp.ok) {
+      const d = await rp.json();
+      if (d.produtos && d.produtos.length) {
+        produtos = d.produtos;
+        localStorage.setItem('nox_produtos', JSON.stringify(produtos));
+        ok = true;
+      }
+    }
+    if (rv.ok) {
+      const d = await rv.json();
+      if (d.vendas && d.vendas.length) {
+        vendas = d.vendas.map(v => {
+          let detalhe = v.detalhe;
+          if (typeof v.detalhe_json === 'string') {
+            try { detalhe = JSON.parse(v.detalhe_json || '[]'); } catch { detalhe = []; }
+          }
+          return {
+            ...v,
+            detalhe: detalhe || [],
+            total: Number(v.total) || 0,
+            impostos: Number(v.impostos) || 0,
+            cbs_ibs: Number(v.cbs_ibs) || 0,
+            data: v.data,
+            itens: v.itens || (detalhe?.length || 0),
+            numero: v.numero,
+            clienteNome: v.cliente_nome || v.clienteNome,
+            clienteTel: v.cliente_tel || v.clienteTel
+          };
+        });
+        localStorage.setItem('nox_vendas', JSON.stringify(vendas));
+        ok = true;
+      }
+    }
+    const pill = document.getElementById('pillSync');
+    if (pill) {
+      pill.textContent = ok || rp.ok ? '● Nuvem' : '● Local';
+      pill.className = 'pill ' + (ok || rp.ok ? 'pill-mint' : 'pill-amber');
+    }
+    atualizarTudo();
+    if (ok) toast('Dados da conta sincronizados');
+    else toast('Nuvem ok — sem registros ainda ou D1 vazio');
+  } catch (e) {
+    document.getElementById('pillSync').textContent = '● Local';
+    document.getElementById('pillSync').className = 'pill pill-amber';
+    toast('Nuvem indisponível — modo local', 'err');
+  }
 }
 
 async function fazerLogin() {
@@ -551,19 +649,18 @@ async function fazerLogin() {
     });
     const data = await r.json();
     if (!r.ok) {
-      // fallback local admin
       if (email === 'admin@noxmob.com.br' && senha === '123456') {
-        entrarApp({ email, nome: 'Admin', papel: 'admin' }, false);
+        await entrarApp({ email, nome: 'Admin', papel: 'admin' }, false);
         return;
       }
       toast(data.erro || 'Login falhou', 'err');
       return;
     }
-    entrarApp(data.usuario, true);
+    await entrarApp(data.usuario, true);
   } catch (e) {
     if (email === 'admin@noxmob.com.br' && senha === '123456') {
-      entrarApp({ email, nome: 'Admin Local', papel: 'admin' }, false);
-    } else toast('Worker offline e credenciais locais inválidas', 'err');
+      await entrarApp({ email, nome: 'Admin Local', papel: 'admin' }, false);
+    } else toast('Worker offline', 'err');
   }
 }
 
@@ -574,17 +671,14 @@ async function fazerCadastro() {
   if (!email || !senha) { toast('Preencha e-mail e senha', 'err'); return; }
   try {
     const r = await fetch(getWorker() + '/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, email, senha })
     });
     const data = await r.json();
-    if (!r.ok) { toast(data.erro || 'Falha no cadastro', 'err'); return; }
-    toast(data.msg || 'Cadastro enviado — aguarde o admin');
+    if (!r.ok) { toast(data.erro || 'Falha', 'err'); return; }
+    toast(data.msg || 'Cadastro enviado');
     trocarAuthTab('login');
-  } catch (e) {
-    toast('Worker indisponível para cadastro', 'err');
-  }
+  } catch (e) { toast('Worker indisponível', 'err'); }
 }
 
 async function fazerForgot() {
@@ -592,30 +686,29 @@ async function fazerForgot() {
   if (!email) { toast('Informe o e-mail', 'err'); return; }
   try {
     const r = await fetch(getWorker() + '/auth/forgot', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
     });
     const data = await r.json();
-    toast(data.msg || 'Solicitação enviada');
+    toast(data.msg || 'Enviado');
     if (data.tokenDev) toast('Token dev: ' + data.tokenDev);
-  } catch (e) {
-    toast('Worker indisponível', 'err');
-  }
+  } catch (e) { toast('Worker indisponível', 'err'); }
 }
 
-function entrarApp(user, nuvem) {
+async function entrarApp(user, nuvem) {
   usuario = user;
   sessionStorage.setItem('nox_user', JSON.stringify(user));
   document.getElementById('tela-login').style.display = 'none';
   document.getElementById('app').classList.add('ativo');
   document.getElementById('userLabel').textContent = user.email || user.nome;
-  document.getElementById('pillSync').textContent = nuvem ? '● Nuvem' : '● Local';
-  document.getElementById('pillSync').className = 'pill ' + (nuvem ? 'pill-mint' : 'pill-amber');
   const w = localStorage.getItem('nox_worker');
   if (w) document.getElementById('cfgWorker').value = w;
-  atualizarTudo();
-  if (nuvem) syncTudo();
+  if (nuvem) await carregarNuvem();
+  else {
+    document.getElementById('pillSync').textContent = '● Local';
+    document.getElementById('pillSync').className = 'pill pill-amber';
+    atualizarTudo();
+  }
   toast('Olá, ' + (user.nome || user.email));
 }
 
@@ -631,18 +724,31 @@ function sair() {
 function irPara(p, el) {
   document.querySelectorAll('.page').forEach(x => x.classList.remove('ativa'));
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('ativo'));
-  document.getElementById('p-' + p).classList.add('ativa');
+  document.querySelectorAll('.bottom-nav button[data-page]').forEach(x => x.classList.remove('ativo'));
+  const page = document.getElementById('p-' + p);
+  if (page) page.classList.add('ativa');
   if (el) el.classList.add('ativo');
+  else {
+    const side = document.querySelector('.nav-item[data-page="' + p + '"]');
+    if (side) side.classList.add('ativo');
+  }
+  const bot = document.querySelector('.bottom-nav button[data-page="' + p + '"]');
+  if (bot) bot.classList.add('ativo');
   const t = { dashboard:'Dashboard', pdv:'PDV / Caixa', produtos:'Produtos', pessoas:'Pessoas / Leads', estoque:'Estoque', relatorios:'Relatórios / DRE', fiscal:'Fiscal · CBS/IBS', pagamentos:'PIX · Asaas · Inter', whatsapp:'WhatsApp · Flows', usuarios:'Usuários', config:'Config / Worker' };
   document.getElementById('topTitle').textContent = t[p] || p;
   atualizarTudo();
 }
+function irParaMobile(p, btn) {
+  irPara(p, null);
+  document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('ativo'));
+  if (btn) btn.classList.add('ativo');
+}
+
 function atualizarTudo() {
   atualizarDashboard(); renderProdutos(); renderPessoas(); renderLeads();
   renderEstoque(); renderRelatorios(); renderOlhoImpostos(); renderCarrinho();
 }
 
-/* Sync / Worker */
 function salvarConfigWorker() {
   localStorage.setItem('nox_worker', document.getElementById('cfgWorker').value.trim());
   toast('Worker salvo');
@@ -660,44 +766,27 @@ async function testarWorker() {
     toast('Worker offline', 'err');
   }
 }
-async function syncTudo() {
-  await syncProdutosNuvem();
-  try {
-    const r = await fetch(getWorker() + '/api/vendas');
-    if (r.ok) {
-      const d = await r.json();
-      if (d.vendas && d.vendas.length) {
-        // merge simples
-        toast('Vendas nuvem: ' + d.vendas.length);
-      }
-    }
-  } catch (_) {}
-}
 async function syncProdutosNuvem() {
   try {
     const r = await fetch(getWorker() + '/api/produtos');
     if (r.ok) {
       const d = await r.json();
-      if (d.produtos && d.produtos.length) {
+      if (d.produtos?.length) {
         produtos = d.produtos;
         localStorage.setItem('nox_produtos', JSON.stringify(produtos));
         renderProdutos(); renderEstoque();
-        toast('Produtos sincronizados');
+        toast('Produtos da nuvem');
         return;
       }
     }
-    // push local → nuvem
     for (const p of produtos) {
       await fetch(getWorker() + '/api/produtos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(p)
       });
     }
     toast('Produtos enviados à nuvem');
-  } catch (e) {
-    toast('Sync offline — dados locais ok', 'err');
-  }
+  } catch (e) { toast('Sync offline', 'err'); }
 }
 
 async function aprovarUsuario() {
@@ -705,23 +794,19 @@ async function aprovarUsuario() {
   const emailAlvo = document.getElementById('approveEmail').value.trim();
   try {
     const r = await fetch(getWorker() + '/auth/approve', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         emailAdmin: usuario.email,
-        senhaAdmin: prompt('Confirme sua senha admin:'),
+        senhaAdmin: prompt('Senha admin:'),
         emailAlvo
       })
     });
     const d = await r.json();
     document.getElementById('approveOut').textContent = JSON.stringify(d);
-    toast(r.ok ? 'Usuário ativado' : (d.erro || 'Falha'), r.ok ? 'ok' : 'err');
-  } catch (e) {
-    toast('Worker/D1 necessário', 'err');
-  }
+    toast(r.ok ? 'Ativado' : (d.erro || 'Falha'), r.ok ? 'ok' : 'err');
+  } catch (e) { toast('D1/Worker necessário', 'err'); }
 }
 
-/* CPF/CNPJ */
 function validarCPF(cpf) {
   if (!/^\d{11}$/.test(cpf) || /^(\d)\1+$/.test(cpf)) return false;
   let s = 0; for (let i = 0; i < 9; i++) s += +cpf[i] * (10 - i);
@@ -741,25 +826,23 @@ async function buscarDocumento() {
         document.getElementById('cNome').value = d.razao_social || d.nome || '';
         document.getElementById('cTipo').value = 'PJ';
         if (d.telefone) document.getElementById('cTel').value = String(d.telefone);
-        toast('CNPJ ok');
-        return;
+        toast('CNPJ ok'); return;
       }
       const r2 = await fetch('https://brasilapi.com.br/api/cnpj/v1/' + raw);
       if (r2.ok) {
         const d = await r2.json();
         document.getElementById('cNome').value = d.razao_social || '';
         document.getElementById('cTipo').value = 'PJ';
-        toast('CNPJ (BrasilAPI direto)');
+        toast('CNPJ (BrasilAPI)');
       }
     } else {
       if (!validarCPF(raw)) { toast('CPF inválido', 'err'); return; }
       document.getElementById('cTipo').value = 'PF';
-      toast('CPF válido — preencha o nome (Serpro no Worker)');
+      toast('CPF válido');
     }
   } catch (e) { toast('Consulta falhou', 'err'); }
 }
 
-/* Produtos / scan */
 async function iniciarScanCadastro() {
   try {
     pararScanCadastro();
@@ -808,7 +891,8 @@ function salvarProduto() {
     cfop: document.getElementById('pCfop').value,
     icms: parseFloat(document.getElementById('pIcms').value) || 18
   };
-  produtos.push(p);
+  const idx = produtos.findIndex(x => x.sku === sku);
+  if (idx >= 0) produtos[idx] = p; else produtos.push(p);
   localStorage.setItem('nox_produtos', JSON.stringify(produtos));
   fetch(getWorker() + '/api/produtos', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(p) }).catch(()=>{});
   fecharModalProduto(); renderProdutos(); renderEstoque(); toast('Produto salvo');
@@ -843,7 +927,6 @@ function renderProdutos() {
   </tr>`).join('');
 }
 
-/* Dashboard */
 function atualizarDashboard() {
   const hoje = vendas.filter(v => new Date(v.data).toDateString() === new Date().toDateString());
   document.getElementById('statVendas').textContent = 'R$ ' + hoje.reduce((s, v) => s + v.total, 0).toFixed(2);
@@ -859,8 +942,8 @@ function atualizarDashboard() {
   tb.innerHTML = vendas.slice(0, 8).map((v, i) => `<tr>
     <td>${new Date(v.data).toLocaleString('pt-BR')}</td>
     <td>${v.itens}</td>
-    <td style="color:var(--mint);font-weight:700">R$ ${v.total.toFixed(2)}</td>
-    <td style="color:var(--amber)">R$ ${(v.impostos || 0).toFixed(2)}</td>
+    <td style="color:var(--mint);font-weight:700">R$ ${Number(v.total).toFixed(2)}</td>
+    <td style="color:var(--amber)">R$ ${Number(v.impostos || 0).toFixed(2)}</td>
     <td style="color:var(--cyan)">R$ ${dualDaVenda(v).toFixed(2)}</td>
     <td style="white-space:nowrap">
       <button class="btn btn-ghost btn-sm" onclick="imprimirDanfe(${i})">🖨</button>
@@ -869,7 +952,6 @@ function atualizarDashboard() {
   </tr>`).join('');
 }
 
-/* PDV */
 function buscarPorCodigo() {
   const cod = document.getElementById('scanInput').value.trim();
   if (!cod) return;
@@ -928,7 +1010,7 @@ function renderCarrinho() {
     sub += c.preco * c.qtd; tax += imp.totalLegado; dual += imp.ivaDual;
     return `<div class="cart-item">
       <div><div style="font-weight:700">${c.nome}</div>
-      <div style="font-size:11px;color:var(--muted)">ICMS ${c.icms||18}% · CBS/IBS</div></div>
+      <div style="font-size:11px;color:var(--muted)">ICMS ${c.icms||18}%</div></div>
       <div style="display:flex;align-items:center;gap:8px">
         <span style="font-family:JetBrains Mono,monospace">${c.qtd}x</span>
         <span style="color:var(--mint);font-weight:700">R$ ${(c.preco*c.qtd).toFixed(2)}</span>
@@ -973,12 +1055,11 @@ function finalizarVenda() {
   localStorage.setItem('nox_vendas', JSON.stringify(vendas));
   localStorage.setItem('nox_produtos', JSON.stringify(produtos));
   fetch(getWorker() + '/api/vendas', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(venda)
   }).catch(() => {});
   if (venda.clienteTel) {
-    salvarLead({ nome: venda.clienteNome || 'Cliente', tel: venda.clienteTel.replace(/\D/g,''), ultimaCompra: venda.data, valor: total });
+    salvarLead({ nome: venda.clienteNome || 'Cliente', tel: venda.clienteTel, ultimaCompra: venda.data, valor: total });
   }
   carrinho = [];
   renderCarrinho();
@@ -987,7 +1068,6 @@ function finalizarVenda() {
   imprimirDanfe(0);
 }
 
-/* Print DANFE */
 function imprimirDanfe(idx) {
   const v = vendas[idx];
   if (!v) return;
@@ -1015,15 +1095,14 @@ function imprimirDanfe(idx) {
   <tbody>${linhas||'<tr><td colspan="7">—</td></tr>'}</tbody></table>
   <div class="tot"><div class="box">ICMS R$ ${totIcms.toFixed(2)}</div>
   <div class="box"><b>CBS</b> R$ ${totCbs.toFixed(2)} | <b>IBS</b> R$ ${totIbs.toFixed(2)}</div></div>
-  <div class="box" style="text-align:right;font-size:14px"><b>TOTAL R$ ${v.total.toFixed(2)}</b></div>
-  <div class="box" style="font-size:9px">LC 214/2025 · CBS 0,9% + IBS 0,1% teste · NoxMob Unificado</div></div>
+  <div class="box" style="text-align:right;font-size:14px"><b>TOTAL R$ ${Number(v.total).toFixed(2)}</b></div>
+  <div class="box" style="font-size:9px">LC 214/2025 · NoxMob PWA</div></div>
   <script>window.onload=function(){window.print()}<\/script></body></html>`;
   const w = window.open('', '_blank', 'width=860,height=700');
   if (!w) { toast('Permita pop-up', 'err'); return; }
   w.document.write(html); w.document.close();
 }
 
-/* WhatsApp / Leads */
 function salvarLead(lead) {
   const tel = onlyDigits(lead.tel);
   const i = leads.findIndex(l => onlyDigits(l.tel) === tel);
@@ -1032,7 +1111,6 @@ function salvarLead(lead) {
   localStorage.setItem('nox_leads', JSON.stringify(leads));
   renderLeads();
 }
-function onlyDigits(s) { return String(s || '').replace(/\D/g, ''); }
 
 async function enviarWhatsApp(idx) {
   const v = vendas[idx];
@@ -1041,22 +1119,20 @@ async function enviarWhatsApp(idx) {
   if (!tel) return;
   tel = onlyDigits(tel);
   if (tel.length < 10) { toast('Telefone inválido', 'err'); return; }
-  salvarLead({ nome: v.clienteNome || 'Cliente', tel, doc: v.clienteDoc || '', ultimaCompra: v.data, valor: v.total });
+  salvarLead({ nome: v.clienteNome || 'Cliente', tel, ultimaCompra: v.data, valor: v.total });
   const itens = (v.detalhe || []).map(d => `• ${d.qtd}x ${d.nome} — R$ ${(d.preco * d.qtd).toFixed(2)}`).join('\n');
-  const text = `*NoxMob — Pedido / NF-e ${v.numero||''}*\n${new Date(v.data).toLocaleString('pt-BR')}\n\n${itens}\n\n*Total: R$ ${v.total.toFixed(2)}*\nCBS+IBS: R$ ${dualDaVenda(v).toFixed(2)}\n\nObrigado!`;
+  const text = `*NoxMob — NF-e ${v.numero||''}*\n${new Date(v.data).toLocaleString('pt-BR')}\n\n${itens}\n\n*Total: R$ ${Number(v.total).toFixed(2)}*\nCBS+IBS: R$ ${dualDaVenda(v).toFixed(2)}\n\nObrigado!`;
   try {
     const r = await fetch(getWorker() + '/wa/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phone: tel, text })
     });
     const data = await r.json();
     if (data.ok && !data.fallback) { toast('WhatsApp via Zernio'); return; }
     window.open(data.waMe || ('https://wa.me/55' + tel + '?text=' + encodeURIComponent(text)), '_blank');
-    toast(data.fallback ? 'Fallback wa.me' : 'WhatsApp aberto');
+    toast(data.fallback ? 'Fallback wa.me' : 'WhatsApp');
   } catch (e) {
     window.open('https://wa.me/55' + tel + '?text=' + encodeURIComponent(text), '_blank');
-    toast('wa.me (Worker offline)');
   }
 }
 function enviarWhatsAppUltima() {
@@ -1065,56 +1141,44 @@ function enviarWhatsAppUltima() {
 }
 
 async function waEnviarTexto() {
-  const phone = document.getElementById('waTel').value;
-  const text = document.getElementById('waText').value;
   try {
     const r = await fetch(getWorker() + '/wa/send', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, text })
+      body: JSON.stringify({ phone: document.getElementById('waTel').value, text: document.getElementById('waText').value })
     });
     const d = await r.json();
     document.getElementById('waOut').textContent = JSON.stringify(d, null, 2);
     if (d.waMe) window.open(d.waMe, '_blank');
-    toast(d.ok ? 'Enviado' : 'Ver saída');
-  } catch (e) {
-    document.getElementById('waOut').textContent = String(e);
-  }
+  } catch (e) { document.getElementById('waOut').textContent = String(e); }
 }
 async function waEnviarTemplate() {
-  const phone = document.getElementById('waTel').value;
-  const templateName = document.getElementById('waTpl').value || 'order_confirmation';
-  try {
-    const r = await fetch(getWorker() + '/wa/send', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, useTemplate: true, templateName, params: ['Cliente', '0001'], text: ' ' })
-    });
-    document.getElementById('waOut').textContent = JSON.stringify(await r.json(), null, 2);
-  } catch (e) {
-    document.getElementById('waOut').textContent = String(e);
-  }
-}
-async function waDispararFlow() {
-  const flowId = document.getElementById('waFlowId').value.trim();
-  const phone = document.getElementById('waFlowTel').value;
-  // Esqueleto: Worker pode mapear para Zernio Flows API quando disponível
   try {
     const r = await fetch(getWorker() + '/wa/send', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        phone,
-        text: '[Flow] ' + flowId,
-        useTemplate: false,
-        flowId
+        phone: document.getElementById('waTel').value,
+        useTemplate: true,
+        templateName: document.getElementById('waTpl').value || 'order_confirmation',
+        params: ['Cliente', '0001'], text: ' '
       })
     });
     document.getElementById('waOut').textContent = JSON.stringify(await r.json(), null, 2);
-    toast('Flow solicitado ao Worker/Zernio');
-  } catch (e) {
-    toast('Configure Flow no Zernio + rota no Worker', 'err');
-  }
+  } catch (e) { document.getElementById('waOut').textContent = String(e); }
+}
+async function waDispararFlow() {
+  try {
+    const r = await fetch(getWorker() + '/wa/send', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        phone: document.getElementById('waFlowTel').value,
+        text: '[Flow] ' + document.getElementById('waFlowId').value,
+        flowId: document.getElementById('waFlowId').value
+      })
+    });
+    document.getElementById('waOut').textContent = JSON.stringify(await r.json(), null, 2);
+  } catch (e) { toast('Flow / Worker', 'err'); }
 }
 
-/* Asaas / Inter */
 async function criarCobrancaAsaas() {
   const payload = {
     value: parseFloat(document.getElementById('asaasValor').value) || 0,
@@ -1129,20 +1193,19 @@ async function criarCobrancaAsaas() {
     });
     const d = await r.json();
     document.getElementById('asaasOut').textContent = JSON.stringify(d, null, 2);
-    toast(r.ok ? 'Cobrança Asaas' : (d.erro || 'Configure ASAAS_API_KEY no Worker'), r.ok ? 'ok' : 'err');
+    toast(r.ok ? 'Cobrança Asaas' : (d.erro || 'Erro Asaas'), r.ok ? 'ok' : 'err');
   } catch (e) {
-    document.getElementById('asaasOut').textContent =
-      'Rota /pay/asaas/pix ainda não implantada no Worker.\nAdicione secret ASAAS_API_KEY e a rota que chama api.asaas.com';
+    document.getElementById('asaasOut').textContent = 'Worker offline ou rota ausente.\n' + e;
   }
 }
 function gerarPixAsaas() {
-  if (!carrinho.length && !ultimaVenda) { toast('Finalize uma venda ou use tela Pagamentos', 'err'); return; }
   const total = carrinho.length
     ? carrinho.reduce((s, c) => s + c.preco * c.qtd, 0)
     : (ultimaVenda?.total || 0);
+  if (!total) { toast('Sem valor', 'err'); return; }
   document.getElementById('asaasValor').value = total.toFixed(2);
-  irPara('pagamentos', document.querySelectorAll('.nav-item')[7]);
-  toast('Valor do carrinho/venda carregado');
+  irPara('pagamentos');
+  toast('Valor carregado');
 }
 async function criarPixInter() {
   try {
@@ -1152,21 +1215,15 @@ async function criarPixInter() {
     });
     document.getElementById('interOut').textContent = JSON.stringify(await r.json(), null, 2);
   } catch (e) {
-    document.getElementById('interOut').textContent =
-      'Esqueleto Inter: configure OAuth no Worker (CLIENT_ID/SECRET) e rota /pay/inter/pix';
+    document.getElementById('interOut').textContent = 'Configure Inter no Worker.\n' + e;
   }
 }
 
-/* Pessoas / estoque / DRE */
 function salvarPessoa() {
   const nome = document.getElementById('cNome').value.trim();
   if (!nome) { toast('Nome obrigatório', 'err'); return; }
   const tel = onlyDigits(document.getElementById('cTel').value);
-  const p = {
-    nome, doc: document.getElementById('cDoc').value,
-    tipo: document.getElementById('cTipo').value,
-    tel, email: document.getElementById('cEmail').value
-  };
+  const p = { nome, doc: document.getElementById('cDoc').value, tipo: document.getElementById('cTipo').value, tel, email: document.getElementById('cEmail').value };
   pessoas.push(p);
   localStorage.setItem('nox_pessoas', JSON.stringify(pessoas));
   if (tel) salvarLead({ nome, tel, doc: p.doc, ultimaCompra: null, valor: 0 });
@@ -1223,13 +1280,13 @@ function filtrarVendasPeriodo() {
 function setPeriodoDRE(p) { periodoDRE = p; renderRelatorios(); toast('Filtro: ' + p); }
 function zerarVisualizacaoPeriodo() {
   localStorage.setItem('nox_fechado_' + periodoDRE, new Date().toISOString());
-  toast('Saldo visual do período zerado. Extrato completo mantido.');
+  toast('Saldo visual zerado. Extrato mantido.');
   renderRelatorios();
 }
 function renderRelatorios() {
   const lista = filtrarVendasPeriodo();
-  const bruto = lista.reduce((s, v) => s + v.total, 0);
-  const leg = lista.reduce((s, v) => s + (v.impostos || 0), 0);
+  const bruto = lista.reduce((s, v) => s + Number(v.total), 0);
+  const leg = lista.reduce((s, v) => s + Number(v.impostos || 0), 0);
   const dual = lista.reduce((s, v) => s + dualDaVenda(v), 0);
   document.getElementById('dreReceita').textContent = 'R$ ' + bruto.toFixed(2);
   document.getElementById('dreImpostos').textContent = 'R$ ' + leg.toFixed(2);
@@ -1243,30 +1300,29 @@ function renderRelatorios() {
     const realIdx = vendas.indexOf(v);
     return `<tr>
       <td>${new Date(v.data).toLocaleString('pt-BR')}</td><td>${v.itens}</td>
-      <td>R$ ${v.total.toFixed(2)}</td>
-      <td style="color:var(--amber)">R$ ${(v.impostos||0).toFixed(2)}</td>
+      <td>R$ ${Number(v.total).toFixed(2)}</td>
+      <td style="color:var(--amber)">R$ ${Number(v.impostos||0).toFixed(2)}</td>
       <td style="color:var(--cyan)">R$ ${dualDaVenda(v).toFixed(2)}</td>
       <td><button class="btn btn-ghost btn-sm" onclick="imprimirDanfe(${realIdx})">🖨</button>
       <button class="btn btn-mint btn-sm" onclick="enviarWhatsApp(${realIdx})">WA</button></td>
     </tr>`;
-  }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px">Sem vendas no período</td></tr>';
+  }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px">Sem vendas</td></tr>';
 }
 function imprimirDRE() {
   const lista = filtrarVendasPeriodo();
-  const bruto = lista.reduce((s, v) => s + v.total, 0);
-  const leg = lista.reduce((s, v) => s + (v.impostos || 0), 0);
+  const bruto = lista.reduce((s, v) => s + Number(v.total), 0);
+  const leg = lista.reduce((s, v) => s + Number(v.impostos || 0), 0);
   const dual = lista.reduce((s, v) => s + dualDaVenda(v), 0);
   const rows = lista.map(v => `<tr><td>${new Date(v.data).toLocaleString('pt-BR')}</td><td>${v.itens}</td>
-    <td>R$ ${v.total.toFixed(2)}</td><td>R$ ${(v.impostos||0).toFixed(2)}</td><td>R$ ${dualDaVenda(v).toFixed(2)}</td></tr>`).join('');
+    <td>R$ ${Number(v.total).toFixed(2)}</td><td>R$ ${Number(v.impostos||0).toFixed(2)}</td><td>R$ ${dualDaVenda(v).toFixed(2)}</td></tr>`).join('');
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"/><title>DRE</title>
   <style>body{font-family:sans-serif;padding:24px}table{width:100%;border-collapse:collapse;font-size:13px}
-  th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}.r{text-align:right}</style></head><body>
-  <h1>DRE NoxMob · ${periodoDRE}</h1><p>${new Date().toLocaleString('pt-BR')}</p>
-  <table><tr><td>Receita bruta</td><td class="r"><b>R$ ${bruto.toFixed(2)}</b></td></tr>
-  <tr><td>ICMS/PIS/COFINS</td><td class="r">R$ ${leg.toFixed(2)}</td></tr>
-  <tr><td>CBS+IBS</td><td class="r">R$ ${dual.toFixed(2)}</td></tr>
-  <tr><td><b>Líquida est.</b></td><td class="r"><b>R$ ${(bruto-leg).toFixed(2)}</b></td></tr></table>
-  <h3>Extrato</h3><table><thead><tr><th>Data</th><th>Itens</th><th>Bruto</th><th>Legados</th><th>CBS+IBS</th></tr></thead>
+  th,td{border-bottom:1px solid #ddd;padding:8px}.r{text-align:right}</style></head><body>
+  <h1>DRE NoxMob · ${periodoDRE}</h1>
+  <table><tr><td>Receita</td><td class="r"><b>R$ ${bruto.toFixed(2)}</b></td></tr>
+  <tr><td>Legados</td><td class="r">R$ ${leg.toFixed(2)}</td></tr>
+  <tr><td>CBS+IBS</td><td class="r">R$ ${dual.toFixed(2)}</td></tr></table>
+  <table><thead><tr><th>Data</th><th>Itens</th><th>Bruto</th><th>Legados</th><th>CBS+IBS</th></tr></thead>
   <tbody>${rows||'<tr><td colspan="5">—</td></tr>'}</tbody></table>
   <script>window.onload=function(){window.print()}<\/script></body></html>`;
   const w = window.open('', '_blank', 'width=900,height=700');
@@ -1299,11 +1355,31 @@ function renderOlhoImpostos() {
       <span>Total CBS+IBS</span><strong style="color:var(--amber)">R$ ${(cbs+ibs).toFixed(2)}</strong></div>`;
 }
 
-// Sessão persistente na aba
+/* PWA install */
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').classList.add('show');
+});
+document.getElementById('btnInstallPwa')?.addEventListener('click', async () => {
+  if (!deferredPrompt) {
+    toast('No iPhone: Compartilhar → Adicionar à Tela de Início');
+    return;
+  }
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('installBanner').classList.remove('show');
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
 (function boot() {
   try {
     const u = JSON.parse(sessionStorage.getItem('nox_user') || 'null');
-    if (u) entrarApp(u, false);
+    if (u) entrarApp(u, true);
   } catch (_) {}
 })();
 </script>
