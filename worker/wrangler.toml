@@ -14,3 +14,15 @@ ALLOWED_ORIGIN = "https://ws.droppfy.com,https://droppfy.com,https://www.droppfy
 # binding = "DB"
 # database_name = "noxmob-db"
 # database_id = "cole-o-uuid-aqui"
+name = "waitron-server"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+ENV = "production"
+ALLOWED_ORIGIN = "https://ws.droppfy.com,https://droppfy.com,https://www.droppfy.com,http://localhost:5500,http://127.0.0.1:5500"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "noxmob-db"
+database_id = "4d97efa0-a40e-421b-97e4-b331b7195acf"
