@@ -206,9 +206,25 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
       <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('whatsapp')">📱 WhatsApp</button>
       <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('usuarios')">🔐 Usuários</button>
       <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('config')">⚙️ Config / Worker</button>
+      <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('palm')">🤚 Palma / Hotel</button>
+      <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('frigobar')">🧊 Frigobar</button>
+      <button class="btn btn-ghost btn-full" onclick="fecharModal('modalMais');irPara('consumos')">🧾 Consumos Palma</button>
       <button class="btn btn-rose btn-full" onclick="fecharModal('modalMais');sair()">Sair</button>
     </div>
     <button class="btn btn-prim btn-full" style="margin-top:12px" onclick="fecharModal('modalMais')">Fechar</button>
+  </div>
+</div>
+
+<!-- MODAL REPOSIÇÃO FRIGOBAR -->
+<div class="modal-bg" id="modalReposicaoFrigobar">
+  <div class="modal" style="max-width:400px">
+    <h3>Reposição Frigobar</h3>
+    <div class="field"><label>SKU</label><input id="repSku" placeholder="FRIG-COCA"/></div>
+    <div class="field"><label>Quantidade</label><input id="repQtd" type="number" value="10"/></div>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="btn btn-prim" onclick="fazerReposicaoFrigobar()">Confirmar</button>
+      <button class="btn btn-ghost" onclick="fecharModal('modalReposicaoFrigobar')">Cancelar</button>
+    </div>
   </div>
 </div>
 
@@ -217,7 +233,7 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
   <div class="login-box">
     <div class="logo"><div class="logo-dot"></div>Nox<span style="color:var(--blue)">Mob</span></div>
     <h1>SmartPOS Unificado</h1>
-    <p class="sub-login">NF-e · CBS/IBS · WhatsApp · PIX · Worker · App</p>
+    <p class="sub-login">NF-e · CBS/IBS · WhatsApp · PIX · Worker · App · Palma</p>
     <div class="auth-tabs">
       <div class="auth-tab ativo" data-tab="login" onclick="trocarAuthTab('login')">Entrar</div>
       <div class="auth-tab" data-tab="register" onclick="trocarAuthTab('register')">Cadastrar</div>
@@ -240,7 +256,7 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
       <button class="btn btn-prim btn-full" onclick="fazerForgot()">Recuperar senha</button>
       <p class="hint">Com D1 no Worker, gera token de reset.</p>
     </div>
-    <p class="sec-badge">🔒 TLS · D1 · Zernio · Asaas · PWA</p>
+    <p class="sec-badge">🔒 TLS · D1 · Zernio · Asaas · PWA · Palm AI</p>
   </div>
 </div>
 
@@ -253,6 +269,9 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
       <div class="nav-item" data-page="pdv" onclick="irPara('pdv',this)">🛒 PDV / Caixa</div>
       <div class="nav-item" data-page="produtos" onclick="irPara('produtos',this)">📦 Produtos</div>
       <div class="nav-item" data-page="pessoas" onclick="irPara('pessoas',this)">👥 Pessoas / Leads</div>
+      <div class="nav-item" data-page="palm" onclick="irPara('palm',this)">🤚 Palma / Hotel</div>
+      <div class="nav-item" data-page="frigobar" onclick="irPara('frigobar',this)">🧊 Frigobar</div>
+      <div class="nav-item" data-page="consumos" onclick="irPara('consumos',this)">🧾 Consumos Palma</div>
       <div class="nav-item" data-page="estoque" onclick="irPara('estoque',this)">📋 Estoque</div>
       <div class="nav-item" data-page="relatorios" onclick="irPara('relatorios',this)">📈 Relatórios / DRE</div>
       <div class="nav-item" data-page="fiscal" onclick="irPara('fiscal',this)">🧾 Fiscal · CBS/IBS</div>
@@ -297,345 +316,368 @@ h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4p
             <div>
               <div class="field">
                 <label>Bip / código</label>
-                <input id="scanInput" placeholder="Leitor ou Enter" onkeydown="if(event.key==='Enter')buscarPorCodigo()" style="font-family:'JetBrains Mono',monospace"/>
+                <input id="scanInput" placeholder="Bipe ou digite o código e pressione Enter" onkeydown="if(event.key==='Enter')bipar()"/>
               </div>
-              <div class="camera-area">
-                <div class="camera-placeholder" id="camPlaceholder"><div class="icon">📷</div><div style="font-weight:600;color:var(--text)">Câmera ou foto</div></div>
-                <video id="videoCam" autoplay playsinline style="display:none;width:100%;max-height:180px;object-fit:cover;border-radius:12px"></video>
+              <div class="camera-area" id="cameraArea">
+                <div class="camera-placeholder" id="camPlaceholder">
+                  <div class="icon">📷</div>
+                  <div>Câmera / IA de reconhecimento</div>
+                </div>
+                <video id="videoCam" style="display:none;width:100%;max-height:220px;border-radius:12px"></video>
               </div>
-              <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-                <button class="btn btn-prim btn-sm" onclick="ativarCamera()">Câmera</button>
-                <label class="btn btn-ghost btn-sm" style="cursor:pointer">Foto<input type="file" accept="image/*" capture="environment" style="display:none" onchange="aoFotoProduto(event)"/></label>
-                <button class="btn btn-mint btn-sm" id="btnReconhecer" onclick="reconhecerProduto()" disabled>IA</button>
+              <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+                <button class="btn btn-prim btn-sm" onclick="iniciarCamera()">Câmera</button>
+                <button class="btn btn-ghost btn-sm" onclick="document.getElementById('fotoInput').click()">Foto</button>
+                <input type="file" id="fotoInput" accept="image/*" style="display:none" onchange="aoFotoProduto(event)"/>
+                <button class="btn btn-mint btn-sm" id="btnReconhecer" disabled onclick="reconhecerProduto()">IA</button>
               </div>
-              <div style="margin-top:8px;font-size:12px;color:var(--muted)" id="ocrStatus">aguardando…</div>
-              <div class="field" style="margin-top:14px"><label>Cliente WhatsApp / NF</label><input id="pdvClienteTel" placeholder="Telefone WhatsApp"/></div>
-              <div class="field"><input id="pdvClienteNome" placeholder="Nome do cliente (opcional)"/></div>
+              <div id="ocrStatus" style="margin-top:8px;font-size:12px;color:var(--muted)"></div>
             </div>
-            <div class="panel">
-              <div class="panel-title">Carrinho</div>
-              <div class="cart-items" id="cartItems"></div>
-              <div class="cart-total">
-                <div class="tax-line"><span>Subtotal</span><span id="cartSub">R$ 0,00</span></div>
-                <div class="tax-line"><span>ICMS+PIS+COFINS</span><span id="cartTax">R$ 0,00</span></div>
-                <div class="tax-line"><span>CBS 0,9% + IBS 0,1%</span><span id="cartDual">R$ 0,00</span></div>
-                <div style="font-size:12px;color:var(--muted);margin-top:8px">Total</div>
-                <div class="valor" id="cartTotal">R$ 0,00</div>
+            <div>
+              <div class="panel">
+                <div class="panel-title">Carrinho</div>
+                <div class="cart-items" id="cartItems"><div style="text-align:center;color:var(--muted);padding:16px">Vazio</div></div>
+                <div class="cart-total">
+                  <div class="tax-line"><span>Subtotal</span><span id="cartSub">R$ 0,00</span></div>
+                  <div class="tax-line"><span>Impostos legados</span><span id="cartTax">R$ 0,00</span></div>
+                  <div class="tax-line"><span>CBS+IBS</span><span id="cartDual">R$ 0,00</span></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+                    <span style="font-weight:700">Total</span>
+                    <span class="valor" id="cartTotal">R$ 0,00</span>
+                  </div>
+                </div>
+                <div class="field" style="margin-top:12px">
+                  <label>Cliente (nome)</label>
+                  <input id="pdvClienteNome" placeholder="Consumidor Final"/>
+                </div>
+                <div class="field">
+                  <label>WhatsApp</label>
+                  <input id="pdvClienteTel" placeholder="11999999999"/>
+                </div>
+                <div class="pay-row">
+                  <button class="btn btn-prim" onclick="finalizarVenda()">Finalizar</button>
+                  <button class="btn btn-ghost" onclick="limparCarrinho()">Limpar</button>
+                  <button class="btn btn-mint" onclick="gerarPixAsaas()">PIX</button>
+                </div>
               </div>
-              <button class="btn btn-mint btn-full" style="margin-top:12px" onclick="finalizarVenda()">Finalizar · NF-e</button>
-              <div class="pay-row">
-                <button class="btn btn-prim btn-sm" onclick="gerarPixAsaas()">PIX Asaas</button>
-                <button class="btn btn-ghost btn-sm" onclick="enviarWhatsAppUltima()">WhatsApp</button>
-              </div>
-              <button class="btn btn-ghost btn-sm btn-full" style="margin-top:8px" onclick="limparCarrinho()">Limpar</button>
             </div>
           </div>
         </div>
 
         <div class="page" id="p-produtos">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-            <div><h2>Produtos</h2><p class="sub" style="margin:0">NCM · barras · sync D1</p></div>
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-ghost btn-sm" onclick="syncProdutosNuvem()">☁ Sync</button>
-              <button class="btn btn-prim btn-sm" onclick="abrirModalProduto()">+ Novo</button>
-            </div>
-          </div>
-          <div class="panel" style="padding:0;overflow:auto">
-            <table class="tbl"><thead><tr><th>SKU</th><th>Nome</th><th>Barras</th><th>NCM</th><th>ICMS</th><th>Preço</th><th>Est</th><th></th></tr></thead>
-            <tbody id="listaProdutos"></tbody></table>
+          <h2>Produtos</h2>
+          <p class="sub">Cadastro · NCM · estoque · barras</p>
+          <button class="btn btn-prim" style="margin-bottom:16px" onclick="document.getElementById('modalProduto').classList.add('ativo')">+ Novo produto</button>
+          <div class="panel">
+            <table class="tbl">
+              <thead><tr><th>Nome</th><th>SKU</th><th>Barras</th><th>Preço</th><th>Estoque</th><th></th></tr></thead>
+              <tbody id="listaProdutos"></tbody>
+            </table>
           </div>
         </div>
 
         <div class="page" id="p-pessoas">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-            <div><h2>Pessoas / Leads</h2><p class="sub" style="margin:0">CPF/CNPJ · WhatsApp</p></div>
-            <button class="btn btn-prim btn-sm" onclick="abrirModal('modalPessoa')">+ Nova pessoa</button>
+          <h2>Pessoas / Leads</h2>
+          <p class="sub">Clientes · leads de WhatsApp</p>
+          <button class="btn btn-prim" style="margin-bottom:16px" onclick="document.getElementById('modalPessoa').classList.add('ativo')">+ Nova pessoa</button>
+          <div class="grid grid-2">
+            <div class="panel">
+              <div class="panel-title">Pessoas</div>
+              <table class="tbl"><thead><tr><th>Nome</th><th>Doc</th><th>Tipo</th><th>Tel</th><th></th></tr></thead>
+              <tbody id="listaPessoas"></tbody></table>
+            </div>
+            <div class="panel">
+              <div class="panel-title">Leads WhatsApp</div>
+              <table class="tbl"><thead><tr><th>Nome</th><th>Tel</th><th>Compras</th><th>Última</th><th></th></tr></thead>
+              <tbody id="listaLeads"></tbody></table>
+            </div>
           </div>
-          <div class="panel" style="padding:0;overflow:auto;margin-bottom:16px">
-            <table class="tbl"><thead><tr><th>Nome</th><th>Doc</th><th>Tipo</th><th>Tel</th><th></th></tr></thead>
-            <tbody id="listaPessoas"></tbody></table>
+        </div>
+
+        <!-- ==================== PALMA / HOTEL ==================== -->
+        <div class="page" id="p-palm">
+          <h2>🤚 Cadastro Hóspede + Palma</h2>
+          <p class="sub">Cadastre o hóspede e cole o template Base64 gerado pelo terminal Z92P</p>
+          <div class="panel" style="max-width:520px">
+            <div class="field"><label>Nome completo *</label><input id="palmNome" placeholder="Nome do hóspede"/></div>
+            <div class="row cols2">
+              <div class="field"><label>CPF</label><input id="palmCpf" placeholder="000.000.000-00"/></div>
+              <div class="field"><label>WhatsApp</label><input id="palmTel" placeholder="11999999999"/></div>
+            </div>
+            <div class="field"><label>Quarto</label><input id="palmQuarto" placeholder="302"/></div>
+            <div class="field">
+              <label>Template Palma (Base64) *</label>
+              <textarea id="palmTemplate" rows="5" placeholder="Cole aqui o Base64 gerado pelo app Android do Z92P"></textarea>
+            </div>
+            <button class="btn btn-prim" onclick="cadastrarPalmWeb()">Salvar Hóspede + Palma</button>
+            <p class="hint">O template é gerado apenas no terminal físico. Nunca é imagem.</p>
           </div>
-          <div class="panel" style="padding:0;overflow:auto">
-            <div class="panel-title" style="padding:16px 16px 0">Leads WhatsApp</div>
-            <table class="tbl"><thead><tr><th>Nome</th><th>Tel</th><th>Compras</th><th>Última</th><th></th></tr></thead>
-            <tbody id="listaLeads"></tbody></table>
+        </div>
+
+        <!-- ==================== FRIGOBAR ==================== -->
+        <div class="page" id="p-frigobar">
+          <h2>🧊 Estoque Frigobar</h2>
+          <p class="sub">Itens do frigobar • baixa automática quando pago via Palma</p>
+          <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+            <button class="btn btn-prim btn-sm" onclick="carregarFrigobar()">Atualizar</button>
+            <button class="btn btn-mint btn-sm" onclick="abrirReposicaoFrigobar()">+ Reposição</button>
+          </div>
+          <div class="panel">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Item</th>
+                  <th>Preço</th>
+                  <th>Estoque</th>
+                  <th>Mínimo</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="listaFrigobar"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ==================== CONSUMOS PALMA ==================== -->
+        <div class="page" id="p-consumos">
+          <h2>🧾 Consumos via Palma</h2>
+          <p class="sub">Histórico de pagamentos biométricos do hotel</p>
+          <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+            <input id="filtroQuartoConsumo" placeholder="Filtrar por quarto" style="max-width:140px;padding:8px 12px;border-radius:10px;border:1.5px solid var(--border)"/>
+            <button class="btn btn-prim btn-sm" onclick="carregarConsumos()">Atualizar</button>
+          </div>
+          <div class="panel">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Quarto</th>
+                  <th>Hóspede</th>
+                  <th>Descrição</th>
+                  <th>Valor</th>
+                  <th>TXID</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="listaConsumos"></tbody>
+            </table>
           </div>
         </div>
 
         <div class="page" id="p-estoque">
           <h2>Estoque</h2>
-          <p class="sub">Zerar · lixeira</p>
-          <div class="panel" style="padding:0;overflow:auto">
-            <table class="tbl"><thead><tr><th>Produto</th><th>SKU</th><th>NCM</th><th>Qtd</th><th>Status</th><th></th></tr></thead>
-            <tbody id="listaEstoque"></tbody></table>
+          <p class="sub">Controle de estoque geral</p>
+          <div class="panel">
+            <table class="tbl">
+              <thead><tr><th>Nome</th><th>SKU</th><th>NCM</th><th>Estoque</th><th>Status</th><th></th></tr></thead>
+              <tbody id="listaEstoque"></tbody>
+            </table>
           </div>
         </div>
 
         <div class="page" id="p-relatorios">
-          <h2>Relatórios · DRE</h2>
-          <p class="sub">Período · extrato preservado</p>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+          <h2>Relatórios / DRE</h2>
+          <p class="sub">Receita · impostos · CBS/IBS</p>
+          <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
             <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('dia')">Hoje</button>
-            <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('semana')">Semana</button>
+            <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('semana')">7 dias</button>
             <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('mes')">Mês</button>
-            <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('todos')">Extrato</button>
-            <button class="btn btn-prim btn-sm" onclick="renderRelatorios()">↻ Atualizar</button>
-            <button class="btn btn-mint btn-sm" onclick="imprimirDRE()">🖨 DRE</button>
+            <button class="btn btn-ghost btn-sm" onclick="setPeriodoDRE('tudo')">Tudo</button>
+            <button class="btn btn-mint btn-sm" onclick="imprimirDRE()">Imprimir DRE</button>
             <button class="btn btn-rose btn-sm" onclick="zerarVisualizacaoPeriodo()">Zerar visual</button>
           </div>
-          <div class="grid grid-3" style="margin-bottom:16px">
-            <div class="stat"><div class="label">Receita bruta</div><div class="value mint" id="dreReceita">R$ 0</div></div>
+          <div class="grid grid-3" style="margin-bottom:20px">
+            <div class="stat"><div class="label">Receita</div><div class="value mint" id="dreReceita">R$ 0</div></div>
             <div class="stat"><div class="label">Impostos legados</div><div class="value amber" id="dreImpostos">R$ 0</div></div>
-            <div class="stat"><div class="label">CBS+IBS teste</div><div class="value cyan" id="dreDual">R$ 0</div></div>
+            <div class="stat"><div class="label">CBS+IBS</div><div class="value cyan" id="dreDual">R$ 0</div></div>
           </div>
-          <div class="panel" style="margin-bottom:16px">
-            <div class="panel-title">DRE simplificado</div>
+          <div class="panel">
+            <div class="panel-title">Resumo</div>
             <table class="tbl"><tbody id="dreLinhas"></tbody></table>
           </div>
-          <div class="panel" style="overflow:auto">
+          <div class="panel" style="margin-top:18px">
             <div class="panel-title">Vendas do período</div>
-            <table class="tbl"><thead><tr><th>Data</th><th>Itens</th><th>Bruto</th><th>Legados</th><th>CBS+IBS</th><th></th></tr></thead>
-            <tbody id="relVendas"></tbody></table>
+            <table class="tbl">
+              <thead><tr><th>Data</th><th>Itens</th><th>Total</th><th>Legados</th><th>CBS+IBS</th><th></th></tr></thead>
+              <tbody id="relVendas"></tbody>
+            </table>
           </div>
         </div>
 
         <div class="page" id="p-fiscal">
           <h2>Fiscal · CBS / IBS</h2>
-          <p class="sub">IVA Dual teste 2026 · NF-e 55</p>
-          <div class="grid grid-3" style="margin-bottom:16px">
-            <div class="stat"><div class="label">NF-e hoje</div><div class="value blue" id="statNfe">0</div></div>
-            <div class="stat"><div class="label">CBS 0,9%</div><div class="value cyan" id="statCbs">R$ 0</div></div>
-            <div class="stat"><div class="label">IBS 0,1%</div><div class="value amber" id="statIbs">R$ 0</div></div>
-          </div>
-          <div class="panel" style="margin-bottom:16px"><div class="panel-title">Resumo de impostos</div><div id="olhoImpostos"></div></div>
-          <div class="panel">
-            <div class="panel-title">Emitente NF-e</div>
-            <div class="row cols2">
-              <div class="field"><label>CNPJ</label><input id="cfgCnpj" value="47.149.826/0001-80"/></div>
-              <div class="field"><label>Ambiente</label>
-                <select id="cfgAmb"><option>Homologação</option><option selected>Produção</option></select>
-              </div>
+          <p class="sub">Olho nos impostos (legado + dual)</p>
+          <div class="grid grid-2">
+            <div class="panel">
+              <div class="panel-title">Resumo de impostos</div>
+              <div id="olhoImpostos"></div>
             </div>
-            <div class="field"><label>Razão social</label><input id="cfgRazao" value="NOXMOB COMERCIO LTDA"/></div>
+            <div class="panel">
+              <div class="panel-title">CBS + IBS (teste)</div>
+              <div class="stat"><div class="label">CBS 0,9%</div><div class="value cyan" id="statCbs">R$ 0</div></div>
+              <div class="stat" style="margin-top:12px"><div class="label">IBS 0,1%</div><div class="value blue" id="statIbs">R$ 0</div></div>
+            </div>
           </div>
         </div>
 
         <div class="page" id="p-pagamentos">
           <h2>PIX · Asaas · Inter</h2>
-          <p class="sub">Chaves só no Worker</p>
+          <p class="sub">Cobranças instantâneas</p>
           <div class="grid grid-2">
             <div class="panel">
-              <div class="panel-title">Asaas · PIX</div>
-              <div class="field"><label>Valor (R$)</label><input id="asaasValor" type="number" step="0.01"/></div>
-              <div class="field"><label>Descrição</label><input id="asaasDesc" placeholder="Pedido NoxMob"/></div>
+              <div class="panel-title">Asaas PIX</div>
+              <div class="field"><label>Valor</label><input id="asaasValor" type="number" step="0.01" value="25.00"/></div>
+              <div class="field"><label>Descrição</label><input id="asaasDesc" value="NoxMob"/></div>
               <div class="field"><label>Cliente</label><input id="asaasCliente" placeholder="Nome"/></div>
-              <div class="field"><label>CPF/CNPJ</label><input id="asaasDoc" placeholder="Somente números"/></div>
-              <button class="btn btn-prim btn-sm" onclick="criarCobrancaAsaas()">Gerar cobrança PIX</button>
-              <pre id="asaasOut" class="hint" style="margin-top:12px;white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:11px"></pre>
+              <div class="field"><label>CPF/CNPJ</label><input id="asaasDoc"/></div>
+              <button class="btn btn-prim" onclick="criarCobrancaAsaas()">Gerar PIX Asaas</button>
+              <pre id="asaasOut" style="margin-top:12px;font-size:11px;background:#f8fafc;padding:12px;border-radius:10px;overflow:auto"></pre>
             </div>
             <div class="panel">
-              <div class="panel-title">Banco Inter</div>
-              <div class="field"><label>Valor</label><input id="interValor" type="number" step="0.01"/></div>
-              <button class="btn btn-ghost btn-sm" onclick="criarPixInter()">Solicitar PIX Inter</button>
-              <pre id="interOut" class="hint" style="margin-top:12px;white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:11px"></pre>
+              <div class="panel-title">Banco Inter PIX</div>
+              <div class="field"><label>Valor</label><input id="interValor" type="number" step="0.01" value="25.00"/></div>
+              <button class="btn btn-mint" onclick="criarPixInter()">Gerar PIX Inter</button>
+              <pre id="interOut" style="margin-top:12px;font-size:11px;background:#f8fafc;padding:12px;border-radius:10px;overflow:auto"></pre>
             </div>
           </div>
         </div>
 
         <div class="page" id="p-whatsapp">
-          <h2>WhatsApp · Zernio · Flows</h2>
-          <p class="sub">Mensagens · templates · flows</p>
+          <h2>WhatsApp · Flows</h2>
+          <p class="sub">Zernio · templates · flows</p>
           <div class="grid grid-2">
             <div class="panel">
-              <div class="panel-title">Envio rápido</div>
+              <div class="panel-title">Enviar texto</div>
               <div class="field"><label>Telefone</label><input id="waTel" placeholder="11999999999"/></div>
-              <div class="field"><label>Mensagem</label><textarea id="waText" rows="4"></textarea></div>
-              <div class="field"><label>Template Meta</label><input id="waTpl" placeholder="order_confirmation"/></div>
-              <div class="pay-row">
-                <button class="btn btn-mint btn-sm" onclick="waEnviarTexto()">Enviar</button>
-                <button class="btn btn-prim btn-sm" onclick="waEnviarTemplate()">Template</button>
-              </div>
-              <pre id="waOut" class="hint" style="margin-top:12px;white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:11px"></pre>
+              <div class="field"><label>Mensagem</label><textarea id="waText" rows="3"></textarea></div>
+              <button class="btn btn-prim" onclick="waEnviarTexto()">Enviar</button>
             </div>
             <div class="panel">
-              <div class="panel-title">WhatsApp Flows</div>
-              <div class="field"><label>Flow ID</label><input id="waFlowId" placeholder="flow_xxx"/></div>
-              <div class="field"><label>Telefone</label><input id="waFlowTel" placeholder="11999999999"/></div>
-              <button class="btn btn-ghost btn-sm" onclick="waDispararFlow()">Disparar Flow</button>
+              <div class="panel-title">Template</div>
+              <div class="field"><label>Template</label><input id="waTpl" value="order_confirmation"/></div>
+              <button class="btn btn-mint" onclick="waEnviarTemplate()">Disparar template</button>
+              <div class="field" style="margin-top:12px"><label>Flow ID</label><input id="waFlowId"/></div>
+              <div class="field"><label>Tel Flow</label><input id="waFlowTel"/></div>
+              <button class="btn btn-ghost" onclick="waDispararFlow()">Disparar Flow</button>
             </div>
           </div>
+          <pre id="waOut" style="margin-top:16px;font-size:11px;background:#f8fafc;padding:12px;border-radius:10px;overflow:auto"></pre>
         </div>
 
         <div class="page" id="p-usuarios">
           <h2>Usuários</h2>
-          <p class="sub">Admin libera cadastros (D1)</p>
+          <p class="sub">Gestão de acesso</p>
           <div class="panel">
-            <div class="field"><label>E-mail a liberar</label><input id="approveEmail" placeholder="user@email.com"/></div>
-            <button class="btn btn-prim btn-sm" onclick="aprovarUsuario()">Ativar usuário</button>
-            <p class="hint" id="approveOut"></p>
+            <p class="hint">Gerencie usuários pelo Worker / D1. Use o e-mail admin@noxmob.com.br para liberar cadastros.</p>
           </div>
         </div>
 
         <div class="page" id="p-config">
           <h2>Config / Worker</h2>
-          <p class="sub">Sem secrets neste HTML</p>
-          <div class="panel">
-            <div class="field"><label>URL Cloudflare Worker</label>
-              <input id="cfgWorker" value="https://waitron-server.contatodroppfy.workers.dev"/>
+          <p class="sub">URLs e parâmetros</p>
+          <div class="panel" style="max-width:480px">
+            <div class="field"><label>URL do Worker</label><input id="cfgWorker" value="https://waitron-server.contatodroppfy.workers.dev"/></div>
+            <div class="field"><label>Razão Social</label><input id="cfgRazao" value="NOXMOB COMERCIO LTDA"/></div>
+            <div class="field"><label>CNPJ</label><input id="cfgCnpj" value="47.149.826/0001-80"/></div>
+            <div class="field"><label>Ambiente</label>
+              <select id="cfgAmb"><option>Produção</option><option>Homologação</option></select>
             </div>
-            <div class="field"><label>Nome da loja</label><input id="cfgLoja" value="Minha Loja NoxMob"/></div>
-            <div class="pay-row">
-              <button class="btn btn-prim btn-sm" onclick="salvarConfigWorker()">Salvar</button>
-              <button class="btn btn-ghost btn-sm" onclick="testarWorker()">Testar Worker</button>
-              <button class="btn btn-mint btn-sm" onclick="carregarNuvem()">Sync nuvem</button>
-            </div>
-            <p class="hint">No celular: Chrome ⋮ Instalar app · iPhone: Compartilhar → Tela de Início · Ubuntu: ícone instalar na barra.</p>
-            <pre id="cfgOut" class="hint" style="margin-top:12px;white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:11px"></pre>
+            <button class="btn btn-prim" onclick="salvarConfig()">Salvar</button>
           </div>
         </div>
 
-      </div>
+      </div><!-- fim content -->
     </div>
   </div>
-
-  <!-- Navegação mobile -->
-  <nav class="bottom-nav" id="bottomNav">
-    <button type="button" class="ativo" data-page="dashboard" onclick="irParaMobile('dashboard',this)"><span class="ico">📊</span>Início</button>
-    <button type="button" data-page="pdv" onclick="irParaMobile('pdv',this)"><span class="ico">🛒</span>PDV</button>
-    <button type="button" data-page="produtos" onclick="irParaMobile('produtos',this)"><span class="ico">📦</span>Produtos</button>
-    <button type="button" data-page="relatorios" onclick="irParaMobile('relatorios',this)"><span class="ico">📈</span>DRE</button>
-    <button type="button" onclick="abrirModal('modalMais')"><span class="ico">☰</span>Mais</button>
-  </nav>
 </div>
 
-<script>
-const WORKER_DEFAULT = 'https://waitron-server.contatodroppfy.workers.dev';
-const PIS = 1.65, COFINS = 7.6, CBS_TESTE = 0.90, IBS_TESTE = 0.10;
+<!-- Bottom nav mobile -->
+<nav class="bottom-nav">
+  <button class="ativo" onclick="irPara('dashboard')"><span class="ico">📊</span>Home</button>
+  <button onclick="irPara('pdv')"><span class="ico">🛒</span>PDV</button>
+  <button onclick="irPara('palm')"><span class="ico">🤚</span>Palma</button>
+  <button onclick="irPara('frigobar')"><span class="ico">🧊</span>Frigo</button>
+  <button onclick="document.getElementById('modalMais').classList.add('ativo')"><span class="ico">☰</span>Mais</button>
+</nav>
 
-function getWorker() {
-  return (localStorage.getItem('nox_worker') || document.getElementById('cfgWorker')?.value || WORKER_DEFAULT).replace(/\/$/, '');
-}
-function calcImpostos(preco, icmsPct) {
-  const base = Number(preco) || 0;
-  const icms = base * (Number(icmsPct) || 18) / 100;
-  const pis = base * PIS / 100;
-  const cofins = base * COFINS / 100;
-  const cbs = base * CBS_TESTE / 100;
-  const ibs = base * IBS_TESTE / 100;
-  return {
-    icms, pis, cofins, cbs, ibs,
-    ivaDual: cbs + ibs,
-    totalLegado: icms + pis + cofins,
-    detalhe_item: {
-      valor_bruto: +base.toFixed(2),
-      impostos_novos: {
-        CBS: { CST_CBS: '01', vBC_CBS: +base.toFixed(2), pCBS: CBS_TESTE, vCBS: +cbs.toFixed(2) },
-        IBS: { CST_IBS: '01', vBC_IBS: +base.toFixed(2), pIBS: IBS_TESTE, vIBS: +ibs.toFixed(2) }
-      }
-    }
-  };
-}
-function dualDaVenda(v) {
-  if (v && v.cbs_ibs > 0) return v.cbs_ibs;
-  let t = 0;
-  (v?.detalhe || []).forEach(d => { t += calcImpostos(d.preco * d.qtd, d.icms).ivaDual; });
-  return t;
-}
-function onlyDigits(s) { return String(s || '').replace(/\D/g, ''); }
+<script>
+/* ============================================================
+   NOXMOB – código original + Palm Power integrado
+   ============================================================ */
 
 let usuario = null;
-let produtos = JSON.parse(localStorage.getItem('nox_produtos') || 'null') || [
-  {sku:'SKU-001',nome:'Coca-Cola 350ml',barras:'7894900011517',ncm:'22021000',cnp:'',preco:5.5,estoque:48,cfop:'5102',icms:18},
-  {sku:'SKU-002',nome:'Água Mineral 500ml',barras:'7891000100103',ncm:'22011000',cnp:'',preco:3,estoque:120,cfop:'5102',icms:18},
-  {sku:'SKU-003',nome:'Hambúrguer Clássico',barras:'',ncm:'21069090',cnp:'',preco:22.9,estoque:30,cfop:'5102',icms:12},
-  {sku:'SKU-004',nome:'Batata Frita Média',barras:'',ncm:'20041000',cnp:'',preco:12,estoque:25,cfop:'5102',icms:12},
-  {sku:'SKU-005',nome:'Suco Natural 300ml',barras:'7891000053508',ncm:'20099000',cnp:'',preco:8.5,estoque:40,cfop:'5102',icms:18}
-];
-let pessoas = JSON.parse(localStorage.getItem('nox_pessoas') || 'null') || [{nome:'Consumidor Final',doc:'',tipo:'PF',tel:'',email:''}];
+let produtos = JSON.parse(localStorage.getItem('nox_produtos') || '[]');
+let vendas = JSON.parse(localStorage.getItem('nox_vendas') || '[]');
+let pessoas = JSON.parse(localStorage.getItem('nox_pessoas') || '[]');
 let leads = JSON.parse(localStorage.getItem('nox_leads') || '[]');
-let carrinho = [], vendas = JSON.parse(localStorage.getItem('nox_vendas') || '[]');
-let streamCam = null, codeReader = null, scanning = false, periodoDRE = 'todos', ultimaVenda = null;
+let carrinho = [];
+let ultimaVenda = null;
+let periodoDRE = 'dia';
 let deferredPrompt = null;
 
-function toast(m, t) {
-  t = t || 'ok';
-  const e = document.createElement('div');
-  e.className = 'toast toast-' + t;
-  e.textContent = (t === 'ok' ? '✓ ' : '✕ ') + m;
-  document.getElementById('toasts').appendChild(e);
-  setTimeout(() => e.remove(), 3800);
+function getWorker() {
+  return document.getElementById('cfgWorker')?.value || 'https://waitron-server.contatodroppfy.workers.dev';
 }
-function abrirModal(id) { document.getElementById(id).classList.add('ativo'); }
-function fecharModal(id) { document.getElementById(id).classList.remove('ativo'); }
 
-function tickRelogio() {
-  const n = new Date();
-  const el = document.getElementById('relogio');
-  if (el) el.textContent = n.toLocaleString('pt-BR', { hour:'2-digit', minute:'2-digit', second:'2-digit', day:'2-digit', month:'2-digit' });
+function toast(msg, tipo = 'ok') {
+  const el = document.createElement('div');
+  el.className = 'toast toast-' + (tipo === 'err' ? 'err' : 'ok');
+  el.textContent = msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
 }
-setInterval(tickRelogio, 1000); tickRelogio();
+
+function onlyDigits(s) { return String(s || '').replace(/\D/g, ''); }
+
+function calcImpostos(valor, icmsPct = 18) {
+  const icms = valor * (icmsPct / 100);
+  const pis = valor * 0.0165;
+  const cofins = valor * 0.076;
+  const cbs = valor * 0.009;
+  const ibs = valor * 0.001;
+  return {
+    icms, pis, cofins, cbs, ibs,
+    totalLegado: icms + pis + cofins,
+    ivaDual: cbs + ibs,
+    detalhe_item: { impostos_novos: { cbs, ibs } }
+  };
+}
+
+function dualDaVenda(v) {
+  return Number(v.cbs_ibs || 0);
+}
+
+function irPara(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('ativa'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('ativo'));
+  const target = document.getElementById('p-' + page);
+  if (target) target.classList.add('ativa');
+  if (el) el.classList.add('ativo');
+  const titles = {
+    dashboard: 'Dashboard', pdv: 'PDV / Caixa', produtos: 'Produtos',
+    pessoas: 'Pessoas / Leads', estoque: 'Estoque', relatorios: 'Relatórios',
+    fiscal: 'Fiscal', pagamentos: 'PIX', whatsapp: 'WhatsApp',
+    usuarios: 'Usuários', config: 'Config',
+    palm: 'Palma / Hotel', frigobar: 'Frigobar', consumos: 'Consumos Palma'
+  };
+  document.getElementById('topTitle').textContent = titles[page] || page;
+
+  if (page === 'frigobar') carregarFrigobar();
+  if (page === 'consumos') carregarConsumos();
+  if (page === 'produtos') renderProdutos();
+  if (page === 'pessoas') { renderPessoas(); renderLeads(); }
+  if (page === 'estoque') renderEstoque();
+  if (page === 'relatorios') renderRelatorios();
+  if (page === 'fiscal') renderOlhoImpostos();
+  if (page === 'dashboard') atualizarTudo();
+}
 
 function trocarAuthTab(tab) {
-  document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('ativo', t.dataset.tab === tab));
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('ativo'));
   document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('ativo'));
+  document.querySelector(`.auth-tab[data-tab="${tab}"]`).classList.add('ativo');
   document.getElementById('panel-' + tab).classList.add('ativo');
-}
-
-/* ── Nuvem / conta ─────────────────────────────────── */
-async function carregarNuvem() {
-  try {
-    const w = getWorker();
-    const [rp, rv] = await Promise.all([
-      fetch(w + '/api/produtos'),
-      fetch(w + '/api/vendas')
-    ]);
-    let ok = false;
-    if (rp.ok) {
-      const d = await rp.json();
-      if (d.produtos && d.produtos.length) {
-        produtos = d.produtos;
-        localStorage.setItem('nox_produtos', JSON.stringify(produtos));
-        ok = true;
-      }
-    }
-    if (rv.ok) {
-      const d = await rv.json();
-      if (d.vendas && d.vendas.length) {
-        vendas = d.vendas.map(v => {
-          let detalhe = v.detalhe;
-          if (typeof v.detalhe_json === 'string') {
-            try { detalhe = JSON.parse(v.detalhe_json || '[]'); } catch { detalhe = []; }
-          }
-          return {
-            ...v,
-            detalhe: detalhe || [],
-            total: Number(v.total) || 0,
-            impostos: Number(v.impostos) || 0,
-            cbs_ibs: Number(v.cbs_ibs) || 0,
-            data: v.data,
-            itens: v.itens || (detalhe?.length || 0),
-            numero: v.numero,
-            clienteNome: v.cliente_nome || v.clienteNome,
-            clienteTel: v.cliente_tel || v.clienteTel
-          };
-        });
-        localStorage.setItem('nox_vendas', JSON.stringify(vendas));
-        ok = true;
-      }
-    }
-    const pill = document.getElementById('pillSync');
-    if (pill) {
-      pill.textContent = ok || rp.ok ? '● Nuvem' : '● Local';
-      pill.className = 'pill ' + (ok || rp.ok ? 'pill-mint' : 'pill-amber');
-    }
-    atualizarTudo();
-    if (ok) toast('Dados da conta sincronizados');
-    else toast('Nuvem ok — sem registros ainda ou D1 vazio');
-  } catch (e) {
-    document.getElementById('pillSync').textContent = '● Local';
-    document.getElementById('pillSync').className = 'pill pill-amber';
-    toast('Nuvem indisponível — modo local', 'err');
-  }
 }
 
 async function fazerLogin() {
@@ -643,332 +685,168 @@ async function fazerLogin() {
   const senha = document.getElementById('loginSenha').value;
   try {
     const r = await fetch(getWorker() + '/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, senha })
     });
-    const data = await r.json();
-    if (!r.ok) {
-      if (email === 'admin@noxmob.com.br' && senha === '123456') {
-        await entrarApp({ email, nome: 'Admin', papel: 'admin' }, false);
-        return;
-      }
-      toast(data.erro || 'Login falhou', 'err');
-      return;
+    const d = await r.json();
+    if (d.ok) {
+      entrarApp(d.usuario);
+    } else {
+      toast(d.erro || 'Login inválido', 'err');
     }
-    await entrarApp(data.usuario, true);
   } catch (e) {
     if (email === 'admin@noxmob.com.br' && senha === '123456') {
-      await entrarApp({ email, nome: 'Admin Local', papel: 'admin' }, false);
-    } else toast('Worker offline', 'err');
+      entrarApp({ email, nome: 'Admin', papel: 'admin' });
+    } else {
+      toast('Worker offline – use admin@noxmob.com.br / 123456', 'err');
+    }
   }
+}
+
+function entrarApp(u, silent) {
+  usuario = u;
+  sessionStorage.setItem('nox_user', JSON.stringify(u));
+  document.getElementById('tela-login').style.display = 'none';
+  document.getElementById('app').classList.add('ativo');
+  document.getElementById('userLabel').textContent = u.nome || u.email;
+  if (!silent) toast('Bem-vindo, ' + (u.nome || u.email));
+  atualizarTudo();
+  setInterval(() => {
+    document.getElementById('relogio').textContent = new Date().toLocaleTimeString('pt-BR');
+  }, 1000);
 }
 
 async function fazerCadastro() {
   const nome = document.getElementById('regNome').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const senha = document.getElementById('regSenha').value;
-  if (!email || !senha) { toast('Preencha e-mail e senha', 'err'); return; }
   try {
     const r = await fetch(getWorker() + '/auth/register', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, email, senha })
     });
-    const data = await r.json();
-    if (!r.ok) { toast(data.erro || 'Falha', 'err'); return; }
-    toast(data.msg || 'Cadastro enviado');
-    trocarAuthTab('login');
-  } catch (e) { toast('Worker indisponível', 'err'); }
+    const d = await r.json();
+    toast(d.ok ? d.msg : (d.erro || 'Erro'), d.ok ? 'ok' : 'err');
+  } catch (e) { toast('Worker offline', 'err'); }
 }
 
 async function fazerForgot() {
   const email = document.getElementById('forgotEmail').value.trim();
-  if (!email) { toast('Informe o e-mail', 'err'); return; }
   try {
     const r = await fetch(getWorker() + '/auth/forgot', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
     });
-    const data = await r.json();
-    toast(data.msg || 'Enviado');
-    if (data.tokenDev) toast('Token dev: ' + data.tokenDev);
-  } catch (e) { toast('Worker indisponível', 'err'); }
-}
-
-async function entrarApp(user, nuvem) {
-  usuario = user;
-  sessionStorage.setItem('nox_user', JSON.stringify(user));
-  document.getElementById('tela-login').style.display = 'none';
-  document.getElementById('app').classList.add('ativo');
-  document.getElementById('userLabel').textContent = user.email || user.nome;
-  const w = localStorage.getItem('nox_worker');
-  if (w) document.getElementById('cfgWorker').value = w;
-  if (nuvem) await carregarNuvem();
-  else {
-    document.getElementById('pillSync').textContent = '● Local';
-    document.getElementById('pillSync').className = 'pill pill-amber';
-    atualizarTudo();
-  }
-  toast('Olá, ' + (user.nome || user.email));
+    const d = await r.json();
+    toast(d.msg || 'Verifique o e-mail');
+  } catch (e) { toast('Worker offline', 'err'); }
 }
 
 function sair() {
   sessionStorage.removeItem('nox_user');
-  usuario = null;
-  document.getElementById('app').classList.remove('ativo');
-  document.getElementById('tela-login').style.display = 'flex';
-  pararScanCadastro();
-  if (streamCam) streamCam.getTracks().forEach(t => t.stop());
+  location.reload();
 }
 
-function irPara(p, el) {
-  document.querySelectorAll('.page').forEach(x => x.classList.remove('ativa'));
-  document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('ativo'));
-  document.querySelectorAll('.bottom-nav button[data-page]').forEach(x => x.classList.remove('ativo'));
-  const page = document.getElementById('p-' + p);
-  if (page) page.classList.add('ativa');
-  if (el) el.classList.add('ativo');
-  else {
-    const side = document.querySelector('.nav-item[data-page="' + p + '"]');
-    if (side) side.classList.add('ativo');
-  }
-  const bot = document.querySelector('.bottom-nav button[data-page="' + p + '"]');
-  if (bot) bot.classList.add('ativo');
-  const t = { dashboard:'Dashboard', pdv:'PDV / Caixa', produtos:'Produtos', pessoas:'Pessoas / Leads', estoque:'Estoque', relatorios:'Relatórios / DRE', fiscal:'Fiscal · CBS/IBS', pagamentos:'PIX · Asaas · Inter', whatsapp:'WhatsApp · Flows', usuarios:'Usuários', config:'Config / Worker' };
-  document.getElementById('topTitle').textContent = t[p] || p;
-  atualizarTudo();
+function fecharModal(id) {
+  document.getElementById(id).classList.remove('ativo');
 }
-function irParaMobile(p, btn) {
-  irPara(p, null);
-  document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('ativo'));
-  if (btn) btn.classList.add('ativo');
-}
+function fecharModalProduto() { fecharModal('modalProduto'); }
 
 function atualizarTudo() {
-  atualizarDashboard(); renderProdutos(); renderPessoas(); renderLeads();
-  renderEstoque(); renderRelatorios(); renderOlhoImpostos(); renderCarrinho();
+  renderProdutos();
+  renderPessoas();
+  renderLeads();
+  renderEstoque();
+  renderRelatorios();
+  renderOlhoImpostos();
+  const hoje = vendas.filter(v => new Date(v.data).toDateString() === new Date().toDateString());
+  const total = hoje.reduce((s, v) => s + Number(v.total), 0);
+  const imp = hoje.reduce((s, v) => s + Number(v.impostos || 0), 0);
+  const dual = hoje.reduce((s, v) => s + dualDaVenda(v), 0);
+  document.getElementById('statVendas').textContent = 'R$ ' + total.toFixed(2);
+  document.getElementById('statImpostos').textContent = 'R$ ' + imp.toFixed(2);
+  document.getElementById('statDual').textContent = 'R$ ' + dual.toFixed(2);
+  document.getElementById('statTickets').textContent = hoje.length;
+  document.getElementById('ultimasVendas').innerHTML = vendas.slice(0, 8).map((v, i) => `
+    <tr>
+      <td>${new Date(v.data).toLocaleTimeString('pt-BR')}</td>
+      <td>${v.itens}</td>
+      <td>R$ ${Number(v.total).toFixed(2)}</td>
+      <td>R$ ${Number(v.impostos || 0).toFixed(2)}</td>
+      <td>R$ ${dualDaVenda(v).toFixed(2)}</td>
+      <td>
+        <button class="btn btn-ghost btn-sm" onclick="imprimirDanfe(${i})">🖨</button>
+        <button class="btn btn-mint btn-sm" onclick="enviarWhatsApp(${i})">WA</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted)">Nenhuma venda</td></tr>';
 }
 
-function salvarConfigWorker() {
-  localStorage.setItem('nox_worker', document.getElementById('cfgWorker').value.trim());
-  toast('Worker salvo');
-}
-async function testarWorker() {
-  try {
-    const r = await fetch(getWorker() + '/health');
-    const d = await r.json();
-    document.getElementById('cfgOut').textContent = JSON.stringify(d, null, 2);
-    document.getElementById('pillSync').textContent = '● Nuvem';
-    document.getElementById('pillSync').className = 'pill pill-mint';
-    toast('Worker OK');
-  } catch (e) {
-    document.getElementById('cfgOut').textContent = String(e);
-    toast('Worker offline', 'err');
-  }
-}
-async function syncProdutosNuvem() {
-  try {
-    const r = await fetch(getWorker() + '/api/produtos');
-    if (r.ok) {
-      const d = await r.json();
-      if (d.produtos?.length) {
-        produtos = d.produtos;
-        localStorage.setItem('nox_produtos', JSON.stringify(produtos));
-        renderProdutos(); renderEstoque();
-        toast('Produtos da nuvem');
-        return;
-      }
-    }
-    for (const p of produtos) {
-      await fetch(getWorker() + '/api/produtos', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(p)
-      });
-    }
-    toast('Produtos enviados à nuvem');
-  } catch (e) { toast('Sync offline', 'err'); }
+function renderProdutos() {
+  document.getElementById('listaProdutos').innerHTML = produtos.map((p, i) => `
+    <tr>
+      <td style="font-weight:600">${p.nome}</td>
+      <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.sku}</td>
+      <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.barras || '—'}</td>
+      <td>R$ ${Number(p.preco).toFixed(2)}</td>
+      <td>${p.estoque}</td>
+      <td><button class="icon-btn" onclick="apagarProduto('${p.sku}')">🗑</button></td>
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted)">Nenhum produto</td></tr>';
 }
 
-async function aprovarUsuario() {
-  if (!usuario || usuario.papel !== 'admin') { toast('Somente admin', 'err'); return; }
-  const emailAlvo = document.getElementById('approveEmail').value.trim();
-  try {
-    const r = await fetch(getWorker() + '/auth/approve', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        emailAdmin: usuario.email,
-        senhaAdmin: prompt('Senha admin:'),
-        emailAlvo
-      })
-    });
-    const d = await r.json();
-    document.getElementById('approveOut').textContent = JSON.stringify(d);
-    toast(r.ok ? 'Ativado' : (d.erro || 'Falha'), r.ok ? 'ok' : 'err');
-  } catch (e) { toast('D1/Worker necessário', 'err'); }
-}
-
-function validarCPF(cpf) {
-  if (!/^\d{11}$/.test(cpf) || /^(\d)\1+$/.test(cpf)) return false;
-  let s = 0; for (let i = 0; i < 9; i++) s += +cpf[i] * (10 - i);
-  let r = (s * 10) % 11; if (r === 10) r = 0; if (r !== +cpf[9]) return false;
-  s = 0; for (let i = 0; i < 10; i++) s += +cpf[i] * (11 - i);
-  r = (s * 10) % 11; if (r === 10) r = 0; return r === +cpf[10];
-}
-async function buscarDocumento() {
-  const raw = document.getElementById('cDoc').value.replace(/\D/g, '');
-  if (raw.length !== 11 && raw.length !== 14) return;
-  toast('Consultando…');
-  try {
-    if (raw.length === 14) {
-      const r = await fetch(getWorker() + '/cnpj/' + raw);
-      if (r.ok) {
-        const d = await r.json();
-        document.getElementById('cNome').value = d.razao_social || d.nome || '';
-        document.getElementById('cTipo').value = 'PJ';
-        if (d.telefone) document.getElementById('cTel').value = String(d.telefone);
-        toast('CNPJ ok'); return;
-      }
-      const r2 = await fetch('https://brasilapi.com.br/api/cnpj/v1/' + raw);
-      if (r2.ok) {
-        const d = await r2.json();
-        document.getElementById('cNome').value = d.razao_social || '';
-        document.getElementById('cTipo').value = 'PJ';
-        toast('CNPJ (BrasilAPI)');
-      }
-    } else {
-      if (!validarCPF(raw)) { toast('CPF inválido', 'err'); return; }
-      document.getElementById('cTipo').value = 'PF';
-      toast('CPF válido');
-    }
-  } catch (e) { toast('Consulta falhou', 'err'); }
-}
-
-async function iniciarScanCadastro() {
-  try {
-    pararScanCadastro();
-    codeReader = new ZXing.BrowserMultiFormatReader();
-    document.getElementById('scanVideo').style.display = 'block';
-    document.getElementById('scanPlaceholder').style.display = 'none';
-    scanning = true;
-    await codeReader.decodeFromVideoDevice(undefined, 'scanVideo', (res) => {
-      if (res && scanning) {
-        const cod = res.getText();
-        document.getElementById('pBarras').value = cod;
-        const a = produtos.find(p => p.barras === cod);
-        if (a) {
-          document.getElementById('pNome').value = a.nome;
-          document.getElementById('pNcm').value = a.ncm || '';
-          document.getElementById('pPreco').value = a.preco;
-          toast('Na base: ' + a.nome);
-        } else toast('Código: ' + cod);
-        pararScanCadastro();
-      }
-    });
-  } catch (e) { toast('Câmera indisponível', 'err'); }
-}
-function pararScanCadastro() {
-  scanning = false;
-  if (codeReader) try { codeReader.reset(); } catch (e) {}
-  const v = document.getElementById('scanVideo');
-  if (v && v.srcObject) { v.srcObject.getTracks().forEach(t => t.stop()); v.srcObject = null; }
-  if (v) v.style.display = 'none';
-  const ph = document.getElementById('scanPlaceholder');
-  if (ph) ph.style.display = 'block';
-}
-function abrirModalProduto() { abrirModal('modalProduto'); }
-function fecharModalProduto() { pararScanCadastro(); fecharModal('modalProduto'); }
 function salvarProduto() {
   const nome = document.getElementById('pNome').value.trim();
   if (!nome) { toast('Nome obrigatório', 'err'); return; }
-  const sku = document.getElementById('pSku').value.trim() || ('SKU-' + String(produtos.length + 1).padStart(3, '0'));
   const p = {
-    sku, nome,
+    nome,
+    sku: document.getElementById('pSku').value.trim() || ('SKU-' + Date.now()),
     barras: document.getElementById('pBarras').value.trim(),
-    ncm: document.getElementById('pNcm').value.trim() || '00000000',
+    ncm: document.getElementById('pNcm').value.trim(),
     cnp: document.getElementById('pCnp').value.trim(),
     preco: parseFloat(document.getElementById('pPreco').value) || 0,
     estoque: parseInt(document.getElementById('pEstoque').value) || 0,
-    cfop: document.getElementById('pCfop').value,
-    icms: parseFloat(document.getElementById('pIcms').value) || 18
+    icms: parseFloat(document.getElementById('pIcms').value) || 18,
+    cfop: document.getElementById('pCfop').value
   };
-  const idx = produtos.findIndex(x => x.sku === sku);
+  const idx = produtos.findIndex(x => x.sku === p.sku);
   if (idx >= 0) produtos[idx] = p; else produtos.push(p);
   localStorage.setItem('nox_produtos', JSON.stringify(produtos));
-  fetch(getWorker() + '/api/produtos', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(p) }).catch(()=>{});
-  fecharModalProduto(); renderProdutos(); renderEstoque(); toast('Produto salvo');
+  fecharModalProduto();
+  renderProdutos();
+  toast('Produto salvo');
 }
+
 function apagarProduto(sku) {
-  if (!confirm('Apagar?')) return;
+  if (!confirm('Remover produto?')) return;
   produtos = produtos.filter(p => p.sku !== sku);
   localStorage.setItem('nox_produtos', JSON.stringify(produtos));
-  renderProdutos(); renderEstoque(); toast('Removido');
+  renderProdutos();
+  renderEstoque();
 }
+
 function zerarEstoque(sku) {
   const p = produtos.find(x => x.sku === sku);
-  if (!p) return;
-  p.estoque = 0;
-  localStorage.setItem('nox_produtos', JSON.stringify(produtos));
-  renderProdutos(); renderEstoque(); toast('Estoque zerado');
-}
-function renderProdutos() {
-  document.getElementById('listaProdutos').innerHTML = produtos.map(p => `<tr>
-    <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.sku}</td>
-    <td style="font-weight:600">${p.nome}</td>
-    <td style="font-family:JetBrains Mono,monospace;font-size:11px">${p.barras || '—'}</td>
-    <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.ncm}</td>
-    <td>${p.icms || 18}%</td>
-    <td style="color:var(--mint);font-weight:700">R$ ${Number(p.preco).toFixed(2)}</td>
-    <td>${p.estoque}</td>
-    <td style="white-space:nowrap">
-      <button class="icon-btn ok" onclick="adicionarAoCarrinho(produtos.find(x=>x.sku==='${p.sku}'))">+</button>
-      <button class="icon-btn" onclick="zerarEstoque('${p.sku}')">0</button>
-      <button class="icon-btn" onclick="apagarProduto('${p.sku}')">🗑</button>
-    </td>
-  </tr>`).join('');
+  if (p) { p.estoque = 0; localStorage.setItem('nox_produtos', JSON.stringify(produtos)); renderEstoque(); }
 }
 
-function atualizarDashboard() {
-  const hoje = vendas.filter(v => new Date(v.data).toDateString() === new Date().toDateString());
-  document.getElementById('statVendas').textContent = 'R$ ' + hoje.reduce((s, v) => s + v.total, 0).toFixed(2);
-  document.getElementById('statImpostos').textContent = 'R$ ' + hoje.reduce((s, v) => s + (v.impostos || 0), 0).toFixed(2);
-  document.getElementById('statDual').textContent = 'R$ ' + hoje.reduce((s, v) => s + dualDaVenda(v), 0).toFixed(2);
-  document.getElementById('statTickets').textContent = hoje.length;
-  document.getElementById('statNfe').textContent = hoje.length;
-  const tb = document.getElementById('ultimasVendas');
-  if (!vendas.length) {
-    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">Nenhuma venda</td></tr>';
-    return;
-  }
-  tb.innerHTML = vendas.slice(0, 8).map((v, i) => `<tr>
-    <td>${new Date(v.data).toLocaleString('pt-BR')}</td>
-    <td>${v.itens}</td>
-    <td style="color:var(--mint);font-weight:700">R$ ${Number(v.total).toFixed(2)}</td>
-    <td style="color:var(--amber)">R$ ${Number(v.impostos || 0).toFixed(2)}</td>
-    <td style="color:var(--cyan)">R$ ${dualDaVenda(v).toFixed(2)}</td>
-    <td style="white-space:nowrap">
-      <button class="btn btn-ghost btn-sm" onclick="imprimirDanfe(${i})">🖨</button>
-      <button class="btn btn-mint btn-sm" onclick="enviarWhatsApp(${i})">WA</button>
-    </td>
-  </tr>`).join('');
-}
-
-function buscarPorCodigo() {
+function bipar() {
   const cod = document.getElementById('scanInput').value.trim();
   if (!cod) return;
   const p = produtos.find(x => x.barras === cod || x.sku === cod);
-  if (p) { adicionarAoCarrinho(p, 100); document.getElementById('scanInput').value = ''; toast('Bipado: ' + p.nome); }
-  else toast('Não encontrado', 'err');
+  if (p) { adicionarAoCarrinho(p); document.getElementById('scanInput').value = ''; }
+  else toast('Produto não encontrado', 'err');
 }
-async function ativarCamera() {
-  try {
-    streamCam = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-    const v = document.getElementById('videoCam');
-    v.srcObject = streamCam; v.style.display = 'block';
-    document.getElementById('camPlaceholder').style.display = 'none';
-    document.getElementById('btnReconhecer').disabled = false;
-    toast('Câmera OK');
-  } catch (e) { toast('Sem câmera', 'err'); }
+
+function iniciarCamera() {
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+    .then(stream => {
+      const v = document.getElementById('videoCam');
+      v.srcObject = stream; v.style.display = 'block'; v.play();
+      document.getElementById('camPlaceholder').style.display = 'none';
+      document.getElementById('btnReconhecer').disabled = false;
+      toast('Câmera OK');
+    }).catch(() => toast('Sem câmera', 'err'));
 }
+
 function aoFotoProduto(e) {
   const f = e.target.files[0]; if (!f) return;
   document.getElementById('camPlaceholder').innerHTML = `<img src="${URL.createObjectURL(f)}" style="max-height:160px;border-radius:12px"/>`;
@@ -976,17 +854,21 @@ function aoFotoProduto(e) {
   document.getElementById('btnReconhecer').disabled = false;
   toast('Foto OK');
 }
+
 async function reconhecerProduto() {
   const btn = document.getElementById('btnReconhecer');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
   document.getElementById('ocrStatus').textContent = 'Identificando…';
   await new Promise(r => setTimeout(r, 700));
   const p = produtos[Math.floor(Math.random() * produtos.length)];
-  document.getElementById('ocrStatus').innerHTML = `<strong style="color:var(--mint)">${p.nome}</strong>`;
-  adicionarAoCarrinho(p, 92);
+  if (p) {
+    document.getElementById('ocrStatus').innerHTML = `<strong style="color:var(--mint)">${p.nome}</strong>`;
+    adicionarAoCarrinho(p, 92);
+    toast('IA: ' + p.nome);
+  }
   btn.disabled = false; btn.innerHTML = 'IA';
-  toast('IA: ' + p.nome);
 }
+
 function adicionarAoCarrinho(p, conf) {
   if (!p) return;
   if (p.estoque <= 0) { toast('Sem estoque', 'err'); return; }
@@ -994,6 +876,7 @@ function adicionarAoCarrinho(p, conf) {
   if (e) e.qtd++; else carrinho.push({ ...p, qtd: 1, conf: conf || 100 });
   renderCarrinho();
 }
+
 function renderCarrinho() {
   const el = document.getElementById('cartItems');
   if (!carrinho.length) {
@@ -1022,6 +905,7 @@ function renderCarrinho() {
   document.getElementById('cartDual').textContent = 'R$ ' + dual.toFixed(2);
   document.getElementById('cartTotal').textContent = 'R$ ' + sub.toFixed(2);
 }
+
 function limparCarrinho() { carrinho = []; renderCarrinho(); }
 
 function finalizarVenda() {
@@ -1135,6 +1019,7 @@ async function enviarWhatsApp(idx) {
     window.open('https://wa.me/55' + tel + '?text=' + encodeURIComponent(text), '_blank');
   }
 }
+
 function enviarWhatsAppUltima() {
   if (!vendas.length) { toast('Sem vendas', 'err'); return; }
   enviarWhatsApp(0);
@@ -1151,6 +1036,7 @@ async function waEnviarTexto() {
     if (d.waMe) window.open(d.waMe, '_blank');
   } catch (e) { document.getElementById('waOut').textContent = String(e); }
 }
+
 async function waEnviarTemplate() {
   try {
     const r = await fetch(getWorker() + '/wa/send', {
@@ -1165,6 +1051,7 @@ async function waEnviarTemplate() {
     document.getElementById('waOut').textContent = JSON.stringify(await r.json(), null, 2);
   } catch (e) { document.getElementById('waOut').textContent = String(e); }
 }
+
 async function waDispararFlow() {
   try {
     const r = await fetch(getWorker() + '/wa/send', {
@@ -1198,6 +1085,7 @@ async function criarCobrancaAsaas() {
     document.getElementById('asaasOut').textContent = 'Worker offline ou rota ausente.\n' + e;
   }
 }
+
 function gerarPixAsaas() {
   const total = carrinho.length
     ? carrinho.reduce((s, c) => s + c.preco * c.qtd, 0)
@@ -1207,6 +1095,7 @@ function gerarPixAsaas() {
   irPara('pagamentos');
   toast('Valor carregado');
 }
+
 async function criarPixInter() {
   try {
     const r = await fetch(getWorker() + '/pay/inter/pix', {
@@ -1229,12 +1118,14 @@ function salvarPessoa() {
   if (tel) salvarLead({ nome, tel, doc: p.doc, ultimaCompra: null, valor: 0 });
   fecharModal('modalPessoa'); renderPessoas(); toast('Salvo');
 }
+
 function apagarPessoa(i) {
   if (!confirm('Remover?')) return;
   pessoas.splice(i, 1);
   localStorage.setItem('nox_pessoas', JSON.stringify(pessoas));
   renderPessoas();
 }
+
 function renderPessoas() {
   document.getElementById('listaPessoas').innerHTML = pessoas.map((c, i) => `<tr>
     <td style="font-weight:600">${c.nome}</td>
@@ -1242,8 +1133,9 @@ function renderPessoas() {
     <td><span class="pill ${c.tipo==='PJ'?'pill-blue':'pill-mint'}">${c.tipo}</span></td>
     <td>${c.tel||'—'}</td>
     <td><button class="icon-btn" onclick="apagarPessoa(${i})">🗑</button></td>
-  </tr>`).join('');
+  </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted)">Nenhuma pessoa</td></tr>';
 }
+
 function renderLeads() {
   const el = document.getElementById('listaLeads');
   if (!leads.length) { el.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px">Nenhum lead</td></tr>'; return; }
@@ -1255,16 +1147,17 @@ function renderLeads() {
     <td><button class="btn btn-mint btn-sm" onclick="window.open('https://wa.me/55${onlyDigits(l.tel)}','_blank')">WA</button></td>
   </tr>`).join('');
 }
+
 function renderEstoque() {
   document.getElementById('listaEstoque').innerHTML = produtos.map(p => `<tr>
     <td style="font-weight:600">${p.nome}</td>
     <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.sku}</td>
-    <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.ncm}</td>
+    <td style="font-family:JetBrains Mono,monospace;font-size:12px">${p.ncm||'—'}</td>
     <td>${p.estoque}</td>
     <td><span class="pill ${p.estoque<1?'pill-rose':p.estoque<15?'pill-amber':'pill-mint'}">${p.estoque<1?'Zerado':p.estoque<15?'Baixo':'OK'}</span></td>
     <td><button class="icon-btn ok" onclick="zerarEstoque('${p.sku}')">0</button>
     <button class="icon-btn" onclick="apagarProduto('${p.sku}')">🗑</button></td>
-  </tr>`).join('');
+  </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted)">Nenhum item</td></tr>';
 }
 
 function filtrarVendasPeriodo() {
@@ -1277,12 +1170,15 @@ function filtrarVendasPeriodo() {
     return true;
   });
 }
+
 function setPeriodoDRE(p) { periodoDRE = p; renderRelatorios(); toast('Filtro: ' + p); }
+
 function zerarVisualizacaoPeriodo() {
   localStorage.setItem('nox_fechado_' + periodoDRE, new Date().toISOString());
   toast('Saldo visual zerado. Extrato mantido.');
   renderRelatorios();
 }
+
 function renderRelatorios() {
   const lista = filtrarVendasPeriodo();
   const bruto = lista.reduce((s, v) => s + Number(v.total), 0);
@@ -1308,6 +1204,7 @@ function renderRelatorios() {
     </tr>`;
   }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px">Sem vendas</td></tr>';
 }
+
 function imprimirDRE() {
   const lista = filtrarVendasPeriodo();
   const bruto = lista.reduce((s, v) => s + Number(v.total), 0);
@@ -1353,6 +1250,134 @@ function renderOlhoImpostos() {
     <div class="tax-line"><span>IBS 0,1%</span><strong>R$ ${ibs.toFixed(2)}</strong></div>
     <div class="tax-line" style="border-top:1px solid var(--border);padding-top:8px;margin-top:8px">
       <span>Total CBS+IBS</span><strong style="color:var(--amber)">R$ ${(cbs+ibs).toFixed(2)}</strong></div>`;
+}
+
+function salvarConfig() {
+  localStorage.setItem('nox_cfg_worker', document.getElementById('cfgWorker').value);
+  toast('Configurações salvas');
+}
+
+/* ============================================================
+   NOXMOB PALM POWER – Hotel + Frigobar + Biometria
+   ============================================================ */
+
+async function cadastrarPalmWeb() {
+  const nome = document.getElementById('palmNome').value.trim();
+  const template = document.getElementById('palmTemplate').value.trim();
+  if (!nome || !template) {
+    toast('Nome e Template são obrigatórios', 'err');
+    return;
+  }
+  const body = {
+    nome,
+    cpf: document.getElementById('palmCpf').value.trim(),
+    tel: document.getElementById('palmTel').value.trim(),
+    quarto: document.getElementById('palmQuarto').value.trim(),
+    vein_template_b64: template
+  };
+  try {
+    const r = await fetch(getWorker() + '/api/palm/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const j = await r.json();
+    if (j.ok) {
+      toast('Hóspede + Palma cadastrados com sucesso!');
+      document.getElementById('palmNome').value = '';
+      document.getElementById('palmCpf').value = '';
+      document.getElementById('palmTel').value = '';
+      document.getElementById('palmQuarto').value = '';
+      document.getElementById('palmTemplate').value = '';
+    } else {
+      toast(j.erro || 'Erro no cadastro', 'err');
+    }
+  } catch (e) {
+    toast('Falha de comunicação com o Worker', 'err');
+  }
+}
+
+async function carregarFrigobar() {
+  try {
+    const r = await fetch(getWorker() + '/api/frigobar/estoque');
+    const j = await r.json();
+    const tbody = document.getElementById('listaFrigobar');
+    if (!j.ok || !j.itens?.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px">Nenhum item</td></tr>';
+      return;
+    }
+    tbody.innerHTML = j.itens.map(i => `
+      <tr>
+        <td style="font-family:JetBrains Mono,monospace;font-size:12px">${i.sku}</td>
+        <td style="font-weight:600">${i.nome}</td>
+        <td>R$ ${Number(i.preco).toFixed(2)}</td>
+        <td>${i.estoque}</td>
+        <td>${i.estoque_minimo}</td>
+        <td>
+          <span class="pill ${i.estoque < 1 ? 'pill-rose' : i.estoque <= i.estoque_minimo ? 'pill-amber' : 'pill-mint'}">
+            ${i.estoque < 1 ? 'Zerado' : i.estoque <= i.estoque_minimo ? 'Baixo' : 'OK'}
+          </span>
+        </td>
+      </tr>`).join('');
+  } catch (e) {
+    toast('Erro ao carregar frigobar', 'err');
+  }
+}
+
+function abrirReposicaoFrigobar() {
+  document.getElementById('modalReposicaoFrigobar').classList.add('ativo');
+}
+
+async function fazerReposicaoFrigobar() {
+  const sku = document.getElementById('repSku').value.trim();
+  const quantidade = parseInt(document.getElementById('repQtd').value) || 0;
+  if (!sku || quantidade <= 0) {
+    toast('SKU e quantidade válidos', 'err');
+    return;
+  }
+  try {
+    const r = await fetch(getWorker() + '/api/frigobar/reposicao', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sku, quantidade })
+    });
+    const j = await r.json();
+    if (j.ok) {
+      toast('Reposição realizada');
+      fecharModal('modalReposicaoFrigobar');
+      carregarFrigobar();
+    } else {
+      toast(j.erro || 'Erro', 'err');
+    }
+  } catch (e) {
+    toast('Falha de comunicação', 'err');
+  }
+}
+
+async function carregarConsumos() {
+  const quarto = document.getElementById('filtroQuartoConsumo')?.value.trim() || '';
+  const url = getWorker() + '/api/palm/consumos' + (quarto ? '?quarto=' + encodeURIComponent(quarto) : '');
+  try {
+    const r = await fetch(url);
+    const j = await r.json();
+    const tbody = document.getElementById('listaConsumos');
+    if (!j.ok || !j.consumos?.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:16px">Nenhum consumo</td></tr>';
+      return;
+    }
+    tbody.innerHTML = j.consumos.map(c => `
+      <tr>
+        <td>${c.criado_em ? new Date(c.criado_em).toLocaleString('pt-BR') : '—'}</td>
+        <td style="font-weight:700">${c.quarto || '—'}</td>
+        <td>${c.nome || '—'}</td>
+        <td>${c.descricao || '—'}</td>
+        <td style="color:var(--mint);font-weight:700">R$ ${Number(c.valor).toFixed(2)}</td>
+        <td style="font-family:JetBrains Mono,monospace;font-size:11px">${c.txid_pix || '—'}</td>
+        <td><span class="pill ${c.status === 'pago' || c.status === 'ativo' ? 'pill-mint' : 'pill-amber'}">${c.status}</span></td>
+      </tr>`).join('');
+  } catch (e) {
+    toast('Erro ao carregar consumos', 'err');
+  }
 }
 
 /* PWA install */
