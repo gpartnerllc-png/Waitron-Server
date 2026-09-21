@@ -2,14 +2,40 @@ name = "waitron-server"
 main = "src/index.js"
 compatibility_date = "2026-01-01"
 workers_dev = true
+compatibility_flags = ["nodejs_compat"]
 
+# ============================================================
+# Variáveis públicas (não sensíveis)
+# ============================================================
 [vars]
 ENV = "production"
 ZERNIO_BASE = "https://zernio.com/api/v1"
-ASAAS_BASE = "https://api-sandbox.asaas.com"
-ALLOWED_ORIGIN = "https://ws.droppfy.com,https://droppfy.com,https://www.droppfy.com,http://localhost:5500,http://127.0.0.1:5500,http://localhost:3000"
+ASAAS_BASE = "https://api-sandbox.asaas.com"          # troque para https://api.asaas.com em produção
+ALLOWED_ORIGIN = "https://ws.droppfy.com,https://droppfy.com,https://www.droppfy.com,https://waitron-server.contatodroppfy.workers.dev,http://localhost:5500,http://127.0.0.1:5500,http://localhost:3000"
 
+# ============================================================
+# Banco de dados D1
+# ============================================================
 [[d1_databases]]
 binding = "DB"
 database_name = "noxmob-db"
 database_id = "4d97efa0-a40e-421b-97e4-b331b7195acf"
+
+# ============================================================
+# Observabilidade (opcional, mas recomendado)
+# ============================================================
+[observability]
+enabled = true
+
+# ============================================================
+# Secrets (configure com: npx wrangler secret put NOME)
+# ============================================================
+# ZERNIO_API_KEY
+# ZERNIO_PROFILE_ID
+# ZERNIO_ACCOUNT_ID
+# ASAAS_API_KEY
+# INTER_CLIENT_ID
+# INTER_CLIENT_SECRET
+# INTER_PIX_CHAVE
+# SERPRO_TOKEN          (se usar consulta CPF)
+# API_KEY               (se quiser proteger rotas internas)
