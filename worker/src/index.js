@@ -1,7 +1,9 @@
 /**
  * waitron-server · NoxMob API
  * Auth · D1 · CNPJ · WhatsApp Zernio · Asaas · CORS
- * Secrets: ZERNIO_API_KEY, ASAAS_API_KEY, SERPRO_TOKEN, API_KEY
+ * + Palm Vein · Hotel · Frigobar · Banco Inter PIX
+ * Secrets: ZERNIO_API_KEY, ASAAS_API_KEY, SERPRO_TOKEN, API_KEY,
+ *          INTER_CLIENT_ID, INTER_CLIENT_SECRET, INTER_PIX_CHAVE
  */
 
 const DEFAULT_ORIGINS = [
@@ -74,6 +76,69 @@ async function zernioFetch(env, path, options = {}) {
   return { ok: r.ok, status: r.status, data };
 }
 
+/* ============================================================
+   BANCO INTER – Token + Cobrança Imediata (PIX)
+   ============================================================ */
+async function getInterToken(env) {
+  const clientId = env.INTER_CLIENT_ID;
+  const clientSecret = env.INTER_CLIENT_SECRET;
+  if (!clientId || !clientSecret) {
+    throw new Error('INTER_CLIENT_ID / INTER_CLIENT_SECRET não configurados');
+  }
+
+  const basic = btoa(`${clientId}:${clientSecret}`);
+  const res = await fetch('https://cdpj.partners.bancointer.com.br/oauth/v2/token', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Basic ${basic}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'grant_type=client_credentials&scope=cob.write cob.read pix.read',
+  });
+
+  if (!res.ok) {
+    const t = await res.text();
+    throw new Error(`Token Inter falhou: ${res.status} ${t}`);
+  }
+  const data = await res.json();
+  return data.access_token;
+}
+
+async function criarCobrancaInter(env, { txid, valor, nome, cpf, solicitacao }) {
+  const token = await getInterToken(env);
+  const chave = env.INTER_PIX_CHAVE;
+  if (!chave) throw new Error('INTER_PIX_CHAVE não configurada');
+
+  const payload = {
+    calendario: { expiracao: 3600 },
+    devedor: {
+      cpf: (cpf || '00000000000').replace(/\D/g, ''),
+      nome: nome || 'Hóspede',
+    },
+    valor: { original: Number(valor).toFixed(2) },
+    chave,
+    solicitacaoPagador: solicitacao || 'Consumo Hotel via Biometria Vascular',
+  };
+
+  const res = await fetch(
+    `https://cdpj.partners.bancointer.com.br/pix/v2/cob/${txid}`,
+    {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    }
+  );
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(`Inter Cobrança: ${res.status} ${JSON.stringify(data)}`);
+  }
+  return data;
+}
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
@@ -92,6 +157,7 @@ export default {
           env: env.ENV || 'production',
           zernio: !!env.ZERNIO_API_KEY,
           asaas: !!env.ASAAS_API_KEY,
+          inter: !!(env.INTER_CLIENT_ID && env.INTER_CLIENT_SECRET),
           d1: !!env.DB,
           routes: [
             'GET /health',
@@ -105,6 +171,11 @@ export default {
             'GET|POST /api/produtos',
             'GET|POST /api/vendas',
             'POST /pay/asaas/pix',
+            'POST /api/palm/register',
+            'POST /api/palm/identify-and-charge',
+            'GET /api/palm/consumos',
+            'GET /api/frigobar/estoque',
+            'POST /api/frigobar/reposicao',
           ],
         },
         200,
@@ -152,7 +223,6 @@ export default {
         if (!text && !(body.useTemplate && body.templateName)) {
           return json({ erro: 'Mensagem ou template obrigatório' }, 400, req, env);
         }
-
         if (body.useTemplate && body.templateName) {
           const created = await zernioFetch(env, '/broadcasts', {
             method: 'POST',
@@ -207,7 +277,6 @@ export default {
             env
           );
         }
-
         if (!env.ZERNIO_API_KEY) {
           const waMe =
             'https://wa.me/' + onlyDigits(phone) + '?text=' + encodeURIComponent(text);
@@ -223,7 +292,6 @@ export default {
             env
           );
         }
-
         const msg = await zernioFetch(env, '/messages/send', {
           method: 'POST',
           body: JSON.stringify({
@@ -234,7 +302,6 @@ export default {
             text: { body: text },
           }),
         });
-
         if (msg.ok) {
           return json(
             { ok: true, mode: 'zernio_message', detalhe: msg.data },
@@ -243,7 +310,6 @@ export default {
             env
           );
         }
-
         const waMe =
           'https://wa.me/' + onlyDigits(phone) + '?text=' + encodeURIComponent(text);
         return json(
@@ -514,6 +580,332 @@ export default {
         return json({ ok: r.ok, data }, r.ok ? 200 : r.status, req, env);
       } catch (e) {
         return json({ erro: String(e.message || e) }, 502, req, env);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  PALM VEIN + HOTEL + FRIGOBAR (NoxMob Palm Power)
+    // ═══════════════════════════════════════════════════════════
+
+    // POST /api/palm/register
+    if (url.pathname === '/api/palm/register' && req.method === 'POST') {
+      try {
+        if (!env.DB) return json({ erro: 'D1 necessário' }, 501, req, env);
+
+        const body = await req.json();
+        const { nome, cpf, tel, quarto, vein_template_b64, device_id } = body;
+
+        if (!nome || !vein_template_b64) {
+          return json({ erro: 'nome e vein_template_b64 obrigatórios' }, 400, req, env);
+        }
+
+        const hashBuffer = await crypto.subtle.digest(
+          'SHA-256',
+          new TextEncoder().encode(vein_template_b64)
+        );
+        const template_hash = Array.from(new Uint8Array(hashBuffer))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('');
+
+        let hospede = await env.DB.prepare('SELECT id FROM pessoas WHERE doc = ?')
+          .bind(cpf || '')
+          .first();
+
+        if (!hospede) {
+          const r = await env.DB.prepare(
+            `INSERT INTO pessoas (nome, doc, tipo, tel) VALUES (?, ?, 'PF', ?)`
+          )
+            .bind(nome, cpf || null, tel || null)
+            .run();
+          hospede = { id: r.meta.last_row_id };
+        } else {
+          await env.DB.prepare(
+            `UPDATE pessoas SET nome = ?, tel = ? WHERE id = ?`
+          )
+            .bind(nome, tel || null, hospede.id)
+            .run();
+        }
+
+        await env.DB.prepare(
+          `INSERT OR REPLACE INTO palm_templates (hospede_id, template_hash, template_b64, device_id)
+           VALUES (?, ?, ?, ?)`
+        )
+          .bind(hospede.id, template_hash, vein_template_b64, device_id || null)
+          .run();
+
+        if (quarto) {
+          await env.DB.prepare(
+            `UPDATE hospede_quarto SET status = 'checkout', checkout = datetime('now')
+             WHERE quarto = ? AND status = 'ocupado'`
+          )
+            .bind(quarto)
+            .run();
+
+          await env.DB.prepare(
+            `INSERT INTO hospede_quarto (hospede_id, quarto, status) VALUES (?, ?, 'ocupado')`
+          )
+            .bind(hospede.id, quarto)
+            .run();
+        }
+
+        return json(
+          {
+            ok: true,
+            hospede_id: hospede.id,
+            nome,
+            quarto,
+            msg: 'Hóspede + Palma cadastrados com sucesso',
+          },
+          201,
+          req,
+          env
+        );
+      } catch (e) {
+        return json({ erro: String(e.message || e) }, 500, req, env);
+      }
+    }
+
+    // POST /api/palm/identify-and-charge
+    if (url.pathname === '/api/palm/identify-and-charge' && req.method === 'POST') {
+      try {
+        if (!env.DB) return json({ erro: 'D1 necessário' }, 501, req, env);
+
+        const body = await req.json();
+        const {
+          vein_template_b64,
+          quarto,
+          itens = [],
+          valor,
+          descricao = 'Consumo Frigobar',
+          device_id,
+        } = body;
+
+        if (!vein_template_b64) {
+          return json({ erro: 'vein_template_b64 obrigatório' }, 400, req, env);
+        }
+
+        const hashBuffer = await crypto.subtle.digest(
+          'SHA-256',
+          new TextEncoder().encode(vein_template_b64)
+        );
+        const template_hash = Array.from(new Uint8Array(hashBuffer))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('');
+
+        const palm = await env.DB.prepare(
+          `SELECT pt.hospede_id, p.nome, p.doc, p.tel
+           FROM palm_templates pt
+           JOIN pessoas p ON p.id = pt.hospede_id
+           WHERE pt.template_hash = ?`
+        )
+          .bind(template_hash)
+          .first();
+
+        if (!palm) {
+          return json(
+            { ok: false, erro: 'Palma não cadastrada', code: 'PALM_NOT_FOUND' },
+            404,
+            req,
+            env
+          );
+        }
+
+        let quartoAtual = quarto;
+        if (!quartoAtual) {
+          const hq = await env.DB.prepare(
+            `SELECT quarto FROM hospede_quarto
+             WHERE hospede_id = ? AND status = 'ocupado'
+             ORDER BY id DESC LIMIT 1`
+          )
+            .bind(palm.hospede_id)
+            .first();
+          quartoAtual = hq?.quarto || 'SEM_QUARTO';
+        }
+
+        let total = 0;
+        const detalhes = [];
+
+        if (Array.isArray(itens) && itens.length > 0) {
+          for (const it of itens) {
+            const prod = await env.DB.prepare(
+              `SELECT id, nome, preco, estoque FROM frigobar_itens WHERE sku = ? AND ativo = 1`
+            )
+              .bind(it.sku)
+              .first();
+
+            if (!prod) continue;
+            const qtd = Math.max(1, parseInt(it.quantidade) || 1);
+
+            if (prod.estoque < qtd) {
+              return json(
+                {
+                  ok: false,
+                  erro: `Estoque insuficiente: ${prod.nome} (tem ${prod.estoque})`,
+                  code: 'STOCK_OUT',
+                },
+                409,
+                req,
+                env
+              );
+            }
+
+            total += prod.preco * qtd;
+            detalhes.push({
+              sku: it.sku,
+              nome: prod.nome,
+              qtd,
+              preco: prod.preco,
+            });
+
+            await env.DB.prepare(
+              `UPDATE frigobar_itens SET estoque = estoque - ? WHERE id = ?`
+            )
+              .bind(qtd, prod.id)
+              .run();
+
+            await env.DB.prepare(
+              `INSERT INTO frigobar_movimentacao (item_id, quarto, quantidade, tipo)
+               VALUES (?, ?, ?, 'consumo')`
+            )
+              .bind(prod.id, quartoAtual, -qtd)
+              .run();
+          }
+        } else {
+          total = Number(valor) || 25.0;
+        }
+
+        const txid = (
+          'NOX' +
+          Date.now().toString(36) +
+          Math.random().toString(36).slice(2, 7)
+        )
+          .toUpperCase()
+          .replace(/[^A-Z0-9]/g, '')
+          .slice(0, 32);
+
+        let interData = null;
+        try {
+          interData = await criarCobrancaInter(env, {
+            txid,
+            valor: total,
+            nome: palm.nome,
+            cpf: palm.doc,
+            solicitacao: `${descricao} - Quarto ${quartoAtual}`,
+          });
+        } catch (errInter) {
+          console.error('Inter error:', errInter.message);
+        }
+
+        const r = await env.DB.prepare(
+          `INSERT INTO consumos_hotel
+           (quarto, hospede_id, descricao, valor, pago_via, txid_pix, status, device_id)
+           VALUES (?, ?, ?, ?, 'palma', ?, ?, ?)`
+        )
+          .bind(
+            quartoAtual,
+            palm.hospede_id,
+            descricao +
+              (detalhes.length
+                ? ' | ' + detalhes.map((d) => d.nome + 'x' + d.qtd).join(', ')
+                : ''),
+            total,
+            txid,
+            interData ? 'ativo' : 'pago_local',
+            device_id || null
+          )
+          .run();
+
+        if (detalhes.length) {
+          await env.DB.prepare(
+            `UPDATE frigobar_movimentacao SET consumo_id = ?
+             WHERE quarto = ? AND consumo_id IS NULL`
+          )
+            .bind(r.meta.last_row_id, quartoAtual)
+            .run();
+        }
+
+        return json(
+          {
+            ok: true,
+            hospede: {
+              id: palm.hospede_id,
+              nome: palm.nome,
+              cpf: palm.doc,
+            },
+            quarto: quartoAtual,
+            valor: total,
+            txid,
+            detalhes,
+            pixCopiaECola: interData?.pixCopiaECola || null,
+            inter_status: interData?.status || null,
+            msg: 'Pagamento autorizado via Palma da Mão',
+          },
+          200,
+          req,
+          env
+        );
+      } catch (e) {
+        return json({ erro: String(e.message || e) }, 500, req, env);
+      }
+    }
+
+    // GET /api/palm/consumos
+    if (url.pathname === '/api/palm/consumos' && req.method === 'GET') {
+      if (!env.DB) return json({ consumos: [] }, 200, req, env);
+      const quarto = url.searchParams.get('quarto');
+      const query = quarto
+        ? `SELECT c.*, p.nome FROM consumos_hotel c
+           LEFT JOIN pessoas p ON p.id = c.hospede_id
+           WHERE c.quarto = ? ORDER BY c.id DESC LIMIT 50`
+        : `SELECT c.*, p.nome FROM consumos_hotel c
+           LEFT JOIN pessoas p ON p.id = c.hospede_id
+           ORDER BY c.id DESC LIMIT 50`;
+
+      const stmt = env.DB.prepare(query);
+      const { results } = quarto
+        ? await stmt.bind(quarto).all()
+        : await stmt.all();
+
+      return json({ ok: true, consumos: results || [] }, 200, req, env);
+    }
+
+    // GET /api/frigobar/estoque
+    if (url.pathname === '/api/frigobar/estoque' && req.method === 'GET') {
+      if (!env.DB) return json({ itens: [] }, 200, req, env);
+      const { results } = await env.DB.prepare(
+        `SELECT * FROM frigobar_itens WHERE ativo = 1 ORDER BY nome`
+      ).all();
+      return json({ ok: true, itens: results || [] }, 200, req, env);
+    }
+
+    // POST /api/frigobar/reposicao
+    if (url.pathname === '/api/frigobar/reposicao' && req.method === 'POST') {
+      try {
+        if (!env.DB) return json({ erro: 'D1 necessário' }, 501, req, env);
+        const { sku, quantidade } = await req.json();
+        await env.DB.prepare(
+          `UPDATE frigobar_itens SET estoque = estoque + ? WHERE sku = ?`
+        )
+          .bind(quantidade, sku)
+          .run();
+
+        const item = await env.DB.prepare(
+          `SELECT id FROM frigobar_itens WHERE sku = ?`
+        )
+          .bind(sku)
+          .first();
+
+        if (item) {
+          await env.DB.prepare(
+            `INSERT INTO frigobar_movimentacao (item_id, quantidade, tipo)
+             VALUES (?, ?, 'reposicao')`
+          )
+            .bind(item.id, quantidade)
+            .run();
+        }
+        return json({ ok: true }, 200, req, env);
+      } catch (e) {
+        return json({ erro: String(e.message || e) }, 500, req, env);
       }
     }
 
