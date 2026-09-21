@@ -1407,6 +1407,24 @@ if ('serviceWorker' in navigator) {
     if (u) entrarApp(u, true);
   } catch (_) {}
 })();
-</script>
+
+  // Força atualização do Service Worker quando houver nova versão
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // Nova versão disponível
+          if (confirm('Nova versão do NoxMob disponível. Atualizar agora?')) {
+            newWorker.postMessage({ type: 'SKIP_WAITING' });
+            window.location.reload();
+          }
+        }
+      });
+    });
+  }).catch(() => {});
+}
+  </script>
 </body>
 </html>
